@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="网上商城:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="网上商城/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="网上商城" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
