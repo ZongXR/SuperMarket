@@ -1,0 +1,9 @@
+@charset "utf-8";
+#common_foot{
+	width:1200px;
+	margin:15px auto;
+	border-top: 1px solid #EEEEEE;
+	text-align: center;
+	font-size: 13px;
+	color:#666666;
+}
