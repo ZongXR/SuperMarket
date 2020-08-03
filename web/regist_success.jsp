@@ -14,13 +14,14 @@
     <script type="text/javascript">
         $(function () {
             let timeout = <%=request.getAttribute("timeout") %>;
-            setInterval(refresh, 1000);
+            let timer = window.setInterval(refresh, 1000);
             function refresh() {
                 if (timeout > 0) {
                     timeout = timeout - 1;
                     $("#success_alarm").text("注册成功，" + timeout + "秒后跳转");
                 }else{
-                    $(window).attr("location", "/");
+                    window.clearInterval(timer);
+                    window.location.href = "/";
                 }
             }
         });

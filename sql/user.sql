@@ -1,5 +1,5 @@
-﻿create database if not exists easymall;
-use easymall;
+﻿create database if not exists supermarket;
+use supermarket;
 create table user(
 	id int primary key auto_increment,
 	username varchar(100),
