@@ -1,4 +1,4 @@
-package com.easymall;
+package com.supermarket;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 

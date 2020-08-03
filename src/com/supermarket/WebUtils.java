@@ -1,4 +1,4 @@
-package com.easymall;
+package com.supermarket;
 
 
 public class WebUtils {

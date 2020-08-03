@@ -1,4 +1,4 @@
-package com.easymall;
+package com.supermarket;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

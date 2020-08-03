@@ -6,7 +6,7 @@
 
     <servlet>
         <servlet-name>RegistServlet</servlet-name>
-        <servlet-class>com.easymall.RegistServlet</servlet-class>
+        <servlet-class>com.supermarket.RegistServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>RegistServlet</servlet-name>
