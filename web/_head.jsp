@@ -16,7 +16,7 @@
 			<a id="goto_order" href="#">我的订单</a>
 			<a id="goto_cart" href="#">我的购物车</a>
 		</span>
-		<img id="erwm" src="<%=request.getContextPath() %>/img/head/qr.jpg"/>
+		<img id="erwm" src="<%=request.getContextPath() %>/img/head/qr.jpg" width="76" />
 	</div>
 	<div id="line3">
 		<div id="content">

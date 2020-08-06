@@ -1,5 +1,10 @@
-package com.supermarket;
+package com.supermarket.servlet;
 
+import com.supermarket.utils.JDBCUtils;
+import com.supermarket.utils.WebUtils;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,12 +14,25 @@ import java.io.IOException;
 
 @WebServlet(name = "RegistServlet")
 public class RegistServlet extends HttpServlet {
+
+    /**
+     * 初始化servlet
+     * @param config servlet配置信息
+     * */
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        WebUtils.useConnectionPool(config);
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         this.doGet(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
+
         // 先设置属性
         request.setAttribute("username", request.getParameter("username"));
         request.setAttribute("password", request.getParameter("password"));
@@ -26,7 +44,7 @@ public class RegistServlet extends HttpServlet {
         if (this.isNull(request, response, "username", "用户名不能为空"))
             return;
         // 用户名重复性校验
-        if (JDBCUtils.count("user", "username", request.getParameter("username")) > 0){
+        if (JDBCUtils.count("user", "username", request.getParameter("username")) > 0) {
             request.setAttribute("msg", "已存在用户名");
             request.removeAttribute("username");
             request.getRequestDispatcher("/regist.jsp").forward(request, response);
@@ -74,21 +92,21 @@ public class RegistServlet extends HttpServlet {
     /**
      * 非空校验
      *
-     * @param request 请求对象
+     * @param request  请求对象
      * @param response 响应对象
-     * @param name    表单name
-     * @param msg     提示信息
+     * @param name     表单name
+     * @param msg      提示信息
      * @return 是否为空
      */
     protected boolean isNull(HttpServletRequest request, HttpServletResponse response, String name, String msg) throws ServletException, IOException {
         String value = request.getParameter(name);
-        if (WebUtils.isNull(value)){
+        if (WebUtils.isNull(value)) {
             // 如果是空
             request.setAttribute("msg", msg);
             request.removeAttribute(name);
             request.getRequestDispatcher("/regist.jsp").forward(request, response);
             return true;
-        }else{
+        } else {
             // 如果非空
             request.setAttribute("msg", "");
             return false;
@@ -106,11 +124,11 @@ public class RegistServlet extends HttpServlet {
      */
     protected boolean isRegexValid(HttpServletRequest request, HttpServletResponse response, String name, String regex, String msg) throws ServletException, IOException {
         String value = request.getParameter(name);
-        if (value.matches(regex)){
+        if (value.matches(regex)) {
             // 如果满足正则
             request.setAttribute("msg", "");
             return true;
-        }else{
+        } else {
             // 如果不满足正则
             request.setAttribute("msg", msg);
             request.removeAttribute(name);

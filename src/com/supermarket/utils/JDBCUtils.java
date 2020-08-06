@@ -1,20 +1,84 @@
-package com.supermarket;
+package com.supermarket.utils;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.apache.commons.dbcp.BasicDataSourceFactory;
+import org.junit.Test;
 
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class JDBCUtils {
 
-    static ComboPooledDataSource pool = new ComboPooledDataSource();
+//    private static ComboPooledDataSource pool = new ComboPooledDataSource();
+    private static DataSource pool = null;
+
+    /**
+     * 设置使用哪个连接池
+     * @param datasource 连接池名称
+     * */
+    public static void setPool(String datasource) {
+        switch (datasource.toLowerCase()){
+            case "dbcp":
+                // 使用dbcp连接池，如果异常，则使用C3P0
+                JDBCUtils.useDBCP("useC3P0");
+                break;
+            case "c3p0":
+                // 使用c3p0连接池
+            default:
+                // 默认使用c3p0连接池
+                JDBCUtils.useC3P0();
+        }
+    }
 
     /**
      * 工具类，私有化构造函数
      */
     private JDBCUtils() {
+    }
+
+    /**
+     * 使用C3P0连接池
+     * */
+    private static void useC3P0(){
+        System.out.println("使用C3P0连接池");
+        JDBCUtils.pool = new ComboPooledDataSource();
+    }
+
+    /**
+     * 通过反射调用初始化连接池方法名
+     * @param datasourceMethod 使用连接池的方法名
+     * */
+    private static void useDataSource(String datasourceMethod){
+        try {
+            Method method = JDBCUtils.class.getDeclaredMethod(datasourceMethod);
+            method.invoke(null);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 使用DBCP连接池
+     * @param datasourceMethod 使用DBCP连接池失败，使用的连接池方法名
+     * */
+    private static void useDBCP(String datasourceMethod){
+        Properties prop = new Properties();
+        try {
+            prop.load(Class.forName("com.supermarket.utils.JDBCUtils").getResourceAsStream("/DBCPconfig.properties"));
+            System.out.println("使用DBCP连接池");
+            JDBCUtils.pool = BasicDataSourceFactory.createDataSource(prop);
+        } catch (Exception e) {
+            System.err.println("使用DBCP连接池失败");
+            e.printStackTrace();
+            JDBCUtils.useDataSource(datasourceMethod);
+        }
     }
 
     /**
