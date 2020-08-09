@@ -1,34 +1,30 @@
 package com.supermarket.servlet;
 
-import com.supermarket.utils.JDBCUtils;
 import com.supermarket.utils.WebUtils;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "AjaxUsernameServlet")
-public class AjaxUsernameServlet extends HttpServlet {
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-//        WebUtils.useConnectionPool(config);
-    }
-
+@WebServlet(name = "LogoutServlet")
+public class LogoutServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         this.doGet(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("utf-8");
+        request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=utf-8");
 
-        String username = request.getParameter("username");
-        int count = JDBCUtils.count("user", "username", username);
-        response.getWriter().write(Boolean.toString(count == 0));
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            // 杀死session，失活cookie
+            session.invalidate();
+            WebUtils.removeCookie(request, response, "JSESSIONID");
+        }
     }
 }

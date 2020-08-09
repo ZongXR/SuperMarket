@@ -4,14 +4,17 @@
 <h2>截图展示</h2>
 <img src="./img/index.png" alt="首页" /><br />
 <img src="./img/regist.png" alt="注册页面" /><br />
+<img src="./img/login.png" alt="登录页面" /><br />
+<img src="./img/logout.PNG" alt="注销页面" /><br />
 <h2>关键技术</h2>
 <ul>
     <li>JDBC连接MySQL</li>
-    <li>可自定义使用的连接池，在web.xml中配置</li>
+    <li>可自定义使用的连接池：在JDBC.properties中全局配置，在web.xml中局部配置</li>
     <li>Servlet完成后端注册有效性校验</li>
+    <li>Servlet完成后端登录校验</li>
     <li>jQuery完成前端注册有效性校验</li>
-    <li>主页及注册页面均为jsp页面</li>
-    <li>使用Ajax技术完成前端用户名校验</li>
+    <li>完成前端登录非空校验</li>
+    <li>使用Ajax技术完成前端用户名可用性校验、退出登录功能</li>
 </ul>
 <h2>版本迭代</h2>
 <table>
@@ -44,6 +47,20 @@
             </ul>
         </td>
         <td>2020年8月7日</td>
+    </tr>
+    <tr>
+        <td>0.1.2</td>
+        <td>
+            <ul>
+                <li>使用JDBC.properties进行全局JDBC配置</li>
+                <li>去掉JDBC的反射调用</li>
+                <li>使用cookie完成记住用户名功能</li>
+                <li>新增登录功能：使用session完成会话级别的数据传递</li>
+                <li>新增注销功能：通过ajax请求销毁session</li>
+                <li>修改静态页面，使其实现对logo.png的单独依赖</li>
+            </ul>
+        </td>
+        <td>2020年8月9日</td>
     </tr>
 </table>
 <h2>配置情况</h2>

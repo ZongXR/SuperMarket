@@ -1,17 +1,14 @@
 <%@ page import="com.supermarket.servlet.ValiImgServlet" %>
+<%@ page import="com.supermarket.utils.WebUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>欢迎注册网上商城</title>
+    <title>欢迎注册</title>
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="<%=request.getContextPath() %>/css/regist.css"/>
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.4.2.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/js/refreshValistr.js"></script>
     <script type="text/javascript">
-        // 刷新验证码
-        function refreshValistr(element){
-            let time = new Date().getTime();
-            $(element).attr("src", "<%=request.getContextPath()%>/ValiImgServlet?time=" + time);
-        }
         // 文档就绪事件
         $(function () {
             $("input[name='username']").blur(function () {
@@ -127,19 +124,20 @@
     </script>
 </head>
 <body>
+<img src="img/login/logo.png" alt="logo" style="position: absolute;top: 8%;left: 12%;">
 <form action="<%=request.getContextPath()%>/RegistServlet" method="POST" onsubmit="return formObj.checkForm();">
     <h1>欢迎注册网上商城</h1>
     <table>
         <tr>
             <td class="tds" colspan="2" style="color:red;text-align:center;">
-                <%=request.getAttribute("msg") == null ? "" : request.getAttribute("msg")%>
+                <%=WebUtils.getString(request.getAttribute("msg"))%>
             </td>
         </tr>
         <tr>
             <td class="tds">用户名：</td>
             <td>
                 <input type="text" name="username"
-                       value="<%=request.getAttribute("username")==null?"":request.getAttribute("username")%>"/>
+                       value="<%=WebUtils.getString(request.getAttribute("username"))%>"/>
                 <span></span>
             </td>
         </tr>
@@ -147,7 +145,7 @@
             <td class="tds">密码：</td>
             <td>
                 <input type="password" name="password"
-                       value="<%=request.getAttribute("password")==null?"":request.getAttribute("password")%>"/>
+                       value="<%=WebUtils.getString(request.getAttribute("password"))%>"/>
                 <span></span>
             </td>
         </tr>
@@ -155,7 +153,7 @@
             <td class="tds">确认密码：</td>
             <td>
                 <input type="password" name="password2"
-                       value="<%=request.getAttribute("password2")==null?"":request.getAttribute("password2")%>"/>
+                       value="<%=WebUtils.getString(request.getAttribute("password2"))%>"/>
                 <span></span>
             </td>
         </tr>
@@ -163,7 +161,7 @@
             <td class="tds">昵称：</td>
             <td>
                 <input type="text" name="nickname"
-                       value="<%=request.getAttribute("nickname")==null?"":request.getAttribute("nickname")%>"/>
+                       value="<%=WebUtils.getString(request.getAttribute("nickname"))%>"/>
                 <span></span>
             </td>
         </tr>
@@ -171,7 +169,7 @@
             <td class="tds">邮箱：</td>
             <td>
                 <input type="text" name="email"
-                       value="<%=request.getAttribute("email")==null?"":request.getAttribute("email")%>"/>
+                       value="<%=WebUtils.getString(request.getAttribute("email"))%>"/>
                 <span></span>
             </td>
         </tr>

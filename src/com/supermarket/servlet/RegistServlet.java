@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet(name = "RegistServlet")
@@ -22,7 +23,7 @@ public class RegistServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        WebUtils.useConnectionPool(config);
+//        WebUtils.useConnectionPool(config);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -75,6 +76,9 @@ public class RegistServlet extends HttpServlet {
             return;
         // 验证码非空校验
         if (this.isNull(request, response, "valistr", "验证码不能为空"))
+            return;
+        // 验证码有效性校验
+        if (!this.isValistrCorrect(request, response, "验证码不对"))
             return;
 
         // 将数据插入数据库
@@ -132,6 +136,27 @@ public class RegistServlet extends HttpServlet {
             // 如果不满足正则
             request.setAttribute("msg", msg);
             request.removeAttribute(name);
+            request.getRequestDispatcher("/regist.jsp").forward(request, response);
+            return false;
+        }
+    }
+
+    /**
+     * 判断验证码是否合法
+     * @param request 请求对象
+     * @param response 响应对象
+     * @param msg 提示信息
+     * */
+    protected boolean isValistrCorrect(HttpServletRequest request, HttpServletResponse response, String msg) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String code = request.getParameter("valistr");
+        if (code != null && code.equals(session.getAttribute("valicode"))){
+            // 如果验证码合法
+            request.setAttribute("msg", "");
+            return true;
+        }else{
+            // 如果验证码不合法
+            request.setAttribute("msg", msg);
             request.getRequestDispatcher("/regist.jsp").forward(request, response);
             return false;
         }

@@ -4,20 +4,41 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.apache.commons.dbcp.BasicDataSourceFactory;
 import org.junit.Test;
 
+import javax.servlet.GenericServlet;
+import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.sql.DataSource;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.Properties;
 
 public class JDBCUtils {
 
-//    private static ComboPooledDataSource pool = new ComboPooledDataSource();
     private static DataSource pool = null;
+
+    // 默认使用c3p0连接池
+    static {
+        InputStream resource = JDBCUtils.class.getClassLoader().getResourceAsStream("/JDBC.properties");
+        Properties prop = new Properties();
+        try{
+            prop.load(resource);
+            JDBCUtils.setPool(prop.getProperty("datasource"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            JDBCUtils.useDataSourceDefault();
+        }
+    }
 
     /**
      * 设置使用哪个连接池
@@ -27,13 +48,15 @@ public class JDBCUtils {
         switch (datasource.toLowerCase()){
             case "dbcp":
                 // 使用dbcp连接池，如果异常，则使用C3P0
-                JDBCUtils.useDBCP("useC3P0");
+                JDBCUtils.useDBCP();
                 break;
             case "c3p0":
                 // 使用c3p0连接池
+                JDBCUtils.useC3P0();
+                break;
             default:
                 // 默认使用c3p0连接池
-                JDBCUtils.useC3P0();
+                JDBCUtils.useDataSourceDefault();
         }
     }
 
@@ -52,23 +75,9 @@ public class JDBCUtils {
     }
 
     /**
-     * 通过反射调用初始化连接池方法名
-     * @param datasourceMethod 使用连接池的方法名
-     * */
-    private static void useDataSource(String datasourceMethod){
-        try {
-            Method method = JDBCUtils.class.getDeclaredMethod(datasourceMethod);
-            method.invoke(null);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * 使用DBCP连接池
-     * @param datasourceMethod 使用DBCP连接池失败，使用的连接池方法名
      * */
-    private static void useDBCP(String datasourceMethod){
+    private static void useDBCP(){
         Properties prop = new Properties();
         try {
             prop.load(Class.forName("com.supermarket.utils.JDBCUtils").getResourceAsStream("/DBCPconfig.properties"));
@@ -77,8 +86,15 @@ public class JDBCUtils {
         } catch (Exception e) {
             System.err.println("使用DBCP连接池失败");
             e.printStackTrace();
-            JDBCUtils.useDataSource(datasourceMethod);
+            JDBCUtils.useDataSourceDefault();
         }
+    }
+
+    /**
+     * 使用默认连接池
+     * */
+    private static void useDataSourceDefault(){
+        JDBCUtils.useC3P0();
     }
 
     /**
@@ -134,6 +150,7 @@ public class JDBCUtils {
                 result = rs.getInt("count");
         } catch (SQLException e) {
             e.printStackTrace();
+            System.err.println(String.format("执行 select count(1) as count from %s where %s = ? 发生错误", table, field));
         }finally{
             JDBCUtils.close(rs, ps, conn);
         }
@@ -160,8 +177,38 @@ public class JDBCUtils {
             ps.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();
+            System.err.println("执行 insert into user values(null, ?, ?, ?, ?) 发生错误");
         }finally{
             JDBCUtils.close(ps, conn);
         }
+    }
+
+    /**
+     * 判断是否能登录
+     * @param table 表名
+     * @param usernameField 用户名字段
+     * @param username 用户名
+     * @param passwordField 密码字段
+     * @param password 密码
+     * @return 是否有权限登录
+     * */
+    public static boolean canLogin(String table, String usernameField, String username, String passwordField, String password){
+        boolean result = false;
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try{
+            conn = pool.getConnection();
+            ps = conn.prepareStatement(String.format("select %s from %s where %s = ? and %s = ?", usernameField, table, usernameField, passwordField));
+            ps.setString(1, username);
+            ps.setString(2, password);
+            rs = ps.executeQuery();
+            result = rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            JDBCUtils.close(rs, ps, conn);
+        }
+        return result;
     }
 }

@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -30,5 +31,7 @@ public class ValiImgServlet extends HttpServlet {
         ServletOutputStream out = response.getOutputStream();
         img.drawImage(out);
         String code = img.getCode();
+        HttpSession session = request.getSession();
+        session.setAttribute("valicode", code);
     }
 }

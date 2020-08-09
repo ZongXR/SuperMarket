@@ -38,6 +38,7 @@
         <url-pattern>/AjaxUsernameServlet</url-pattern>
     </servlet-mapping>
 
+    <!--  用于生成验证码的servlet  -->
     <servlet>
         <servlet-name>ValiImgServlet</servlet-name>
         <servlet-class>com.supermarket.servlet.ValiImgServlet</servlet-class>
@@ -45,6 +46,26 @@
     <servlet-mapping>
         <servlet-name>ValiImgServlet</servlet-name>
         <url-pattern>/ValiImgServlet</url-pattern>
+    </servlet-mapping>
+
+    <!--  登陆的servlet  -->
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>com.supermarket.servlet.LoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/LoginServlet</url-pattern>
+    </servlet-mapping>
+
+    <!--  注销servlet  -->
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>com.supermarket.servlet.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/LogoutServlet</url-pattern>
     </servlet-mapping>
 
 </web-app>
