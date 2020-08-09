@@ -58,7 +58,7 @@ public class LoginServlet extends HttpServlet {
         WebUtils.setCookie(request, response, "JSESSIONID", session.getId());
         System.out.println(session.getAttribute("username"));
 
-        //忽略缓存，跳转回首页
+        // 跳转回首页
         response.sendRedirect(request.getContextPath() + "/");
     }
 }

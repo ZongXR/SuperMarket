@@ -17,16 +17,17 @@
         }
     })
     function logout(element) {
-        $.ajax({
-            "url": "<%=request.getContextPath()%>/LogoutServlet",
-            "async": true,
-            "type": "POST",
-            "success": function (result){
-                if (window.confirm("是否退出登录?") === true){
+        if (window.confirm("是否退出登录?") === true) {
+            $.ajax({
+                "url": "<%=request.getContextPath()%>/LogoutServlet",
+                "async": true,
+                "type": "POST",
+                "success": function (result) {
+                    // 注销后跳转首页
                     window.location.href = "<%=request.getContextPath()%>"
                 }
-            }
-        })
+            })
+        }
     }
 </script>
 <div id="common_head">
