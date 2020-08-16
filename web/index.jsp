@@ -3,12 +3,22 @@
 <html>
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
+    <meta name="keywords" content="网上商城, 电商平台, 能源互联网">
+    <meta name="description" content="能源互联网, 网上商城, 电商平台, 电子商务, 掌上e宝, 科技金服, 不正经网站研究中心">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/index.css"/>
-    <title>欢迎光临网上商城</title>
+    <title>网上商城-能源工业云平台_国电网商|网上金融科技|电子金服</title>
+    <noscript>抱歉，你的浏览器不支持 JavaScript!</noscript>
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.4.2.js"></script>
-    </head>
+</head>
 <body>
 <%@include file="_head.jsp" %>
+<div class="fixed">
+    <%--用于右下角的漂浮显示--%>
+    <a href="https://github.com/GoogleLLP/SuperMarket" target="_blank">
+        <img src="<%=request.getContextPath()%>/img/index/qr.jpg" width="100"/>
+    </a>
+    <a href="#common_head" class="toTop"></a>
+</div>
 <div id="index">
     <div id="line1">
         <img src="<%=request.getContextPath()%>/img/index/banner_big.jpg"/>

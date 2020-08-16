@@ -59,3 +59,32 @@ body{
 #index #line5 #line5_2,#index #line5 #line5_3,#index #line5 #line5_4{
 	margin-left:128px;
 }
+
+.fixed{
+	position: fixed;
+	bottom: 10%;
+	right: 3%;
+}
+
+div.fixed a{
+	display: block;
+	margin-bottom: 10px;
+}
+
+div.fixed a.toTop{
+	position: relative;
+	right: -30px;
+	border: 4px solid #222222;
+	width: 30px;
+	height: 30px;
+	background-image: url(/img/index/top.png);
+	background-repeat: no-repeat;
+	background-size: 100%, 100%;
+	background-position-x: center;
+	background-position-y: center;
+}
+
+div.fixed a.toTop:hover{
+	border-color: #777777;
+	background-image: url(/img/index/top_a.png);
+}
