@@ -4,6 +4,9 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.apache.commons.dbcp.BasicDataSourceFactory;
 import org.junit.Test;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.GenericServlet;
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -31,7 +34,7 @@ public class JDBCUtils {
     static {
         InputStream resource = JDBCUtils.class.getClassLoader().getResourceAsStream("/JDBC.properties");
         Properties prop = new Properties();
-        try{
+        try {
             prop.load(resource);
             JDBCUtils.setPool(prop.getProperty("datasource"));
         } catch (IOException e) {
@@ -42,10 +45,11 @@ public class JDBCUtils {
 
     /**
      * 设置使用哪个连接池
+     *
      * @param datasource 连接池名称
-     * */
+     */
     public static void setPool(String datasource) {
-        switch (datasource.toLowerCase()){
+        switch (datasource.toLowerCase()) {
             case "dbcp":
                 // 使用dbcp连接池，如果异常，则使用C3P0
                 JDBCUtils.useDBCP();
@@ -68,16 +72,16 @@ public class JDBCUtils {
 
     /**
      * 使用C3P0连接池
-     * */
-    private static void useC3P0(){
+     */
+    private static void useC3P0() {
         System.out.println("使用C3P0连接池");
         JDBCUtils.pool = new ComboPooledDataSource();
     }
 
     /**
      * 使用DBCP连接池
-     * */
-    private static void useDBCP(){
+     */
+    private static void useDBCP() {
         Properties prop = new Properties();
         try {
             prop.load(Class.forName("com.supermarket.utils.JDBCUtils").getResourceAsStream("/DBCPconfig.properties"));
@@ -91,16 +95,35 @@ public class JDBCUtils {
     }
 
     /**
+     * 使用tomcat自带DBCP连接池
+     */
+    private static void useTomcat() {
+        Context context = null;
+        try {
+            context = new InitialContext();
+            Context envCtx = (Context) context.lookup("java:comp/env");  // 固定路径
+            DataSource dataSource = (DataSource) envCtx.lookup("jdbc/EmployeeDB");
+            System.out.println("使用tomcat自带连接池");
+            JDBCUtils.pool = dataSource;
+        } catch (NamingException e) {
+            System.err.println("使用tomcat自带连接池失败");
+            e.printStackTrace();
+            JDBCUtils.useDataSourceDefault();
+        }
+    }
+
+    /**
      * 使用默认连接池
-     * */
-    private static void useDataSourceDefault(){
+     */
+    private static void useDataSourceDefault() {
         JDBCUtils.useC3P0();
     }
 
     /**
      * 关闭一个对象
+     *
      * @param obj 要关闭的对象，要求该对象具有close()方法
-     * */
+     */
     private static <T extends AutoCloseable> void close(T obj) {
         if (obj != null) {
             try {
@@ -114,9 +137,10 @@ public class JDBCUtils {
     }
 
     /**
-     * 按照顺序关闭一群对象
+     * 按照顺序关闭一群对象，务必按照从小到大顺序关闭
+     *
      * @param obj 要关闭的一组对象，要求对象具有close()方法
-     * */
+     */
     @SafeVarargs
     public static <T extends AutoCloseable> void close(T... obj) {
         for (T t : obj) {
@@ -125,90 +149,12 @@ public class JDBCUtils {
     }
 
     /**
-     * 查询个数，执行语句：select count(1) as count from table where filed = value
-     * @param table 表名
-     * @param field 列名
-     * @param value 查询数值
-     * @return 查询个数
+     * 从连接池获取链接
+     *
+     * @return 连接
+     * @throws SQLException SQL异常
      */
-    public static int count(String table, String field, Object value) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        int result =  0;
-        try {
-            conn = pool.getConnection();
-            ps = conn.prepareStatement(String.format("select count(1) as count from %s where %s = ?", table, field));
-            if (value.getClass() == String.class)
-                ps.setString(1, (String) value);
-            else if (value.getClass() == Integer.class)
-                ps.setInt(1, (Integer) value);
-            else
-                ps.setObject(1, value);
-            rs = ps.executeQuery();
-            if (rs.next())
-                result = rs.getInt("count");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.err.println(String.format("执行 select count(1) as count from %s where %s = ? 发生错误", table, field));
-        }finally{
-            JDBCUtils.close(rs, ps, conn);
-        }
-        return result;
-    }
-
-    /**
-     * 向表格user中插入数据，执行语句：insert into user values(null, username, password, nickname, email)
-     * @param username 用户名
-     * @param password 密码
-     * @param nickname 昵称
-     * @param email 邮箱
-     * */
-    public static void insertUser(String username, String password, String nickname, String email){
-        Connection conn = null;
-        PreparedStatement ps = null;
-        try{
-            conn = pool.getConnection();
-            ps = conn.prepareStatement("insert into user values(null, ?, ?, ?, ?)");
-            ps.setString(1, username);
-            ps.setString(2, password);
-            ps.setString(3, nickname);
-            ps.setString(4, email);
-            ps.executeUpdate();
-        }catch (SQLException e){
-            e.printStackTrace();
-            System.err.println("执行 insert into user values(null, ?, ?, ?, ?) 发生错误");
-        }finally{
-            JDBCUtils.close(ps, conn);
-        }
-    }
-
-    /**
-     * 判断是否能登录
-     * @param table 表名
-     * @param usernameField 用户名字段
-     * @param username 用户名
-     * @param passwordField 密码字段
-     * @param password 密码
-     * @return 是否有权限登录
-     * */
-    public static boolean canLogin(String table, String usernameField, String username, String passwordField, String password){
-        boolean result = false;
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try{
-            conn = pool.getConnection();
-            ps = conn.prepareStatement(String.format("select %s from %s where %s = ? and %s = ?", usernameField, table, usernameField, passwordField));
-            ps.setString(1, username);
-            ps.setString(2, password);
-            rs = ps.executeQuery();
-            result = rs.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }finally{
-            JDBCUtils.close(rs, ps, conn);
-        }
-        return result;
+    public static Connection getConnection() throws SQLException {
+        return JDBCUtils.pool.getConnection();
     }
 }

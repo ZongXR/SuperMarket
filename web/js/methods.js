@@ -1,3 +1,4 @@
+// 判断是否为空
 function isNull(element, msg) {
     let node = $(element);
     if (node.val() === ""){
@@ -9,4 +10,10 @@ function isNull(element, msg) {
         node.nextAll("span").text("");
         return false;
     }
+}
+
+// 刷新验证码
+function refreshValistr(element){
+    let time = new Date().getTime();
+    $(element).attr("src", "/ValiImgServlet?time=" + time);
 }

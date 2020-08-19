@@ -1,16 +1,17 @@
-<%@ page import="com.supermarket.utils.WebUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" session="false" %>
 <html>
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="<%=request.getContextPath() %>/css/login.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css"/>
     <title>欢迎登陆</title>
-    <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.4.2.js"></script>
-    <script type="text/javascript" src="<%=request.getContextPath()%>/js/refreshValistr.js"></script>
-    <script type="text/javascript" src="<%=request.getContextPath()%>/js/isNull.js"></script>
+    <noscript>抱歉，你的浏览器不支持 JavaScript!</noscript>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.4.2.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/methods.js"></script>
     <script type="text/javascript">
         // 文档就绪事件
         $(function () {
+            // 如果cookie中存有username，则显示用户名，勾选记住用户名
+            $("input[name=username]").val(decodeURI("${cookie.username.value}"));
             let username = $("input[name='username']").val();
             if (username === "") {
                 // 如果用户名为空，则不记住用户名
@@ -20,8 +21,9 @@
                 $("input[name='remname']").attr("checked", "checked");
             }
         })
+
         // 提交表单的检查函数
-        function checkForm(element){
+        function checkForm(element) {
             let node = $(element);
             let result = true;
             result = !isNull(node.find("input[name='username']").get(0), "用户名不能为空") && result;
@@ -32,19 +34,18 @@
     </script>
 </head>
 <body>
-<img src="<%=request.getContextPath() %>/img/login/logo.png" alt="logo" style="position: absolute;top: 8%;left: 12%;">
+<img src="${pageContext.request.contextPath}/img/login/logo.png" alt="logo"
+     style="position: absolute;top: 8%;left: 12%;">
 <h1>欢迎登陆网上商城</h1>
-<form action="<%=request.getContextPath()%>/LoginServlet" method="POST" onsubmit="return checkForm(this);">
+<form action="${pageContext.request.contextPath}/LoginServlet" method="POST" onsubmit="return checkForm(this);">
     <table>
         <tr>
-            <td colspan="2" style="color: red;text-align: center;">
-                <%=WebUtils.getString(request.getAttribute("msg"))%>
-            </td>
+            <td colspan="2" style="color: red;text-align: center;">${requestScope.msg}</td>
         </tr>
         <tr>
             <td class="tdx">用户名：</td>
             <td>
-                <input type="text" name="username" value="<%=WebUtils.getCookieString(request, "username")%>" onblur="isNull(this, '用户名不能为空')"/>
+                <input type="text" name="username" value="" onblur="isNull(this, '用户名不能为空')"/>
                 <span></span>
             </td>
         </tr>
@@ -59,7 +60,7 @@
             <td class="tdx">验证码：</td>
             <td>
                 <input type="text" name="valistr" onblur="isNull(this, '验证码不能为空')"/>
-                <img src="<%=request.getContextPath()%>/ValiImgServlet" width="" height="" alt="验证码"
+                <img src="${pageContext.request.contextPath}/ValiImgServlet" width="" height="" alt="验证码"
                      onclick="refreshValistr(this)"/>
                 <span></span>
             </td>

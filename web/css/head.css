@@ -22,12 +22,12 @@ body{
 	font-size:14px;
 	color:#666666;
 }
-#common_head #line1 #content{
+#common_head #line1 .content{
 	width:1200px;
 	margin:0px auto;
 	line-height:35px;
 }
-#common_head #line1 #content a{
+#common_head #line1 .content a{
 	font-size:14px;
 	text-decoration: none;
 	color:#666666;
@@ -88,20 +88,20 @@ body{
 	height:38px;
 	background-color:#CA141D;
 }
-#common_head #line3 #content{
+#common_head #line3 .content{
 	width:1200px;
 	margin:0px auto;
 }
-#common_head #line3 #content ul{
+#common_head #line3 .content ul{
 	padding:0px;
 	margin:0px;
 }
-#common_head #line3 #content li{
+#common_head #line3 .content li{
 	list-style-type:none;
 	width:120px;
 	float:left;
 }
-#common_head #line3 #content li a{
+#common_head #line3 .content li a{
 	display: block;
 	line-height:38px;
 	color:white;
@@ -109,6 +109,6 @@ body{
 	text-align: center;
 	font-size:16px;
 }
-#common_head #line3 #content li:hover{
+#common_head #line3 .content li:hover{
 	background-color: #D9141E;
 }

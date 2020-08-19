@@ -24,7 +24,6 @@ public class WebUtils {
 
     /**
      * 判断字符串是否为空
-     *
      * @param value 传入的字符串
      * @return 字符串是否为空
      */
@@ -33,8 +32,17 @@ public class WebUtils {
     }
 
     /**
+     * 正则校验
+     * @param value 要校验的字符串
+     * @param regex 正则表达式
+     * @return value是否符合正则
+     */
+    public static boolean isRegexValid(String value, String regex) {
+        return value != null && value.matches(regex);
+    }
+
+    /**
      * 获取当前类的类名
-     *
      * @return 当前类的类名
      */
     public static String getClassName() {
@@ -47,7 +55,6 @@ public class WebUtils {
 
     /**
      * 获取servlet初始化参数
-     *
      * @param config servlet配置信息
      */
     public static void useConnectionPool(ServletConfig config) {
@@ -64,7 +71,6 @@ public class WebUtils {
 
     /**
      * 控制浏览器是否使用缓存
-     *
      * @param use 是否使用缓存
      */
     public static void useCache(boolean use, HttpServletResponse response) {
@@ -81,21 +87,7 @@ public class WebUtils {
     }
 
     /**
-     * 获取有效字符串
-     *
-     * @param value 原来的字符串
-     * @return 处理后的字符串
-     */
-    public static String getString(Object value) {
-        if (value == null)
-            return "";
-        else
-            return value.toString().trim();
-    }
-
-    /**
      * 设置cookie
-     *
      * @param request  请求对象
      * @param response 响应对象
      * @param name     键
@@ -110,7 +102,6 @@ public class WebUtils {
 
     /**
      * 删除cookie
-     *
      * @param request  请求对象
      * @param response 响应对象
      * @param name     键
@@ -129,31 +120,21 @@ public class WebUtils {
 
     /**
      * 获取指定cookie的值
-     *
      * @param request 请求对象
      * @param name    键
+     * @return 如果找到了cookie返回cookie值，没找到返回空字符串
      */
     public static String getCookieValue(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null)
-            return null;
+            return "";
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals(name)) {
                 // 如果找到键为name的cookie
                 return URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
             }
         }
-        return null;
-    }
-
-    /**
-     * 获取指定cookie的字符串
-     *
-     * @param request 请求对象
-     * @param name    键
-     */
-    public static String getCookieString(HttpServletRequest request, String name) {
-        return WebUtils.getString(WebUtils.getCookieValue(request, name));
+        return "";
     }
 
     /**

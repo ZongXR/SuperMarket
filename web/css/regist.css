@@ -16,6 +16,13 @@ h1{
 	text-align: center;
 }
 
+p{
+	width: 600px;/* */
+	color: black;
+	margin: 20px auto 30px;
+	text-align: center;
+}
+
 table{
 	margin: 0 auto;
 	/*text-align: center;*/
@@ -25,7 +32,7 @@ td{
 }
 .tds{
 	font-size: 18px;
-	text-align: right;
+	text-align: center;
 }
 
 input{
@@ -40,10 +47,6 @@ input[name='valistr']{
 
 img{
 	vertical-align: top;
-}
-
-.sub_td{
-	text-align: center;
 }
 
 input[type='submit']{

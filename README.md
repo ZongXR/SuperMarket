@@ -6,19 +6,21 @@
 <img src="./img/regist.png" alt="注册页面" /><br />
 <img src="./img/login.png" alt="登录页面" /><br />
 <img src="./img/logout.PNG" alt="注销页面" /><br />
+<img src="./img/error.png" alt="错误页面" /><br />
 <h2>声明</h2>
 <ul>
-    <li>泵项目静态资源由网络收集得来，并加以大范围修改</li>
+    <li>本项目静态资源由网络收集得来，并加以大范围修改</li>
     <li>未经许可不得将本项目商用，如需商用请联系作者<a href="mailto:zxr@tju.edu.cn">zxr@tju.edu.cn</a></li>
+    <li>本项目为红蓝队候选靶场之一，欢迎提出意见与建议</li>
 </ul>
 <h2>关键技术</h2>
 <ul>
-    <li>JDBC连接MySQL</li>
-    <li>可自定义使用的连接池：在JDBC.properties中全局配置，在web.xml中局部配置</li>
-    <li>Servlet完成后端注册有效性校验</li>
-    <li>Servlet完成后端登录校验</li>
-    <li>jQuery完成前端注册有效性校验</li>
-    <li>完成前端登录非空校验</li>
+    <li>基于JavaWeb三层经典架构开发</li>
+    <li>使用jsp页面展示，并通过EL表达式接收服务器打给浏览器的数据</li>
+    <li>使用js实现网页动态效果，通过jQuery简化操作，并实现前端的数据校验</li>
+    <li>使用servlet(com.supermarket.web)接收前端请求，并根据需求交给com.supermarket.service处理</li>
+    <li>使用com.supermarket.service完成后端各种校验</li>
+    <li>com.supermarket.dao调用JDBC连接MySQL，可自定义使用C3P0连接池或DBCP连接池</li>
     <li>使用Ajax技术完成前端用户名可用性校验、退出登录功能</li>
 </ul>
 <h2>版本迭代</h2>
@@ -71,12 +73,13 @@
         <td>0.2</td>
         <td>
             <ul>
-                <li>使用EL表达式、JSTL标签替换jsp页面中的脚本表达式</li>
+                <li>使用EL表达式替换jsp页面中的脚本表达式</li>
                 <li>修改静态资源，主页增加右下角浮动项以及向上返回功能</li>
-                <li>重构为JavaEE三层经典模型</li>
+                <li>新增错误页面提示</li>
+                <li>重构为JavaEE三层经典架构</li>
             </ul>
         </td>
-        <td>待定</td>
+        <td>2020年8月20日</td>
     </tr>
 </table>
 <h2>配置情况</h2>

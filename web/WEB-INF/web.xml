@@ -4,6 +4,11 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
+    <!--  配置错误页面  -->
+    <error-page>
+        <location>/error.jsp</location>
+    </error-page>
+
     <!--  web应用的初始化参数  -->
     <context-param>
         <param-name>datasource</param-name>
@@ -13,7 +18,7 @@
     <!--  注册功能Servlet  -->
     <servlet>
         <servlet-name>RegistServlet</servlet-name>
-        <servlet-class>com.supermarket.servlet.RegistServlet</servlet-class>
+        <servlet-class>com.supermarket.web.RegistServlet</servlet-class>
         <init-param>
             <param-name>datasource</param-name>
             <param-value>c3p0</param-value>
@@ -27,7 +32,7 @@
     <!--  查看用户名是否重复的ajax  -->
     <servlet>
         <servlet-name>AjaxUsernameServlet</servlet-name>
-        <servlet-class>com.supermarket.servlet.AjaxUsernameServlet</servlet-class>
+        <servlet-class>com.supermarket.web.AjaxUsernameServlet</servlet-class>
         <init-param>
             <param-name>datasource</param-name>
             <param-value>c3p0</param-value>
@@ -41,7 +46,7 @@
     <!--  用于生成验证码的servlet  -->
     <servlet>
         <servlet-name>ValiImgServlet</servlet-name>
-        <servlet-class>com.supermarket.servlet.ValiImgServlet</servlet-class>
+        <servlet-class>com.supermarket.web.ValiImgServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ValiImgServlet</servlet-name>
@@ -51,7 +56,7 @@
     <!--  登陆的servlet  -->
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>com.supermarket.servlet.LoginServlet</servlet-class>
+        <servlet-class>com.supermarket.web.LoginServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -61,7 +66,7 @@
     <!--  注销servlet  -->
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>
-        <servlet-class>com.supermarket.servlet.LogoutServlet</servlet-class>
+        <servlet-class>com.supermarket.web.LogoutServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>

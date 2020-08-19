@@ -9,11 +9,13 @@
 <html>
 <head>
     <title>注册成功</title>
-    <link rel="stylesheet" href="<%=request.getContextPath() %>/css/regist.css"/>
-    <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.4.2.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/regist.css"/>
+    <noscript>抱歉，你的浏览器不支持 JavaScript!</noscript>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.4.2.js"></script>
     <script type="text/javascript">
+        // 文档就绪事件
         $(function () {
-            let timeout = <%=request.getAttribute("timeout") %>;
+            let timeout = ${requestScope.timeout};
             let timer = window.setInterval(refresh, 1000);
             function refresh() {
                 if (timeout > 0) {
@@ -21,19 +23,20 @@
                     $("#success_alarm").text("注册成功，" + timeout + "秒后跳转");
                 }else{
                     window.clearInterval(timer);
-                    window.location.href = "/";
+                    window.location.href = "${pageContext.request.contextPath}/";
                 }
             }
         });
     </script>
 </head>
 <body>
+<img src="${pageContext.request.contextPath}/img/login/logo.png" alt="logo" style="position: absolute;top: 8%;left: 12%;">
 <h1 id="success_alarm" style="width:600px;">
-    注册成功，<%=request.getAttribute("timeout")%>秒后跳转
+    注册成功，${requestScope.timeout}秒后跳转
 </h1>
 <p style="color:black;text-align: center;">
     如未跳转，请手动点击跳转至
-    <a href="/" target="_self" style="color:blue;text-decoration: none;">首页</a>
+    <a href="${pageContext.request.contextPath}/" target="_self" style="color:blue;text-decoration: none;">首页</a>
 </p>
 </body>
 </html>

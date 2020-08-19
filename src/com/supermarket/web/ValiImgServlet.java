@@ -1,5 +1,6 @@
-package com.supermarket.servlet;
+package com.supermarket.web;
 
+import com.supermarket.service.ValistrService;
 import com.supermarket.utils.VerifyCode;
 import com.supermarket.utils.WebUtils;
 
@@ -16,22 +17,24 @@ import java.io.OutputStream;
 
 @WebServlet(name = "ValiImgServlet")
 public class ValiImgServlet extends HttpServlet {
+    private ValistrService valistrService = new ValistrService();
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         this.doGet(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 避免乱码
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;utf-8");
+
+        // 获取session
+        HttpSession session = request.getSession();
 
         // 控制不使用缓存
         WebUtils.useCache(false, response);
 
-        VerifyCode img = new VerifyCode();
-        ServletOutputStream out = response.getOutputStream();
-        img.drawImage(out);
-        String code = img.getCode();
-        HttpSession session = request.getSession();
+        // 生成验证码
+        String code = this.valistrService.generateValistr(response.getOutputStream());
         session.setAttribute("valicode", code);
     }
 }

@@ -1,4 +1,4 @@
-package com.supermarket.servlet;
+package com.supermarket.web;
 
 import com.supermarket.utils.WebUtils;
 
@@ -12,14 +12,16 @@ import java.io.IOException;
 
 @WebServlet(name = "LogoutServlet")
 public class LogoutServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         this.doGet(request, response);
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // 设置字符集
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=utf-8");
 
+        // 杀死session
         HttpSession session = request.getSession(false);
         if (session != null) {
             // 杀死session，失活cookie

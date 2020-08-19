@@ -1,5 +1,6 @@
-package com.supermarket.servlet;
+package com.supermarket.web;
 
+import com.supermarket.service.UserService;
 import com.supermarket.utils.JDBCUtils;
 import com.supermarket.utils.WebUtils;
 
@@ -13,22 +14,21 @@ import java.io.IOException;
 
 @WebServlet(name = "AjaxUsernameServlet")
 public class AjaxUsernameServlet extends HttpServlet {
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-//        WebUtils.useConnectionPool(config);
-    }
+    private UserService userService = new UserService();
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         this.doGet(request, response);
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // 设置字符集
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
 
+        // 获取前端传递来的参数
         String username = request.getParameter("username");
-        int count = JDBCUtils.count("user", "username", username);
-        response.getWriter().write(Boolean.toString(count == 0));
+
+        // 返回是否已存在用户名
+        response.getWriter().write(Boolean.toString(this.userService.userNameAvailable(username)));
     }
 }

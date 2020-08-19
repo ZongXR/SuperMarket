@@ -1,11 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" href="<%=request.getContextPath() %>/css/head.css"/>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/head.css"/>
 <meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
 <script type="text/javascript">
+    // 文档就绪事件
     $(function () {
         //标记登录状态
-        let username = "<%=session.getAttribute("username")%>";
-        if (username === "null") {
+        let username = "${sessionScope.username}";
+        if (username === "") {
             // 如果还未登录
             $("#unlogin").show();
             $("#login").hide();
@@ -16,15 +17,16 @@
             $("#login").children("a").eq(0).text(username);
         }
     })
+    // 注销函数
     function logout(element) {
         if (window.confirm("是否退出登录?") === true) {
             $.ajax({
-                "url": "<%=request.getContextPath()%>/LogoutServlet",
+                "url": "${pageContext.request.contextPath}/LogoutServlet",
                 "async": true,
                 "type": "POST",
                 "success": function (result) {
                     // 注销后跳转首页
-                    window.location.href = "<%=request.getContextPath()%>"
+                    window.location.href = "${pageContext.request.contextPath}"
                 }
             })
         }
@@ -32,10 +34,10 @@
 </script>
 <div id="common_head">
     <div id="line1">
-        <div id="content">
+        <div class="content">
             <span id="unlogin">
-                <a href="<%=request.getContextPath() %>/login.jsp">登录</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-                <a href="<%=request.getContextPath()%>/regist.jsp">注册</a>
+                <a href="${pageContext.request.contextPath}/login.jsp">登录</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                <a href="${pageContext.request.contextPath}/regist.jsp">注册</a>
             </span>
             <span id="login">
                 <a href="javascript:void(0)">用户名</a>&nbsp;&nbsp;|&nbsp;&nbsp;
@@ -44,17 +46,17 @@
         </div>
     </div>
     <div id="line2">
-        <img id="logo" src="<%=request.getContextPath() %>/img/login/logo.png"/>
+        <img id="logo" src="${pageContext.request.contextPath}/img/login/logo.png"/>
         <input type="text" name=""/>
         <input type="button" value="搜 索"/>
         <span id="goto">
 			<a id="goto_order" href="#">我的订单</a>
 			<a id="goto_cart" href="#">我的购物车</a>
 		</span>
-        <img id="erwm" src="<%=request.getContextPath() %>/img/head/e2.png" width="76"/>
+        <img id="erwm" src="${pageContext.request.contextPath}/img/head/e2.png" width="76"/>
     </div>
     <div id="line3">
-        <div id="content">
+        <div class="content">
             <ul>
                 <li><a href="#">首页</a></li>
                 <li><a href="#">全部商品</a></li>
