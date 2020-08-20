@@ -70,7 +70,7 @@ public class RegistServlet extends HttpServlet {
         }
 
         // 注册成功
-        session.setAttribute("username", user.getUsername());
+        session.setAttribute("user", user);
         request.setAttribute("timeout", 5);
         request.getRequestDispatcher("/regist_success.jsp").forward(request, response);
     }

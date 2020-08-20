@@ -68,7 +68,7 @@ public class LoginServlet extends HttpServlet {
         }
 
         // 修改主页，展示用户名
-        session.setAttribute("username", user.getUsername());
+        session.setAttribute("user", user);
         WebUtils.setCookie(request, response, "JSESSIONID", session.getId());
 
         // 跳转回首页

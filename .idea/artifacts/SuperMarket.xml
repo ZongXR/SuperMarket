@@ -1,7 +1,7 @@
 <component name="ArtifactManager">
-  <artifact type="war" name="SuperMarket">
+  <artifact type="exploded-war" name="SuperMarket">
     <output-path>$PROJECT_DIR$/web</output-path>
-    <root id="archive" name="SuperMarket.war">
+    <root id="root">
       <element id="javaee-facet-resources" facet="网上商城/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">

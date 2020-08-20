@@ -5,7 +5,7 @@
     // 文档就绪事件
     $(function () {
         //标记登录状态
-        let username = "${sessionScope.username}";
+        let username = "${sessionScope.user.username}";
         if (username === "") {
             // 如果还未登录
             $("#unlogin").show();
