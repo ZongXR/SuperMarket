@@ -1,6 +1,6 @@
 package com.supermarket.exception;
 
-public class MsgException extends RuntimeException{
+public class MsgException extends Exception{
     /**
      * 韩餐构造方法
      * @param message 在网页中的提示信息

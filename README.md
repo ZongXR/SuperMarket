@@ -11,17 +11,31 @@
 <ul>
     <li>本项目静态资源由网络收集得来，并加以大范围修改</li>
     <li>未经许可不得将本项目商用，如需商用请联系作者<a href="mailto:zxr@tju.edu.cn">zxr@tju.edu.cn</a></li>
-    <li>本项目为红蓝队候选靶场之一，欢迎提出意见与建议</li>
 </ul>
 <h2>关键技术</h2>
+<p>基于JavaWeb三层经典架构开发</p>
+<h3>前端</h3>
 <ul>
-    <li>基于JavaWeb三层经典架构开发</li>
-    <li>使用jsp页面展示，并通过EL表达式接收服务器打给浏览器的数据</li>
+    <li>前端使用jsp页面展示，并通过EL表达式接收服务器打给浏览器的数据</li>
     <li>使用js实现网页动态效果，通过jQuery简化操作，并实现前端的数据校验</li>
-    <li>使用servlet(com.supermarket.web)接收前端请求，并根据需求交给com.supermarket.service处理</li>
-    <li>使用com.supermarket.service完成后端各种校验</li>
-    <li>com.supermarket.dao调用JDBC连接MySQL，可自定义使用C3P0连接池或DBCP连接池</li>
     <li>使用Ajax技术完成前端用户名可用性校验、退出登录功能</li>
+</ul>
+<h3>View层</h3>
+<ul>
+    <li>View层对应com.supermarket.web包，主要通过servlet实现</li>
+    <li>主要功能：接收前端请求，并根据需求交给Controller处理</li>
+</ul>
+<h3>Controller层</h3>
+<ul>
+    <li>Controller层对应com.supermarket.service包</li>
+    <li>使用com.supermarket.service.UserService完成对用户数据的各种校验</li>
+    <li>使用com.supermarket.service.ValistrService完成生成验证码相关功能</li>
+</ul>
+<h3>Model层</h3>
+<ul>
+    <li>Model层对应com.supermarket.dao包</li>
+    <li>使用com.supermarket.service.UserDao完成对数据库user表的增删改查</li>
+    <li>调用JDBC连接MySQL，可自定义使用C3P0连接池或DBCP连接池</li>
 </ul>
 <h2>版本迭代</h2>
 <table>

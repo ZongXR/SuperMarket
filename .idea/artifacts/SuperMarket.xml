@@ -1,11 +1,24 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="SuperMarket">
+  <artifact type="war" name="SuperMarket">
     <output-path>$PROJECT_DIR$/web</output-path>
-    <root id="root">
+    <root id="archive" name="SuperMarket.war">
       <element id="javaee-facet-resources" facet="网上商城/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="网上商城" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/junit-4.12.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/servlet_src.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/c3p0-0.9.1.2.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/commons-dbcp-1.4.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/hamcrest-core-1.3.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/commons-pool-1.5.6.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/junit-4.12-javadoc.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/junit-4.12-sources.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/hamcrest-core-1.3-javadoc.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/hamcrest-core-1.3-sources.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/mysql-connector-java-5.0.8-bin.jar" />
         </element>
       </element>
     </root>
