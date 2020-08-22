@@ -23,10 +23,6 @@ public class ValiImgServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 避免乱码
-        request.setCharacterEncoding("utf-8");
-        response.setContentType("text/html;utf-8");
-
         // 获取session
         HttpSession session = request.getSession();
 

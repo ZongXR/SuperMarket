@@ -4,15 +4,64 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
+    <!--  全局请求参数拦截处理  -->
+    <filter>
+        <filter-name>SetParameters</filter-name>
+        <filter-class>com.supermarket.filter.SetParameters</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SetParameters</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--  指定全局连接池  -->
+    <filter>
+        <filter-name>UseDataSource</filter-name>
+        <filter-class>com.supermarket.filter.UseDataSource</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>UseDataSource</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--  自动登录过滤器  -->
+    <filter>
+        <filter-name>AutoLogin</filter-name>
+        <filter-class>com.supermarket.filter.AutoLogin</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AutoLogin</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
     <!--  配置错误页面  -->
     <error-page>
         <location>/error.jsp</location>
     </error-page>
 
-    <!--  web应用的初始化参数  -->
+    <!--  指定全局字符集  -->
+    <context-param>
+        <param-name>characterEncoding</param-name>
+        <param-value>utf-8</param-value>
+    </context-param>
+
+    <!--  指定tomcat使用的字符集，该选项不能控制server.xml使用的字符集  -->
+    <context-param>
+        <param-name>charset</param-name>
+        <param-value>iso-8859-1</param-value>
+    </context-param>
+
+    <!--  全局指定连接池  -->
     <context-param>
         <param-name>datasource</param-name>
         <param-value>dbcp</param-value>
+    </context-param>
+
+    <!--  指定密码加密算法  -->
+    <context-param>
+        <param-name>encryptMethod</param-name>
+        <param-value>md5</param-value>
     </context-param>
 
     <!--  注册功能Servlet  -->

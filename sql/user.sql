@@ -8,5 +8,7 @@ create table user(
 	email varchar(100)
 );
 
-insert into user values(null, 'admin', '123', '炒鸡管理员', 'admin@tedu.cn');
-insert into user values(null, '张飞', '123', '管理员', 'admin@tedu.cn');
+insert into user values(null, 'admin', '123', '超级管理员', 'admin@supermarket.com');
+insert into user values(null, '张三', '123', '管理员', 'admin@supermarket.com');
+
+update user set password = md5(password);

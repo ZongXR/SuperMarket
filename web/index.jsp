@@ -5,6 +5,7 @@
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
     <meta name="keywords" content="网上商城, 电商平台, 能源互联网">
     <meta name="description" content="能源互联网, 网上商城, 电商平台, 电子商务, 掌上e宝, 科技金服, 不正经网站研究中心">
+    <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/img/index/icon.ico" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css"/>
     <title>网上商城-能源工业云平台_国电网商|网上金融科技|电子金服</title>
     <noscript>抱歉，你的浏览器不支持 JavaScript!</noscript>

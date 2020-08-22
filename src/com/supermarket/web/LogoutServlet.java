@@ -17,16 +17,13 @@ public class LogoutServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // 设置字符集
-        request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=utf-8");
-
         // 杀死session
         HttpSession session = request.getSession(false);
         if (session != null) {
             // 杀死session，失活cookie
             session.invalidate();
             WebUtils.removeCookie(request, response, "JSESSIONID");
+            WebUtils.removeCookie(request, response, "password");
         }
     }
 }

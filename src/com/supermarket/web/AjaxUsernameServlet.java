@@ -21,10 +21,6 @@ public class AjaxUsernameServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // 设置字符集
-        request.setCharacterEncoding("utf-8");
-        response.setContentType("text/html;charset=utf-8");
-
         // 获取前端传递来的参数
         String username = request.getParameter("username");
 

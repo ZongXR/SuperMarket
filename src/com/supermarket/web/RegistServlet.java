@@ -29,10 +29,6 @@ public class RegistServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 设置字符集防乱码
-        request.setCharacterEncoding("utf-8");
-        response.setContentType("text/html;charset=utf-8");
-
         // 获取session
         HttpSession session = request.getSession();
 

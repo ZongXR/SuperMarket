@@ -23,10 +23,6 @@ public class LoginServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 设定字符集防乱码
-        request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=utf-8");
-
         // 获取session
         HttpSession session = request.getSession();
 
@@ -65,6 +61,15 @@ public class LoginServlet extends HttpServlet {
         }else{
             // 如果没勾选记住用户名，则删除cookie
             WebUtils.removeCookie(request, response, "username");
+        }
+
+        // 设置自动登录的cookie
+        if ("true".equals(autologin)){
+            // 如果设置了自动登录，把密码存入cookie
+            WebUtils.setCookie(request, response, "password", user.getPassword(), 30*24*60*60);
+        }else{
+            // 如果没设置自动登录
+            WebUtils.removeCookie(request, response, "password");
         }
 
         // 修改主页，展示用户名

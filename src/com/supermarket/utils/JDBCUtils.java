@@ -30,19 +30,6 @@ public class JDBCUtils {
 
     private static DataSource pool = null;
 
-    // 默认使用c3p0连接池
-    static {
-        InputStream resource = JDBCUtils.class.getClassLoader().getResourceAsStream("/JDBC.properties");
-        Properties prop = new Properties();
-        try {
-            prop.load(resource);
-            JDBCUtils.setPool(prop.getProperty("datasource"));
-        } catch (IOException e) {
-            e.printStackTrace();
-            JDBCUtils.useDataSourceDefault();
-        }
-    }
-
     /**
      * 设置使用哪个连接池
      *

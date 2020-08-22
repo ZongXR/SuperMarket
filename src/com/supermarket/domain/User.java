@@ -62,4 +62,9 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%nID:%d%n用户名:%s%n密码:%s%n昵称:%s%n邮箱：%s", this.id, this.username, this.password, this.nickname, this.email);
+    }
 }

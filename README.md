@@ -96,13 +96,29 @@
         </td>
         <td>2020年8月20日</td>
     </tr>
+    <tr>
+        <td>0.2.1</td>
+        <td>
+            <ul>
+                <li>使用过滤器完成全局请求参数拦截处理，包括全局中文乱码处理、全局password请求参数加密</li>
+                <li>通过过滤器实现全局连接池选定</li>
+                <li>通过过滤器实现自动登录功能</li>
+                <li>通过装饰者模式扩展request对象</li>
+            </ul>
+        </td>
+        <td>待定</td>
+    </tr>
 </table>
 <h2>配置情况</h2>
 <ul>
-<li>本地修改hosts文件,自定义一个域名</li>
-<li>虚拟主机使用tomcat7.0.62托管,将上述域名新增为虚拟主机,appBase参数填写绝对路径</li>
-<li>本项目基于IntelliJ Idea 2020.01编写</li>
-<li>JAVA_HOME环境变量配置为<code>set JAVA_HOME=C:\PROGRA~1\JetBrains\INTELL~1\jbr</code></li>
+    <li>JDK版本：OpenJDK11</li>
+    <li>服务器：tomcat7.0.62</li>
+    <li>开发环境：IntelliJ Idea 2020.1。4</li>
+</ul>
+<h2>遇到的bug锦集(作为记录，博君一笑)</h2>
+<ul>
+    <li>HttpServletRequest的装饰者类HttpServletRequestDecorator中的getParameterMap重写方法中，不能在原地进行参数字符集修改，否则如果调用两次及以上该方法时会编码多次，造成乱码</li>
+    <li>对请求参数的拦截处理，如果用到装饰者模式，最好在一处完成。如果在多处完成会造成请求参数的重复处理，从而导致乱码或者拿到非预期的参数值</li>
 </ul>
 </body>
 </html>
