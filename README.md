@@ -113,7 +113,7 @@
 <ul>
     <li>JDK版本：OpenJDK11</li>
     <li>服务器：tomcat7.0.62</li>
-    <li>开发环境：IntelliJ Idea 2020.1。4</li>
+    <li>开发环境：IntelliJ Idea 2020.1.4</li>
 </ul>
 <h2>遇到的bug锦集(作为记录，博君一笑)</h2>
 <ul>
