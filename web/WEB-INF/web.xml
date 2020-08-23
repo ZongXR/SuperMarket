@@ -122,4 +122,9 @@
         <url-pattern>/LogoutServlet</url-pattern>
     </servlet-mapping>
 
+    <!--  监听web应用的listener  -->
+    <listener>
+        <listener-class>com.supermarket.listener.ApplicationListener</listener-class>
+    </listener>
+
 </web-app>

@@ -1,6 +1,7 @@
 package com.supermarket.utils;
 
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import javax.servlet.GenericServlet;
@@ -19,6 +20,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class WebUtils {
+    private static Logger log = Logger.getLogger(WebUtils.class);
     /**
      * 工具类，私有化构造方法
      */
@@ -138,14 +140,14 @@ public class WebUtils {
     public static String getCookieValue(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null)
-            return "";
+            return null;
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals(name)) {
                 // 如果找到键为name的cookie
                 return URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
             }
         }
-        return "";
+        return null;
     }
 
     /**
@@ -190,6 +192,8 @@ public class WebUtils {
         try {
             secretBytes = MessageDigest.getInstance(encryptMethod).digest(plainText.getBytes());
         } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
             throw new RuntimeException(String.format("没有%s加密算法", encryptMethod));
         }
         StringBuilder md5code = new StringBuilder(new BigInteger(1, secretBytes).toString(16));

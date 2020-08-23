@@ -108,6 +108,17 @@
         </td>
         <td>2020年8月22日</td>
     </tr>
+    <tr>
+        <td>0.2.2</td>
+        <td>
+            <ul>
+                <li>使用log4j框架进行日志记录</li>
+                <li>修复重启服务器自动登录失效的bug</li>
+                <li>加入网页标题图标</li>
+            </ul>
+        </td>
+        <td>2020年8月24日</td>
+    </tr>
 </table>
 <h2>配置情况</h2>
 <ul>
@@ -119,6 +130,7 @@
 <ul>
     <li>HttpServletRequest的装饰者类HttpServletRequestDecorator中的getParameterMap重写方法中，不能在原地进行参数字符集修改，否则如果调用两次及以上该方法时会编码多次，造成乱码</li>
     <li>对请求参数的拦截处理，如果用到装饰者模式，最好在一处完成。如果在多处完成会造成请求参数的重复处理，从而导致乱码或者拿到非预期的参数值</li>
+    <li>用户的登录信息最好保存到session域中，在0.2.1中的自动登录成功后误把user对象塞入到了request域，造成了重启服务器自动登录失效的bug。</li>
 </ul>
 </body>
 </html>

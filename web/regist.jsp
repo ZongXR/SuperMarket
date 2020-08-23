@@ -3,6 +3,7 @@
 <head>
     <title>欢迎注册</title>
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/img/index/icon.ico" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/regist.css"/>
     <noscript>抱歉，你的浏览器不支持 JavaScript!</noscript>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.4.2.js"></script>

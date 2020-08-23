@@ -2,6 +2,7 @@ package com.supermarket.utils;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.apache.commons.dbcp.BasicDataSourceFactory;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import javax.naming.Context;
@@ -29,6 +30,7 @@ import java.util.Properties;
 public class JDBCUtils {
 
     private static DataSource pool = null;
+    private static Logger log = Logger.getLogger(JDBCUtils.class);
 
     /**
      * 设置使用哪个连接池
@@ -61,7 +63,7 @@ public class JDBCUtils {
      * 使用C3P0连接池
      */
     private static void useC3P0() {
-        System.out.println("使用C3P0连接池");
+        JDBCUtils.log.debug("使用c3p0连接池");
         JDBCUtils.pool = new ComboPooledDataSource();
     }
 
@@ -72,10 +74,10 @@ public class JDBCUtils {
         Properties prop = new Properties();
         try {
             prop.load(Class.forName("com.supermarket.utils.JDBCUtils").getResourceAsStream("/DBCPconfig.properties"));
-            System.out.println("使用DBCP连接池");
+            JDBCUtils.log.debug("使用DBCP连接池");
             JDBCUtils.pool = BasicDataSourceFactory.createDataSource(prop);
         } catch (Exception e) {
-            System.err.println("使用DBCP连接池失败");
+            JDBCUtils.log.error("使用DBCP连接池失败");
             e.printStackTrace();
             JDBCUtils.useDataSourceDefault();
         }
@@ -90,10 +92,10 @@ public class JDBCUtils {
             context = new InitialContext();
             Context envCtx = (Context) context.lookup("java:comp/env");  // 固定路径
             DataSource dataSource = (DataSource) envCtx.lookup("jdbc/EmployeeDB");
-            System.out.println("使用tomcat自带连接池");
+            JDBCUtils.log.debug("使用tomcat自带连接池");
             JDBCUtils.pool = dataSource;
         } catch (NamingException e) {
-            System.err.println("使用tomcat自带连接池失败");
+            JDBCUtils.log.error("使用tomcat自带连接池失败");
             e.printStackTrace();
             JDBCUtils.useDataSourceDefault();
         }

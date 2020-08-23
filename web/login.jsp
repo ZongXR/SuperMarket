@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/img/index/icon.ico" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css"/>
     <title>欢迎登陆</title>
     <noscript>抱歉，你的浏览器不支持 JavaScript!</noscript>

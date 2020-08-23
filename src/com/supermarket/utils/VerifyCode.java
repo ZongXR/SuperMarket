@@ -1,5 +1,7 @@
 package com.supermarket.utils;
 
+import org.apache.log4j.Logger;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -15,6 +17,7 @@ import javax.imageio.ImageIO;
  * 动态生成图片
  */
 public class VerifyCode {
+    private static Logger log = Logger.getLogger(VerifyCode.class);
     // {"宋体", "华文楷体", "黑体", "华文新魏", "华文隶书", "微软雅黑", "楷体_GB2312"}
     private static final String[] fontNames = { "宋体", "华文楷体", "黑体", "微软雅黑",  "楷体_GB2312" };
     // 可选字符
@@ -114,7 +117,7 @@ public class VerifyCode {
     public static void main(String[] args) throws Exception {
         VerifyCode vc = new VerifyCode();
         vc.drawImage(new FileOutputStream(String.format("%s\\img\\verify.jpg", System.getProperty("user.dir"))));
-        System.out.println(vc.getCode());
-        System.out.println("执行成功~!");
+        log.debug(vc.getCode());
+        log.debug("执行成功!");
     }
 }

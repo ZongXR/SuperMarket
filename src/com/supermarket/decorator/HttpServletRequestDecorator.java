@@ -21,7 +21,7 @@ import java.util.Map;
 public class HttpServletRequestDecorator extends HttpServletRequestWrapper {
 
     private final HttpServletRequest request;
-    private final Map<String, String> cookies;
+    private Map<String, String> cookies;
 
     /**
      * 构造方法

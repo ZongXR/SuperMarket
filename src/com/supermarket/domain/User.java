@@ -1,6 +1,13 @@
 package com.supermarket.domain;
 
-public class User {
+import org.apache.log4j.Logger;
+
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
+
+public class User implements HttpSessionBindingListener {
+
+    private Logger log = Logger.getLogger(this.getClass());
     private int id;
     private String username;
     private String password;
@@ -63,8 +70,30 @@ public class User {
         this.email = email;
     }
 
+    /**
+     * 将user格式化为字符串
+     * @return user对应的字符串
+     */
     @Override
     public String toString() {
         return String.format("%nID:%d%n用户名:%s%n密码:%s%n昵称:%s%n邮箱：%s", this.id, this.username, this.password, this.nickname, this.email);
+    }
+
+    /**
+     * user加入session域的回调函数
+     * @param event 加入域属性事件
+     */
+    @Override
+    public void valueBound(HttpSessionBindingEvent event) {
+        this.log.info(String.format("用户[%s]已登录", this.username));
+    }
+
+    /**
+     * user离开session域的回调函数
+     * @param event 离开域属性事件
+     */
+    @Override
+    public void valueUnbound(HttpSessionBindingEvent event) {
+        this.log.info(String.format("用户[%s]已注销", this.username));
     }
 }
