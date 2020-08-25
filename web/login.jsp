@@ -21,6 +21,11 @@
                 // 如果用户名不为空，则记住用户名
                 $("input[name='remname']").attr("checked", "checked");
             }
+            // 如果支持html5，那么使用自带校验
+            if (window.applicationCache){
+                $("form").removeAttr("onsubmit");
+                $("input").removeAttr("onblur");
+            }
         })
 
         // 提交表单的检查函数
@@ -46,21 +51,21 @@
         <tr>
             <td class="tdx">用户名：</td>
             <td>
-                <input type="text" name="username" value="" onblur="isNull(this, '用户名不能为空')"/>
+                <input type="text" name="username" value="" required="required" onblur="isNull(this, '用户名不能为空')"/>
                 <span></span>
             </td>
         </tr>
         <tr>
             <td class="tdx">密&nbsp;&nbsp; 码：</td>
             <td>
-                <input type="password" name="password" onblur="isNull(this, '密码不能为空')"/>
+                <input type="password" name="password" required="required" onblur="isNull(this, '密码不能为空')"/>
                 <span></span>
             </td>
         </tr>
         <tr>
             <td class="tdx">验证码：</td>
             <td>
-                <input type="text" name="valistr" onblur="isNull(this, '验证码不能为空')"/>
+                <input type="text" name="valistr" required="required" onblur="isNull(this, '验证码不能为空')"/>
                 <img src="${pageContext.request.contextPath}/ValiImgServlet" width="" height="" alt="验证码"
                      onclick="refreshValistr(this)"/>
                 <span></span>

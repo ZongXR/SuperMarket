@@ -1,5 +1,6 @@
 package com.supermarket.listener;
 
+import com.supermarket.utils.JDBCUtils;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContext;
@@ -23,10 +24,12 @@ public class ApplicationListener implements ServletContextListener{
     // -------------------------------------------------------
 
     /**
-     * web应用启动回调函数
+     * web应用启动回调函数，在其中注册JDBC驱动
      * @param sce ServletContext事件
      */
     public void contextInitialized(ServletContextEvent sce) {
+        String datasource = sce.getServletContext().getInitParameter("datasource");
+        JDBCUtils.setPool(datasource);
         log.debug("web应用已创建");
     }
 

@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet(name = "RegistServlet")
+@WebServlet(name = "RegistServlet", value = "/RegistServlet")
 public class RegistServlet extends HttpServlet {
     private UserService userService = new UserService();
     private ValistrService valistrService = new ValistrService();

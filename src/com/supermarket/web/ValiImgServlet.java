@@ -15,7 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-@WebServlet(name = "ValiImgServlet")
+@WebServlet(name = "ValiImgServlet", value = "/ValiImgServlet")
 public class ValiImgServlet extends HttpServlet {
     private ValistrService valistrService = new ValistrService();
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -13,7 +13,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.Objects;
 
-@WebServlet(name = "LoginServlet")
+@WebServlet(name = "LoginServlet", value = "/LoginServlet")
 public class LoginServlet extends HttpServlet {
     private UserService userService = new UserService();
     private ValistrService valistrService = new ValistrService();

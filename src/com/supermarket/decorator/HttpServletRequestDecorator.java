@@ -67,7 +67,7 @@ public class HttpServletRequestDecorator extends HttpServletRequestWrapper {
         String encryptMethod = this.request.getServletContext().getInitParameter("encryptMethod");
         if (result == null)
             return null;
-        else if ("password".equalsIgnoreCase(name))
+        else if ("password".equalsIgnoreCase(name) || "password2".equalsIgnoreCase(name))
             // 如果键是password，对其进行加密处理
             return WebUtils.encrypt(result[0], encryptMethod);
         else

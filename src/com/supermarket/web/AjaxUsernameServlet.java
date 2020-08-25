@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "AjaxUsernameServlet")
+@WebServlet(name = "AjaxUsernameServlet", value = "/AjaxUsernameServlet")
 public class AjaxUsernameServlet extends HttpServlet {
     private UserService userService = new UserService();
 
