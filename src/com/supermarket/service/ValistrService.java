@@ -1,33 +1,24 @@
 package com.supermarket.service;
 
-import com.supermarket.utils.VerifyCode;
+import com.supermarket.exception.MsgException;
+import org.springframework.stereotype.Service;
 
-import javax.servlet.ServletOutputStream;
 import java.io.OutputStream;
 
-public class ValistrService {
+public interface ValistrService {
 
     /**
-     * 判断验证码是否相等
+     * 检查验证码是否正确
      * @param valistr 前端传过来的验证码
-     * @param valicode 后端生成的验证码
-     * @return 是否相等
+     * @param valicode session中的验证码
+     * @throws MsgException 不正确的提示信息
      */
-    public boolean isCorrect(String valistr, String valicode) {
-        if (valistr == null || valicode == null)
-            return false;
-        else
-            return valistr.equalsIgnoreCase(valicode);
-    }
+    public void check(String valistr, String valicode) throws MsgException;
 
     /**
-     * 生成验证码的功能
-     * @param out 向哪输出，输出流
-     * @return 验证码字符串
+     * 生成验证码
+     * @param out 输出到的流
+     * @return 真实的验证码字符串
      */
-    public String generateValistr(OutputStream out) {
-        VerifyCode img = new VerifyCode();
-        img.drawImage(out);
-        return img.getCode();
-    }
+    public String generateValistr(OutputStream out);
 }

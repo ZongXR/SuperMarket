@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Validation API-2.0.1.Final" type="BeanValidation">
+    <properties version="2.0.1.Final" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/validation-api-2.0.1.Final.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

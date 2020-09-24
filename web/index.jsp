@@ -12,7 +12,7 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.4.2.js"></script>
 </head>
 <body>
-<%@include file="_head.jsp" %>
+<%@include file="WEB-INF/jsp/_head.jsp" %>
 <div class="fixed">
     <%--用于右下角的漂浮显示--%>
     <a href="https://github.com/GoogleLLP/SuperMarket" target="_blank">
@@ -55,6 +55,6 @@
         </span>
     </div>
 </div>
-<%@include file="_foot.jsp" %>
+<%@include file="WEB-INF/jsp/_foot.jsp" %>
 </body>
 </html>

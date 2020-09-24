@@ -1,7 +1,12 @@
-// 判断是否为空
+/**
+ * 非空校验，只用于旧版浏览器。新版浏览器使用html5的require属性
+ * @param element 校验的元素
+ * @param msg 提示信息
+ * @returns {boolean} 是否为空
+ */
 function isNull(element, msg) {
     let node = $(element);
-    if (node.val() === "") {
+    if ($.trim(node.val()) === "") {
         // 如果是空
         node.nextAll("span").text(msg).css("color", "red");
         return true;
@@ -12,7 +17,13 @@ function isNull(element, msg) {
     }
 }
 
-// 正则校验
+/**
+ * 正则校验，只用于旧版浏览器。新版浏览器用html5的pattern属性
+ * @param element 校验的元素
+ * @param regex 正则表达式
+ * @param msg 提示信息
+ * @returns {boolean} 是否满足正则
+ */
 function isRegexValid(element, regex, msg) {
     let node = $(element);
     if (node.val() === "") {
@@ -46,15 +57,27 @@ function isEqual(element1, node2, msg) {
     }
 }
 
-// 刷新验证码
+/**
+ * 刷新验证码
+ * @param element img标签元素
+ */
 function refreshValistr(element) {
     let time = new Date().getTime();
-    $(element).attr("src", "/ValiImgServlet?time=" + time);
+    $(element).attr("src", "/valicode/valistr.action?time=" + time);
 }
 
-// 可用性校验
+/**
+ * ajax可用性校验
+ * @param element 校验的元素
+ * @param msg1 校验通过的提示信息
+ * @param msg2 校验没通过的提示信息
+ * @param path ajax路径
+ * @returns {boolean} 是否可用
+ */
 function isAvailable(element, msg1, msg2, path) {
     let node = $(element);
+    node.attr("oninvalid", "this.setCustomValidity('hhhh')");
+    node.attr("oninput", "this.setCustomValidity('')");
     if (node.val() === "") {
         // 如果没通过非空校验，直接返回false
         node.nextAll("span").text("");
@@ -75,4 +98,24 @@ function isAvailable(element, msg1, msg2, path) {
             }
         }
     });
+}
+
+/**
+ * 判断是否支持html5新属性
+ * @param tagName 标签名
+ * @param attrName 属性名
+ * @returns {boolean} 是否支持
+ */
+function supportHtml5(tagName, attrName) {
+    let elem = document.createElement(tagName);
+    return attrName in elem;
+}
+
+/**
+ * 清除提示消息
+ * @param element 元素
+ */
+function clearMsg(element){
+    let node = $(element);
+    node.nextAll("span").text("");
 }

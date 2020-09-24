@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="supermarket@localhost" uuid="3e10d686-140b-4da6-9a96-ec81197b6d70">
+    <data-source source="LOCAL" name="SuperMarket@localhost" uuid="f2bd7a1b-cfa4-4580-9134-9e7c74139ede">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
+      <remarks>网上商城</remarks>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/supermarket</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/SuperMarket</jdbc-url>
       <driver-properties>
         <property name="serverTimezone" value="Asia/Shanghai" />
       </driver-properties>

@@ -74,7 +74,7 @@ div.fixed a{
 div.fixed a.toTop{
 	position: relative;
 	right: -30px;
-	border: 4px solid #222222;
+	border: 4px solid #484848;
 	width: 30px;
 	height: 30px;
 	background-image: url(/img/index/top.png);

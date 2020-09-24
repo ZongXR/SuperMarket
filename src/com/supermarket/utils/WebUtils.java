@@ -1,8 +1,7 @@
 package com.supermarket.utils;
 
 
-import org.apache.log4j.Logger;
-import org.junit.Test;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.GenericServlet;
 import javax.servlet.ServletConfig;
@@ -18,9 +17,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 public class WebUtils {
-    private static Logger log = Logger.getLogger(WebUtils.class);
     /**
      * 工具类，私有化构造方法
      */
@@ -62,23 +61,6 @@ public class WebUtils {
     }
 
     /**
-     * 获取servlet初始化参数
-     *
-     * @param config servlet配置信息
-     */
-    public static void useConnectionPool(ServletConfig config) {
-        ServletContext context = config.getServletContext();
-        if (config.getInitParameter("datasource") != null) {
-            // 如果有局部配置就用局部配置
-            String datasource = config.getInitParameter("datasource");
-            JDBCUtils.setPool(datasource);
-        } else {
-            // 否则就用全局配置
-            JDBCUtils.setPool(context.getInitParameter("datasource"));
-        }
-    }
-
-    /**
      * 控制浏览器是否使用缓存
      *
      * @param use 是否使用缓存
@@ -112,6 +94,19 @@ public class WebUtils {
     }
 
     /**
+     * 设置一堆cookie
+     * @param request 请求对象
+     * @param response 响应对象
+     * @param map 键值对
+     */
+    public static void setCookies(HttpServletRequest request, HttpServletResponse response, Map<String, String> map){
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            WebUtils.setCookie(request, response, entry.getKey(), entry.getValue());
+        }
+    }
+
+
+    /**
      * 删除cookie
      *
      * @param request  请求对象
@@ -119,14 +114,21 @@ public class WebUtils {
      * @param name     键
      */
     public static void removeCookie(HttpServletRequest request, HttpServletResponse response, String name) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null)
-            return;
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(name)) {
-                cookie.setMaxAge(0);
-                response.addCookie(cookie);
-            }
+        Cookie cookie = new Cookie(name, "");
+        cookie.setMaxAge(0);
+        cookie.setPath(request.getContextPath() + "/");
+        response.addCookie(cookie);
+    }
+
+    /**
+     * 删除一堆cookie
+     * @param request 请求对象
+     * @param response 响应对象
+     * @param names cookie的键
+     */
+    public static void removeCookies(HttpServletRequest request, HttpServletResponse response, String... names){
+        for (String name : names) {
+            WebUtils.removeCookie(request, response, name);
         }
     }
 
@@ -184,17 +186,18 @@ public class WebUtils {
     /**
      * 对密码加密
      * @param plainText 加密前的字符串
-     * @param encryptMethod 加密方法
      * @return 加密后的字符串
      */
-    public static String encrypt(String plainText, String encryptMethod) {
+    public static String md5(String plainText) {
+        if (plainText == null) {
+            return null;
+        }
         byte[] secretBytes = null;
         try {
-            secretBytes = MessageDigest.getInstance(encryptMethod).digest(plainText.getBytes());
+            secretBytes = MessageDigest.getInstance("md5").digest(plainText.getBytes());
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            log.error(e.getMessage());
-            throw new RuntimeException(String.format("没有%s加密算法", encryptMethod));
+            throw new RuntimeException(String.format("没有%s加密算法", "md5"));
         }
         StringBuilder md5code = new StringBuilder(new BigInteger(1, secretBytes).toString(16));
         for (int i = 0; i < 32 - md5code.length(); i++) {

@@ -19,6 +19,7 @@
           <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/hamcrest-core-1.3-javadoc.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/hamcrest-core-1.3-sources.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/mysql-connector-java-5.0.8-bin.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/log4j-1.2.12.jar" />
         </element>
       </element>
     </root>

@@ -1,48 +1,61 @@
 package com.supermarket.filter;
 
-import com.supermarket.decorator.HttpServletRequestDecorator;
+import com.supermarket.decorator.RequestDecorator;
 import com.supermarket.domain.User;
 import com.supermarket.exception.MsgException;
 import com.supermarket.service.UserService;
-import com.supermarket.utils.WebUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebFilter(filterName = "AutoLogin")
 public class AutoLogin implements Filter {
-    private UserService userService = new UserService();
+
+    private UserService userService = null;
+    private User user = null;
 
     public void destroy() {
     }
 
-    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
-        HttpServletRequestDecorator request = new HttpServletRequestDecorator((HttpServletRequest) req);
-        String username = request.getCookieValue("username");
-        String password = request.getCookieValue("password");
-
-        if (request.getSession(false) == null || request.getSession(false).getAttribute("user") == null) {
-            // 如果当前未登录，尝试自动登录
-            if (username != null && password != null) {
-                // cookie里面有username和password才能自动登录了
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
+        RequestDecorator req = new RequestDecorator((HttpServletRequest) request);
+        if (req.getSessionValue("user") == null){
+            // 如果还未登录
+            String username = req.getCookieValue("username");
+            String password = req.getCookieValue("password");
+            if (username != null && password != null){
+                // 如果有用户名和密码
+                this.user.setUsername(username);
+                this.user.setPassword(password);
                 User user = null;
                 try {
-                    user = this.userService.login(username, password);
+                    user = this.userService.login(this.user, "", "");
+                    // 如果登陆成功就把user存入session域
+                    req.getSession().setAttribute("user", user);
                 } catch (MsgException e) {
-                    // 自动登录没找到用户
+                    // 登陆失败说明cookie中的用户名密码不对
                 }
-                request.getSession().setAttribute("user", user);
             }
         }
-        // 此处必须使用旧的req，如果使用新的，会造成请求参数的重复处理
-        chain.doFilter(req, resp);
+        chain.doFilter(request, response);
     }
 
+    /**
+     * 这里不能自动装配，需要手动从spring容器中拿对象
+     * @param config web.xml的filter配置
+     * @throws ServletException
+     */
     public void init(FilterConfig config) throws ServletException {
-
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        this.userService = (UserService) context.getBean("userService");
+        this.user = (User) context.getBean("user");
     }
 
 }
