@@ -22,7 +22,7 @@
 </ul>
 <h3>过滤器</h3>
 <ul>
-    <li>com.supermarket.filter包用于存放监听器</li>
+    <li>com.supermarket.filter包用于存放过滤器</li>
     <li>CharacterEncodingFilter类实现全局乱码处理，包括POST请求、GET请求、响应</li>
     <li>AutoLogin类实现用户自动登录功能</li>
 </ul>
