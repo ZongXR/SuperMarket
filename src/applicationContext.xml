@@ -73,6 +73,9 @@
     </bean>
     <!--  开启注解事务管理-->
     <tx:annotation-driven/>
-
+    <!--  配置JDBC模板类  -->
+    <bean class="org.springframework.jdbc.core.JdbcTemplate" id="jdbcTemplate" >
+        <property name="dataSource" ref="dataSource" />
+    </bean>
 
 </beans>

@@ -4,6 +4,7 @@ import com.supermarket.dao.UserDao;
 import com.supermarket.domain.User;
 import com.supermarket.domain.UserImpl;
 import com.supermarket.exception.MsgException;
+import com.supermarket.exception.MsgRollbackException;
 import com.supermarket.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
             return user;
     }
 
-    @Transactional
+    @Transactional(rollbackOn = {RuntimeException.class, MsgRollbackException.class})
     @Override
     public User regist(
             @Valid User user,
@@ -63,6 +64,12 @@ public class UserServiceImpl implements UserService {
             throw new MsgException("用户名已被注册");
         // 通过以上校验，插入数据
         this.userDao.insertUser(user);
+        // 检查数据库该用户名只有一个
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("username", user.getUsername());
+        List<? extends User> users = this.userDao.queryUsers(map);
+        if (users.size() > 1)
+            throw new MsgRollbackException("用户名已被注册");
         return user;
     }
 
@@ -70,6 +77,6 @@ public class UserServiceImpl implements UserService {
     public boolean isUsernameAvailable(String username) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("username", username);
-        return this.userDao.queryUser(map) == null;
+        return this.userDao.queryUsers(map).size() == 0;
     }
 }

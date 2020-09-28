@@ -15,6 +15,17 @@
         </where>
     </select>
 
+    <select id="queryUsers" resultType="com.supermarket.domain.UserImpl">
+        select * from user
+        <where>
+            <if test="id != 0 and id != null">id = #{id}</if>
+            <if test="username != null">and username = #{username}</if>
+            <if test="password != null">and password = #{password}</if>
+            <if test="nickname != null">and nickname = #{nickname}</if>
+            <if test="email != null">and email = #{email}</if>
+        </where>
+    </select>
+
     <insert id="insertUser">
         insert into user
         <trim prefix="(" suffix=")" suffixOverrides=",">
