@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="war" name="SuperMarket_war">
+  <artifact type="war" build-on-make="true" name="SuperMarket_war">
     <output-path>$PROJECT_DIR$/out/artifacts/SuperMarket_war</output-path>
     <root id="archive" name="SuperMarket_war.war">
       <element id="dir-copy" path="$PROJECT_DIR$/web" />

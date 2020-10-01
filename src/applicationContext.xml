@@ -58,6 +58,13 @@
         <property name="user" value="root"/>
         <property name="password" value="root"/>
     </bean>
+    <!--  配置备选的dbcp连接池  -->
+    <bean id="dataSource_dbcp" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/supermarket" />
+        <property name="username" value="root" />
+        <property name="password" value="root" />
+    </bean>
     <!--  整合mybatis  -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
