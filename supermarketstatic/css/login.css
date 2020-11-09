@@ -1,0 +1,47 @@
+﻿body{
+	background-image: url("../img/login/dl.jpg");
+	background-position: top;
+	font-family: "微软雅黑", serif;
+}
+h1{
+	width:300px;
+	margin:210px auto 0;
+	text-align: center;
+	color:#00716d;
+	font-size:27px;
+}
+form{
+	width:400px;
+	margin:25px auto 0;
+}
+
+form input[type='text'],form input[type='password']{
+	border: 1px solid #CCCCCC;
+	height: 25px;
+	line-height:25px;
+	vertical-align: middle;
+}
+
+table{
+	margin:0 auto 0;
+}
+td{
+	padding-top:10px;
+}
+.tdx{
+	text-align: right;
+}
+
+input[type='submit']{
+	background-image: url("../img/login/dlan01.jpg");
+	width:92px;
+	height:44px;
+	border-style:none;
+	font-size:20px;
+	font-weight:bold;
+	color:white;
+	cursor: pointer;
+}
+input[type='submit']:hover{
+	background-image: url("../img/login/dlan02.jpg");
+}

@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Multi Language Examples</title>
+		<style>
+			form {
+				margin: 0;
+			}
+			textarea {
+				display: block;
+			}
+		</style>
+		<link rel="stylesheet" href="../themes/default/default.css" />
+		<script charset="utf-8" src="../kindeditor-min.js"></script>
+		<script>
+			var editor;
+			KindEditor.ready(function(K) {
+				K('select[name=lang]').change(function() {
+					if (editor) {
+						editor.remove();
+						editor = null;
+					}
+					editor = K.create('textarea[name="content"]', {
+						langType : this.value
+					});
+				});
+				K('select[name=lang]').change();
+			});
+		</script>
+	</head>
+	<body>
+		<h3>Multi Language</h3>
+		<form>
+			<p>
+				<select name="lang">
+					<option value="en">English</option>
+					<option value="zh_CN">简体中文</option>
+					<option value="zh_TW">繁體中文</option>
+					<option value="ko">Korean</option>
+					<option value="ar">Arabic</option>
+				</select>
+			</p>
+			<textarea name="content" style="width:800px;height:200px;"></textarea>
+		</form>
+	</body>
+</html>

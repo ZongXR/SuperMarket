@@ -1,0 +1,45 @@
+@charset "gb2312";
+body {
+	font-family: "Î¢ÈíÑÅºÚ", Arial, Helvetica, sans-serif;
+}
+*{margin:0px;padding:0px;}
+ul li{list-style:none;}
+.clear{clear:both;}
+.lf{float:left;}
+.rt{float:right;}
+/*---¶©µ¥ÁÐ±í----------------------------------------------------------------------*/
+.Order_information{
+	text-align:left;
+	width:1200px;
+	margin-bottom:16px;
+}
+.Order_information dt{
+	background:#f3f3f3;
+	height:32px;
+	margin:22px 0px 12px 0px;
+}
+.Order_information dt h3{
+	font-size:15px;
+	text-indent:18px;
+	line-height:32px;
+}
+.Order_information dd{
+	font-size:15px;
+	line-height:18px;
+	padding-left:18px;
+	color:#333333;
+}
+.Order_information dd img{ 
+	vertical-align:middle;
+	border:none;
+}
+.Order_price{
+	width:1200px;
+	text-align:right;
+	color:#F00;
+	font-size:35px;
+	margin:18px 0px;
+	font-weight:bold;
+	border-bottom: 1px solid #CCC;
+	
+}

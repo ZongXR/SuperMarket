@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>With jQuery</title>
+		<style>
+			form {
+				margin: 0;
+			}
+			textarea {
+				display: block;
+			}
+		</style>
+		<link rel="stylesheet" href="../themes/default/default.css" />
+		<script charset="utf-8" src="jquery.js"></script>
+		<script charset="utf-8" src="../kindeditor-min.js"></script>
+		<script charset="utf-8" src="../lang/zh_CN.js"></script>
+		<script>
+			$(function() {
+				var editor = KindEditor.create('textarea[name="content"]');
+			});
+		</script>
+	</head>
+	<body>
+		<h3>使用jQuery</h3>
+		<form>
+			<textarea name="content" style="width:800px;height:200px;"></textarea>
+		</form>
+	</body>
+</html>

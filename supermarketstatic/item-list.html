@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品列表</title>
+    <link href="js/kindeditor-4.1.10/themes/default/default.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" charset="utf-8" src="js/kindeditor-4.1.10/kindeditor-all-min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/kindeditor-4.1.10/lang/zh_CN.js"></script>
+    <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.4.1/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.4.1/themes/icon.css" />
+    <link rel="stylesheet" type="text/css" href="css/jt.css" />
+    <script type="text/javascript" src="js/jquery-easyui-1.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery-easyui-1.4.1/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="js/jquery-easyui-1.4.1/locale/easyui-lang-zh_CN.js"></script>
+    <!-- 自己实现业务逻辑 -->
+    <script type="text/javascript" src="js/common.js"></script>
+</head>
+
+<body>
+<table class="easyui-datagrid" id="itemList" title="商品列表"
+       data-options="singleSelect:false,collapsible:true,pagination:true,url:'http://www.supermarket.com/products/pageManage',method:'get',pageSize:20,toolbar:toolbar">
+    <thead>
+    <tr>
+        <th data-options="field:'ck',checkbox:true"></th>
+        <th data-options="field:'productId',width:60">商品ID</th>
+        <th data-options="field:'productName',width:200">商品名称</th>
+        <th data-options="field:'productCategory',width:100">商品类目</th>
+        <th data-options="field:'productPrice',width:70,align:'right'">商品价格</th>
+        <th data-options="field:'productDescription',width:100">商品描述</th>
+    </tr>
+    </thead>
+</table>
+<div id="itemEditWindow" class="easyui-window" title="编辑商品" data-options="modal:true,closed:true,iconCls:'icon-save',href:'./item-edit.html'" style="width:80%;height:80%;padding:10px;">
+</div>
+<script>
+    function getSelectionsIds(){
+        let itemList = $("#itemList");
+        let sels = itemList.datagrid("getSelections");
+        let ids = [];
+        for(let i in sels){
+            ids.push(sels[i].productId);
+        }
+        ids = ids.join(",");
+        return ids;//["200","300","400"]
+    }
+
+    var toolbar = [{
+        text:'新增',
+        iconCls:'icon-add',
+        handler:function(){
+            $(".tree-title:contains('新增商品')").parent().click();
+        }
+    },{
+        text:'编辑',
+        iconCls:'icon-edit',
+        handler:function(){
+            let ids = getSelectionsIds();
+            if(ids.length === 0){
+                $.messager.alert('提示','必须选择一个商品才能编辑!');
+                return ;
+            }
+            if(ids.indexOf(',') > 0){
+                $.messager.alert('提示','只能选择一个商品!');
+                return ;
+            }
+
+            $("#itemEditWindow").window({
+                onLoad :function(){
+                    //回显数据
+                    let data = $("#itemList").datagrid("getSelections")[0];
+                    $("#itemEditForm").form("load",data);
+                    KindEditorUtil.init({
+                        "pics" : data.productImage,
+                        "cid" : data.cid,
+                        fun:function(node){
+                            KindEditorUtil.changeItemParam(node, "itemEditForm");
+                        }
+                    });
+                }
+            }).window("open");
+        }
+    },{
+        text:'删除',
+        iconCls:'icon-cancel',
+        handler:function(){
+            let ids = getSelectionsIds();
+            if(ids.length === 0){
+                $.messager.alert('提示','未选中商品!');
+                return ;
+            }
+            $.messager.confirm('确认','确定删除ID为 '+ids+' 的商品吗？',function(r){
+                if (r){
+                    let params = {"ids": ids};
+                    $.post("/product/delete",params, function(data){
+                        if(data.status === 200){
+                            $.messager.alert('提示','删除商品成功!',undefined,function(){
+                                $("#itemList").datagrid("reload");
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    },'-',{
+        text:'下架',
+        iconCls:'icon-remove',
+        handler:function(){
+            let ids = getSelectionsIds();
+            if(ids.length === 0){
+                $.messager.alert('提示','未选中商品!');
+                return ;
+            }
+            $.messager.confirm('确认','确定下架ID为 '+ids+' 的商品吗？',function(r){
+                if (r){
+                    let params = {"ids": ids};
+                    $.post("/item/instock",params, function(data){
+                        if(data.status === 200){
+                            $.messager.alert('提示','下架商品成功!',undefined,function(){
+                                $("#itemList").datagrid("reload");
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    },{
+        text:'上架',
+        iconCls:'icon-remove',
+        handler:function(){
+            let ids = getSelectionsIds();
+            if(ids.length === 0){
+                $.messager.alert('提示','未选中商品!');
+                return ;
+            }
+            $.messager.confirm('确认','确定上架ID为 '+ids+' 的商品吗？',function(r){
+                if (r){
+                    let params = {"ids": ids};
+                    $.post("/item/reshelf",params, function(data){
+                        if(data.status === 200){
+                            $.messager.alert('提示','上架商品成功!',undefined,function(){
+                                $("#itemList").datagrid("reload");
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    }];
+</script>
+</body>
+</html>

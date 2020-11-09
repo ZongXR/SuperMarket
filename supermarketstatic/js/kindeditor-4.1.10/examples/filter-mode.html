@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Filter Mode Examples</title>
+		<style>
+			form {
+				margin: 0;
+			}
+			textarea {
+				display: block;
+			}
+		</style>
+		<link rel="stylesheet" href="../themes/default/default.css" />
+		<script charset="utf-8" src="../kindeditor-min.js"></script>
+		<script charset="utf-8" src="../lang/zh_CN.js"></script>
+		<script>
+			KindEditor.ready(function(K) {
+				K.create('textarea[name="content"]', {
+					filterMode : false
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h3>关闭HTML过滤</h3>
+		<form>
+			<textarea name="content" style="width:800px;height:200px;"></textarea>
+			<p>
+				KindEditor 默认采用白名单过滤方式，可用 htmlTags 参数定义要保留的标签和属性。当然也可以用 filterMode 参数关闭过滤模式，保留所有标签。
+			</p>
+		</form>
+	</body>
+</html>

@@ -1,0 +1,117 @@
+@charset "utf-8";
+price_red{
+	color:red;
+}
+body {
+	margin:0px;padding:0px;
+	font-family:"微软雅黑";
+}
+{
+	border:solid red 1px;
+}
+/*----整体div----------------------------------------------------------------------------*/
+/*商品详情页面样式*/
+#warp{
+	width:1200px;
+	margin:10px auto;
+	height:650px;
+	border: 1px solid #CCCCCC;
+}
+/*左半部分*/
+#left{
+	width:500px;
+	height:650px;
+	float:left;
+}
+#left #left_top{
+	width:500px;
+	height:500px;
+	line-height:500px;
+	text-align: center;
+}
+#left_top img{
+	width:428px;
+	height:428px;
+	vertical-align: middle;
+}
+#left_bottom{
+	width:500px;
+	height:150px;
+	line-height:150px;
+	text-align: center;
+}
+#left_bottom img{
+	vertical-align: middle;
+}
+#left_bottom #lf_img{
+	margin-right: 150px;
+}
+#left_bottom #mid_img{
+	border: 2px solid #FF6666;
+}
+#left_bottom #rt_img{
+	margin-left: 150px;
+}
+
+/*右半部分*/
+#right{
+	width:698px;
+	height:650px;
+	border-left: 1px solid #CCCCCC;
+	float:left;
+}
+#right #right_top{
+	height:180px;	
+	border-bottom: 1px solid #CCCCCC;
+}
+#right #right_top #prod_name{
+	display: block;
+	color:#494949;
+	font-size:22px;
+	padding-top:50px;
+	padding-left:30px;
+}
+#right #right_top #prod_desc{
+	display: block;
+	color:#FF0000;
+	font-size:14px;
+	padding-left:30px;
+}
+#right #right_middle{
+	height:270px;
+	line-height:35px;
+	border-bottom: 1px solid #CCCCCC;
+}
+#right #right_middle #right_middle_span{
+	display: block;
+	padding-top:55px;
+	margin-left:30px;
+	color:#666666;
+	font-size:16px;
+}
+#right #right_middle #delNum ,#right #right_middle #addNum{
+	border: 1px solid #CCCCCC;
+	color:#999999;
+	padding:2px 7px;
+	text-decoration:none;
+	vertical-align: middle;
+}
+#right #right_middle #buyNumInp{
+	border: 1px solid #CCCCCC;
+	width:40px;
+	height:24px;
+	line-height:20px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+#right #right_bottom{
+	height:200px;
+}
+#right #right_bottom .add_cart_but{
+	background-image: url("../img/prodInfo/jr.jpg");
+	width:189px;
+	height:42px;
+	border-style:none;
+	margin:30px;
+}

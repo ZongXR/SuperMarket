@@ -1,0 +1,77 @@
+@charset "utf-8";
+body {
+	font-family: "微软雅黑", Arial, Helvetica, sans-serif;
+	text-align: center;
+}
+*{margin:0px;padding:0px;}
+{
+	border: 1px solid red;
+}
+
+/*----支付页面----------------------------------------------------------------*/
+.payment_page{
+	text-align:left;
+	width:1200px;
+	margin: 0px auto;
+}
+.payment_page dt{
+	background:#f3f3f3;
+	height:32px;
+	margin:20px 0px 12px 0px;
+	padding-top:4px;
+	font-size:14px;
+	text-indent:14px;
+}
+.payment_page dt input{
+	border:1px solid #CCC;
+	vertical-align:middle;
+	line-height:16px;
+}
+.idinp{
+	width: 250px;
+	margin-right: 10px;
+}
+.moneyinp{
+	width:80px;
+	margin-right: 3px;
+}
+
+.payment_page ul {
+	width:1200px;
+}
+.payment_page ul li{
+	list-style-type:none;
+	float:left;
+	width:180px;
+	margin:16px 4px 16px 0px;
+}
+.payment_page ul li img{
+	vertical-align:middle;
+	margin-left:12px;
+}
+.payment_page_name{
+	border-bottom:1px solid #CCC;
+	font-size:16px;
+	padding-bottom:12px;
+}
+.banks{
+	padding-bottom:16px;
+}
+.banks input{
+	cursor: pointer;
+}
+.ok_dd{
+	border:1px solid #CCC;
+}
+.ok_pay{
+	background:#d70000;
+	width:108px;
+	height:38px;
+	border:none;
+	cursor:pointer;
+	color:#FFFFFF;
+	font-weight:bold;
+	font-size:16px;
+	float:right;
+	margin-top:12px;
+}

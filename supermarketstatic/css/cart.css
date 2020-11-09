@@ -1,0 +1,157 @@
+@charset "utf-8";
+*{
+	font-family: "微软雅黑", Arial, Helvetica, sans-serif;
+	font-size:14px;
+	color:#666666;
+}
+{
+	border: 1px solid red;
+}
+
+
+/*购物车样式*/
+/*标题行*/
+#title{
+	width:1200px;
+	margin:20px auto 0px;
+	background-color: #F3F3F3;
+	border: 1px solid #CCCCCC;
+	height:45px;
+	line-height:45px;
+}
+#title input[name='allC']{
+	margin-left:40px;
+	vertical-align: middle;
+}
+#title #title_checkall_text{
+	margin-left:3px;
+}
+#title #title_name{
+	margin-left:210px;
+}
+#title #title_price{
+	margin-left:180px;
+}
+#title #title_buynum{
+	margin-left:150px;
+}
+#title #title_money{
+	margin-left:125px;
+}
+#title #title_del{
+	margin-left:95px;
+}
+/*购物车商品列表*/
+#prods{
+	width:1200px;
+	margin:10px auto 0px;
+	background-color: #FEF4E8;
+	border-top: 1px solid #ABAAA8;
+	height:100px;
+	line-height:100px;
+}
+#prods img ,#prods span{
+	vertical-align: middle;
+}
+#prods input[name='prodC']{
+	margin-left:40px;
+
+}
+
+#prods img{
+	margin-left:30px;
+	margin-bottom:4px;
+	border: 1px solid #DEDEDE;
+}
+
+#prods #prods_name{
+	margin-left:120px;
+	white-space: normal !important;
+}
+
+#prods #prods_price{
+	margin-left:190px;
+}
+
+#prods #prods_buynum a{
+	padding: 2px 8px;
+	border: 1px solid #CCC;
+	text-decoration: none;
+}
+#prods #prods_buynum{
+	margin-left:135px;
+}
+#prods #prods_buynum #buyNumInp{
+	width:60px;
+	height:30px;
+	border-top: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;
+	border-left: none;
+	border-right: none;
+	text-align: center;
+	vertical-align: middle;
+}
+.buyNumInp1{
+	width:60px;
+	height:30px;
+	border-top: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;
+	border-left: none;
+	border-right: none;
+	text-align: center;
+	vertical-align: middle;
+}
+#prods #prods_money{
+	margin-left:85px;
+}
+#prods #prods_del{
+	margin-left:120px;
+}
+#prods #prods_del a{
+	text-decoration:none;
+}
+
+/*总计*/
+#total{
+	width:1200px;
+	margin: 10px auto;
+}
+#total #total_1{
+	float:left;
+	width:1075px;
+	height:45px;
+	line-height:45px;
+	border: 1px solid #CCC;
+}
+#total #total_1 *{
+	vertical-align: middle;
+}
+#total #total_1 input[name='allC']{
+	margin-left:40px;
+}
+#total #total_1 #del_a{
+	margin-left: 15px;
+	text-decoration: none;
+}
+#total #total_1 #span_1{
+	margin-left:720px;
+}
+#total #total_1 #span_2{
+	font-size: 20px;
+	color:#FF0000;
+}
+#total #total_2 a{
+	float:right;
+	width:123px;
+	height:47px;
+	line-height:47px;
+	text-align: center;
+	text-decoration:none;
+	background-color: #D9141E;
+	color: #FFF;
+	font-weight:bold;
+	font-size:24px;
+}
+#total #total_2 a:hover{
+	background-color: #DD4343;
+}

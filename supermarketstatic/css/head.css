@@ -1,0 +1,148 @@
+@charset "utf-8";
+{
+	border: 1px solid #999;
+}
+body{
+	margin:0;
+	padding:0;
+	font-family: "微软雅黑", serif;
+	font-size: 12px;
+	color:#666666;
+}
+#common_head{
+	margin:0;
+	font-family: "微软雅黑", serif;
+}
+/*第一行*/
+#common_head .line1{
+	width:100%;
+	height:35px;
+	background-color:#FAFAFA;
+	border-bottom:1px solid #EDEDED;
+	font-size:14px;
+	color:#666666;
+}
+#common_head .line1 .content{
+	width:1200px;
+	margin:0 auto;
+	line-height:35px;
+}
+#common_head .line1 .content ul{
+	padding: 0;
+	margin: 0;
+}
+#common_head .line1 .content a{
+	font-size:14px;
+	text-decoration: none;
+	color:#666666;
+}
+/*第二行*/
+#common_head .line2{
+	width:1200px;
+	height:100px;
+	margin:0 auto;
+	line-height:100px;
+}
+#common_head .line2 #logo,#common_head .line2 input,#common_head .line2 #goto{
+	vertical-align: middle;
+}
+#common_head .line2 #erwm{
+	margin-top:10px;
+	float:right;
+}
+#common_head .line2 input[type='text']{
+	width:370px;
+	height:30px;
+	margin-left:120px;
+	border: 2px solid #00716d;
+}
+#common_head .line2 input[type='button']{
+	width:70px;
+	height:36px;
+	background-color: #00716d;
+	border: 1px solid #00716d;
+	color:white;
+	margin-left:-5px;
+	cursor: pointer;
+	font-size: 14px;
+}
+#common_head .line2 #goto{
+	margin-left: 5px;
+	border: 1px solid #E5E5E5;
+	padding: 8px 0;
+	font-size: 14px;
+}
+#common_head .line2 #goto a{
+	color:#555555;
+	text-decoration: none;
+	font-size:14px;
+}
+#common_head .line2 #goto #goto_order{
+	padding-left:14px;
+	padding-right:8px;
+}
+#common_head .line2 #goto #goto_cart{
+	padding-left:8px;
+	padding-right:10px;
+	border-left:1px solid #E5E5E5;
+}
+/*第三行*/
+#common_head .line3{
+	width:100%;
+	height:38px;
+	background-color:#00716d;
+}
+#common_head .line3 .content{
+	width:1200px;
+	margin:0 auto;
+}
+#common_head .line3 .content ul{
+	padding:0;
+	margin:0;
+}
+#common_head .line3 .content li{
+	list-style-type:none;
+	width:120px;
+	float:left;
+}
+#common_head .line3 .content li a{
+	display: block;
+	line-height:38px;
+	color:white;
+	text-decoration: none;
+	text-align: center;
+	font-size:16px;
+}
+#common_head .line3 .content li:hover{
+	background-color: #777777;
+}
+#common_head .line2 input[type='button']:hover{
+	background-color: #777777;
+}
+
+/*固定二维码*/
+.fixed{
+	position: fixed;
+	bottom: 10%;
+	right: 3%;
+}
+div.fixed a{
+	display: block;
+	margin-bottom: 10px;
+}
+div.fixed a.toTop{
+	position: relative;
+	right: -30px;
+	border: 4px solid #222222;
+	width: 30px;
+	height: 30px;
+	background-image: url(../img/head/top.png);
+	background-repeat: no-repeat;
+	background-size: 100%, 100%;
+	background-position-x: center;
+	background-position-y: center;
+}
+div.fixed a.toTop:hover{
+	border-color: #777777;
+	background-image: url(../img/head/top_a.png);
+}

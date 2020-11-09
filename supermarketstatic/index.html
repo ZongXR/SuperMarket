@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="css/index.css"/>
+    <link rel="stylesheet" href="css/foot.css"/>
+    <link rel="stylesheet" href="css/head.css"/>
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
+    <meta name="keywords" content="网上商城, 电商平台, 能源互联网">
+    <meta name="description" content="能源互联网, 网上商城, 电商平台, 电子商务, 掌上e宝, 科技金服, 不正经网站研究中心">
+    <title>网上商城-能源工业云平台_国电网商|网上金融科技|电子金服</title>
+    <noscript>抱歉，你的浏览器不支持 JavaScript!</noscript>
+    <script type="text/javascript" src="js/base-v1.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/jquery-1.2.6.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/cookie.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/common.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/jquery.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/jquery-extend.js"></script>
+    <script type="text/javascript" src="js/logout.js"></script>
+    <script type="text/javascript" src="js/lib-v1.js" charset="utf-8"></script>
+    <link href="css/prodList.css" rel="stylesheet" type="text/css">
+    <link rel="icon" type="image/x-icon" href="img/head/icon.ico" />
+    <meta charset="UTF-8">
+    <script type="text/javascript">
+        window.onload = function () {
+            let userId = "";
+            let _ticket = $.cookie("EM_TICKET");
+            if (!_ticket) {
+                return;
+            }
+            //当dataType类型为jsonp时，jQuery就会自动在请求链接上增加一个callback的参数
+            $.ajax({
+                url: "http://www.Supermarket.com/user/query/" + _ticket,
+                dataType: "json",
+                type: "GET",
+                success: function (data) {
+                    if (data.status === 200) {
+                        let _data = JSON.parse(data.data);//jackson
+                        let html = _data.userName + "，欢迎来到Supermarket！<a href=\"javascript:void(0)\" class=\"link-logout\" onclick='logout()'>[退出]</a>  \|<a href=\"http://www.Supermarket.com/manage.html\" class=\"link-logout\">[后台]</a>";
+                        userId = _data[userId];
+                        $("#loginbar").html(html);
+                    }
+                },
+                error: function () {
+                    alert('index error.');
+                }
+            });
+        }
+        function search(a) {
+            let query = document.getElementById(a).value;
+            window.location.href = "./search.html?query=" + query;
+        }
+    </script>
+</head>
+
+<body>
+<div id="common_head">
+    <div class="line1">
+        <div class="content">
+            <ul>
+                <li class="fore1" id="loginbar" clstag="homepage|keycount|home2013|01b">
+                    <span id="head_span" >
+                        <a href="login.html">登录</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                        <a href="regist.html">注册</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                        <a href="manage.html">后台</a>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="line2">
+        <img id="logo" src="img/head/logo.png" alt="logo"/>
+        <input type="text" value="" accesskey="s" id="key" autocomplete="off"
+               onkeydown="if(event.keyCode===13) search('key');"/>
+        <input type="button" value="搜 索" onclick="search('key')"/>
+        <span id="goto">
+			<a id="goto_order" href="./myorder.html">我的订单</a>
+			<a id="goto_cart" href="./mycart.html">我的购物车</a>
+		</span>
+        <img id="erwm" src="img/head/e2.png" alt="e2" width="76"/>
+    </div>
+    <div class="line3">
+        <div class="content">
+            <ul>
+                <li><a href="./index.html">首页</a></li>
+                <li><a href="./product-list.html?page=1&rows=30">全部商品</a></li>
+                <li><a href="./seckill-list.html">秒杀商品</a></li>
+                <li><a href="javascript:void(0)">电脑平板</a></li>
+                <li><a href="javascript:void(0)">家用电器</a></li>
+                <li><a href="javascript:void(0)">汽车用品</a></li>
+                <li><a href="javascript:void(0)">食品饮料</a></li>
+                <li><a href="javascript:void(0)">图书杂志</a></li>
+                <li><a href="javascript:void(0)">服装服饰</a></li>
+                <li><a href="javascript:void(0)">大英理财</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="index">
+    <div id="line1">
+        <img src="img/index/banner_big.jpg" alt="banner"/>
+    </div>
+    <div id="line2">
+        <img id="line2_1" src="img/index/adv1.jpg" alt="adv1"/>
+        <img id="line2_2" src="img/index/adv2.jpg" alt="adv2"/>
+        <img id="line2_3" src="img/index/adv_l1.jpg" alt="adv_l1"/>
+    </div>
+    <div id="line3">
+        <img id="line3_1" src="img/index/adv3.jpg" alt="adv3"/>
+        <img id="line3_2" src="img/index/adv4.jpg" alt="adv4"/>
+        <div id="line3_right">
+            <img id="line3_3" src="img/index/adv_l2.jpg" alt="adv_l2"/>
+            <img id="line3_4" src="img/index/adv_l3.jpg" alt="adv_l3"/>
+        </div>
+    </div>
+    <div id="line4">
+        <img src="img/index/217.jpg" alt="217"/>
+    </div>
+    <div id="line5">
+			<span id="line5_1">
+				<img src="img/index/icon_g1.png" alt="icon_g1"/>&nbsp;&nbsp;500强企业 品质保证
+			</span>
+        <span id="line5_2">
+				<img src="img/index/icon_g2.png" alt="icon_g2"/>&nbsp;&nbsp;7天退货 15天换货
+			</span>
+        <span id="line5_3">
+				<img src="img/index/icon_g3.png" alt="icon_g3"/>&nbsp;&nbsp;100元起免运费
+			</span>
+        <span id="line5_4">
+				<img src="img/index/icon_g4.png" alt="icon_g4"/>&nbsp;&nbsp;448家维修网点 全国联保
+			</span>
+    </div>
+</div>
+<div class="fixed">
+    <a href="https://github.com/GoogleLLP/SuperMarket" target="_blank">
+        <img src="./img/head/qr.jpg" width="100" alt="qrcode"/>
+    </a>
+    <a href="#common_head" class="toTop"></a>
+</div>
+<div id="common_foot">
+    <p>
+        Copyright © 2011-2019 国电家网有限公司 版权所有 保留一切权利 京B2-20180185 | 京ICP备17064178号-1
+        <br />
+        京公网安备  11010202001007号
+    </p>
+</div>
+</body>
+</html>

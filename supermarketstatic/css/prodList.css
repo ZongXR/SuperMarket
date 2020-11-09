@@ -1,0 +1,162 @@
+@charset "utf-8";
+{
+	border: 1px solid #999;
+}
+
+body{
+	font-family: "微软雅黑", serif;
+	font-size: 12px;
+	color:#666666;
+}
+a{
+	text-decoration: none;
+	color: #404040;
+	font-size: 14px;
+}
+#content{
+	width:1200px;
+	margin:10px auto;
+}
+/*搜索条*/
+#content #search_div{
+	border: 1px solid #D4D4D4;
+	padding:8px;
+}
+#content #search_div .input_span{
+	margin: 0 0 0 15px;
+}
+#content #search_div input[type=text]{
+	border: 1px solid #D4D4D4;
+	height:20px;
+}
+#content #search_div input[name=name],#content #search_div input[name=category]{
+	width:130px;
+}
+#content #search_div input[name=minprice],#content #search_div input[name=maxprice]{
+	width:60px;;
+}
+
+#content #search_div input[type=submit]{
+	border-style:none;
+	width:58px;
+	height:28px;
+	cursor: pointer;
+	color:#fff;
+	background-image: url("../img/prodlist/search_03.jpg");	
+	margin-left:5px;
+}
+/*商品信息*/
+#prod_content{
+	width:1200px;
+
+}
+#prod_content #prod_div{
+	width:222px;
+	height:347px;
+	border: 1px solid #D4D4D4;
+	margin-top:15px;
+	margin-right:18px;
+	float:left;
+}
+
+#prod_content #prod_div:nth-child(5n+5){
+	margin-right:0;
+}
+
+#prod_content #prod_div img{
+	width:100%; 
+}
+#prod_content #prod_name_div{
+	font-size:12px;
+	margin-top:8px;
+	text-align: center;
+}
+#prod_content #prod_price_div{
+	font-size:22px;
+	margin-top:22px;
+	text-align: center;
+	color:#CC0000;
+	
+}
+#prod_content #gotocart_div{
+	float:left;
+	width:110px;
+	height:32px;
+	margin-top:15px;
+	text-align: center;
+	line-height:32px;
+	border-top: 1px solid #D4D4D4;
+}
+#gotocart_div a{
+	display: block;
+	width:110px;
+	height:32px;
+	color:#666666;
+	text-decoration: none;
+}
+#gotocart_div a:hover{
+	background-color: #FF0000;
+	color:#fff;
+}
+
+#say_div{
+	float:left;
+	width:110px;
+	height:28px;
+	margin-top:15px;
+	text-align: center;
+	line-height:32px;
+	border-left: 1px solid #D4D4D4;
+}
+#spulist-pager{
+	margin-top: 20px;
+	min-width: 650px;
+	text-align: center;
+}
+.pager1{
+	overflow: hidden;
+	width: 328px;
+	margin: 0 auto;
+}
+.pager1 a{
+	width: 70px;
+	height: 35px;
+	float: left;
+	line-height: 35px;
+	border: solid 1px #ededed;
+	margin-right: 10px;	
+}
+.pager2{
+	overflow: auto;
+    width: 430px;
+	margin: 10px auto 0;
+}
+.pager2 span{
+	float: left;
+	width: 70px;
+	height: 35px;
+	line-height: 35px;
+	font-size: 14px;
+	color: #ccc;
+	/*border: solid 1px #ededed;*/
+}
+.pager2 a{
+	float: left;
+	width: 35px;
+	height: 35px;
+	line-height: 35px;
+	border: solid 1px #ededed;
+}
+#prev_next{
+	width:1200px;
+	margin:15px auto;
+	text-align: center;
+	font-size: 13px;
+	color:#666666;
+	bottom:0;
+	left:0;
+	right:0;
+}
+#prev_next .link_button:hover{
+	color: blue;
+}

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width"/>
+    <link href="js/kindeditor-4.1.10/themes/default/default.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" charset="utf-8" src="js/kindeditor-4.1.10/kindeditor-all-min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/kindeditor-4.1.10/lang/zh_CN.js"></script>
+    <script src="js/jquery-1.7.1.min.js"></script>
+    <script src="js/shoppingMall.js"></script>
+    <script src="js/shoppingDetail.js"></script>
+    <title>商品新增</title>
+    <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.4.1/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.4.1/themes/icon.css" />
+</head>
+
+<body>
+<div style="padding:10px 10px 10px 10px">
+    <form id="itemAddForm" class="itemForm" method="post">
+        <table cellpadding="5">
+            <tr>
+                <td><label for="item_category">商品分类:</label></td>
+                <td>
+                    <input type="text" name="productCategory" style="width: 280px;" id="item_category"/>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="item_name">商品名称:</label></td>
+                <td>
+                    <input class="easyui-textbox" type="text" name="productName" data-options="required:true"
+                           style="width: 280px;" id="item_name"/>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="item_price">商品价格:</label></td>
+                <td>
+                    <input class="easyui-numberbox" type="text" name="productPrice" data-options="min:1,max:99999999,precision:2,required:true" id="item_price"/>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="item_count">库存数量:</label></td>
+                <td>
+                    <input class="easyui-numberbox" type="text" name="productNum" data-options="min:1,max:99999999,precision:0,required:true" id="item_count"/>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="imgInput">商品图片:</label></td>
+                <td>
+                    <input id="imgInput" type="text" name="productImgurl" value="" readonly="readonly"/>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="item_desc">商品描述:</label></td>
+                <td>
+                    <textarea style="width:800px;height:200px;" name="productDescription" id="item_desc"></textarea>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <span>选择商品图片：</span>
+    <img id="photo" src="img/shangchuanBg.png" width="109px" height="109px" style="display: block;" alt="upload"/>
+    <form id="form1" action="" method="post" enctype="multipart/form-data">
+        <input  type="file" name="imgOne" class="imgOne" id="imgOne"
+                onchange=""/>
+    </form>
+    <div style="padding:5px">
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">提交</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">重置</a>
+    </div>
+</div>
+
+<script>
+    function clearForm(){
+        document.getElementById("itemAddForm").reset();
+        document.getElementById("photo").src="img/shangchuanBg.png";
+    }
+    function submitForm(){
+        $.post("/products/save",$("#itemAddForm").serialize(), function(data){
+            if(data.status === 200){
+                alert("新增商品成功");
+            }
+        });
+    }
+    /* 图片大小判定 */
+    function validate(a) {
+        let file = a.value;
+        if (!/.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(file)) {
+            alert("图片类型必须是.gif,jpeg,jpg,png中的一种");
+            return;
+        } else {
+            let image = new Image();
+            image.src = file;
+            let height = image.height;
+            let width = image.width;
+            let filesize = image.filesize;
+            if (width !== 300 && height !== 300 && filesize > 32768) {
+                alert('请上传300*300像素 或者大小32k的图片');
+                return;
+            }
+        }
+    }
+
+    /* 本地上传 */
+    function getFileUrl(sourceId) {
+        let url;
+        if (navigator.userAgent.indexOf("MSIE") >= 1) { // IE
+            url = document.getElementById(sourceId).value;
+        } else if (navigator.userAgent.indexOf("Firefox") > 0) { // Firefox
+            url = window.URL.createObjectURL(document.getElementById(sourceId).files.item(0));
+        } else if (navigator.userAgent.indexOf("Chrome") > 0) { // Chrome
+            url = window.URL.createObjectURL(document.getElementById(sourceId).files.item(0));
+        }
+        return url;
+    }
+
+    function preImg(sourceId, targetId) {
+        let url = getFileUrl(sourceId);
+        let imgPre = document.getElementById(targetId);
+        imgPre.src = url;
+    }
+
+    $("#imgOne").change(function () {
+        let formData = new FormData();
+        formData.append("pic", document.getElementById("imgOne").files[0]);
+        $.ajax({
+            type: "POST", // 数据提交类型
+            url: "http://www.supermarket.com/uploadImg", // 发送地址
+            data: formData, //发送数据
+            async: true, // 是否异步
+            processData: false, //processData 默认为false，当设置为true的时候,jquery ajax 提交的时候不会序列化 data，而是直接使用data
+            contentType: false, //
+            success:function (data) {
+                if(data.error===0){
+                    document.getElementById("imgInput").value=data.url;
+                    document.getElementById("photo").src=data.url;
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

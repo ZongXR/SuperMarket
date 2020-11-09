@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .divcss5{ border:1px solid #F00; width:200px; height:100px}
+    </style>
+    <link rel="stylesheet" href="css/foot.css"/>
+    <link rel="stylesheet" href="css/head.css"/>
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="js/base-v1.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/jquery-1.2.6.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/cookie.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/common.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/jquery.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/jquery-extend.js"></script>
+    <script type="text/javascript" src="js/lib-v1.js" charset="utf-8"></script>
+    <link href="css/prodList.css" rel="stylesheet" type="text/css">
+    <link href="css/prodInfo.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="js/logout.js"></script>
+    <script type="text/javascript" src="js/productinfo.js"></script>
+    <meta charset="UTF-8">
+    <title>商品分页</title>
+    <script type="text/javascript">
+        var userId="";
+        var productId="";
+        window.onload=function(){
+            let localUrl = decodeURI(window.location.href);
+            //alert(localUrl);
+            productId=localUrl.split("?")[1].split("=")[1];
+            $.ajax({
+                url:"http://www.supermarket.com/products/item/"+productId,
+                dataType:"json",
+                type:"POST",
+                success:function(data){
+                    //图片
+                    let imgUrl = data.productImgurl;
+                    productId=data.productId;
+                    document.getElementById("prod_img").src=imgUrl;
+                    document.getElementById("prod_name").innerText=data.productName;
+                    document.getElementById("prod_desc").innerText=data.productDescription;
+                    document.getElementById("prod_pric").innerText=data.productPrice;
+                    document.getElementById("prod_num").innerText=data.productNum;
+                }
+            });
+            let _ticket = $.cookie("EM_TICKET");
+            //alert(_ticket);
+            if(!_ticket){
+                return ;
+            }
+
+                //当dataType类型为jsonp时，jQuery就会自动在请求链接上增加一个callback的参数
+                $.ajax({
+                    url : "http://www.supermarket.com/user/query/" + _ticket,
+                    dataType : "json",
+                    type : "GET",
+                    success : function(data){
+                        if(data.status === 200){
+                            let _data = JSON.parse(data.data);//jackson
+                            let html = _data.userName + "，欢迎来到Supermarket！<a href=\"javascript:void(0)\" class=\"link-logout\" onclick='logout()'>[退出]</a>  \|<a href=\"http://www.supermarket.com/manage.html\" class=\"link-logout\">[后台]</a>";
+                            userId=_data.userId;
+                            $("#loginbar").html(html);
+                        }
+                    },
+                    error : function(){
+                        alert('index error.');
+                    }
+                });
+            }
+
+        function addCart(){
+            if(userId===""){
+                window.location.href="login.html";
+                return;
+            }
+            let num = document.getElementById("buyNumInp").value;
+            alert(num);
+            $.ajax({
+                url:"http://www.supermarket.com/cart/save?userId="+userId+"&productId="+productId+"&num="+num,
+                dataType:"json",
+                type:"GET",
+                success:function (data){
+                    if(data.status===200){
+                        window.location.href="http://www.supermarket.com/mycart.html?userId="+userId;
+                    }else{
+                        alert("新购物车失败");
+                    }
+                },
+                error:function () {
+                    alert("算了吧");
+                }
+            });
+        }
+        function search(a){
+            let query = document.getElementById(a).value;
+            //alert(query);
+            window.location.href="./search.html?query="+query;
+        }
+    </script>
+</head>
+
+<body>
+<div id="common_head">
+    <div class="line1">
+        <div class="content">
+            <ul>
+                <li class="fore1" id="loginbar" clstag="homepage|keycount|home2013|01b">
+                    <span id="head_span" >
+                        <a href="login.html">登录</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                        <a href="regist.html">注册</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                        <a href="manage.html">后台</a>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="line2">
+        <img id="logo" src="img/head/logo.png" alt="logo"/>
+        <input type="text" value="" accesskey="s" id="key" autocomplete="off"
+               onkeydown="if(event.keyCode===13) search('key');"/>
+        <input type="button" value="搜 索" onclick="search('key')"/>
+        <span id="goto">
+			<a id="goto_order" href="./myorder.html">我的订单</a>
+			<a id="goto_cart" href="./mycart.html">我的购物车</a>
+		</span>
+        <img id="erwm" src="img/head/e2.png" alt="e2" width="76"/>
+    </div>
+    <div class="line3">
+        <div class="content">
+            <ul>
+                <li><a href="./index.html">首页</a></li>
+                <li><a href="./product-list.html?page=1&rows=30">全部商品</a></li>
+                <li><a href="./seckill-list.html">秒杀商品</a></li>
+                <li><a href="javascript:void(0)">电脑平板</a></li>
+                <li><a href="javascript:void(0)">家用电器</a></li>
+                <li><a href="javascript:void(0)">汽车用品</a></li>
+                <li><a href="javascript:void(0)">食品饮料</a></li>
+                <li><a href="javascript:void(0)">图书杂志</a></li>
+                <li><a href="javascript:void(0)">服装服饰</a></li>
+                <li><a href="javascript:void(0)">大英理财</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="warp">
+    <div id="left">
+        <div id="left_top">
+            <img src="" id="prod_img" alt="prod_img" />
+        </div>
+        <div id="left_bottom"></div>
+    </div>
+    <div id="right">
+        <div id="right_top">
+            <span id="prod_name"><br/></span>
+            <br>
+            <span id="prod_desc"><br/></span>
+        </div>
+        <div id="right_middle">
+				<span id="right_middle_span">
+                    supermarket 价：<span class="price_red" id="prod_pric">1111</span>元<br/>
+			            运     费：满 100 免运费<br />
+			            服     务：由supermarket负责发货，并提供售后服务<br />
+                    库存：<span id="prod_num">1111</span>件<br />
+                    <label for="buyNumInp">购买数量：</label>
+	                <a href="javascript:void(0)" id="delNum" onclick="change(-1)">-</a>
+	                <input id="buyNumInp" name="buyNum" type="text" value="1" />
+		            <a href="javascript:void(0)" id="addNum" onclick="change(1)">+</a>
+                </span>
+        </div>
+        <div id="right_bottom">
+            <input class="add_cart_but" type="button" onclick="addCart()"/>
+        </div>
+    </div>
+</div>
+
+<div id="common_foot">
+    <p>
+        Copyright © 2011-2019 国电家网有限公司 版权所有 保留一切权利 京B2-20180185 | 京ICP备17064178号-1
+        <br />
+        京公网安备  11010202001007号
+    </p>
+</div>
+</body>
+</html>

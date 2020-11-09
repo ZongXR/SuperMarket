@@ -1,8 +1,9 @@
-<html>
+<html lang="zh">
 <body>
 <h1>网上商城</h1>
 <h2>截图展示</h2>
 <img src="./img/index.png" alt="首页" /><br />
+<img src="./img/product.png" alt="商品页面" /><br />
 <img src="./img/regist.png" alt="注册页面" /><br />
 <img src="./img/login.png" alt="登录页面" /><br />
 <img src="./img/logout.PNG" alt="注销页面" /><br />
@@ -172,13 +173,32 @@
         </td>
         <td>2020年10月1日</td>
     </tr>
+    <tr>
+        <td>0.4</td>
+        <td>
+            <ul>
+                <li>使用Maven重构依赖</li>
+                <li>使用SpringCloud重构项目</li>
+                <li>重构数据库</li>
+                <li>增加common微服务: 存放共享资源(如JavaBean, 工具类, ViewObject)</li>
+                <li>增加商品微服务：新增、修改、查询功能</li>
+                <li>增加用户微服务：用户名校验、注册</li>
+                <li>增加图片微服务：图片上传</li>
+                <li>增加nginx：负载均衡、动态静态资源分离</li>
+            </ul>
+        </td>
+        <td>2020年11月10日</td>
+    </tr>
 </table>
 <h2>配置情况</h2>
 <ul>
     <li>JDK版本：OpenJDK11</li>
-    <li>服务器：tomcat7.0.62</li>
+    <li>nginx：1.19.1</li>
+    <li>maven: 3.6.3</li>
+    <li>MySql: 5.5.27</li>
     <li>开发环境：IntelliJ Idea 2020.1.4</li>
-    <li>框架：Spring5.2.3；SpringMVC5.2.3；Hibernate validator5.4.3；MyBatis3.2.2</li>
+    <li>框架：Springboot 2.2.5.RELEASE, SpringCloud Hoxton.SR3</li>
+    <li>hosts配置: 127.0.0.1 www.supermarket.com</li>
 </ul>
 <h2>遇到的bug锦集(作为记录，博君一笑)</h2>
 <ul>
@@ -189,6 +209,9 @@
     <li>使用SpringMVC处理请求参数，如果自动封bean作为方法参数传入，那么该bean所携带的请求参数是不经过过滤器的！原因未知</li>
     <li>自动登录最好使用过滤器实现，因为SpringMVC拦截器无法拦截index.jsp。而因为使用过滤器的时候Spring容器还未初始化，所以过滤器的属性需要手工注入</li>
     <li>即便上一次响应设置了cookie的path，下一次请求携带的cookie的path也会是null。因此如果要修改或删除cookie，一定要严格满足name, path都设置，否则可能会无效</li>
+    <li>如果间接依赖了spring-cloud-starter-netflix-eureka-server，一定要把jackson-dataformat-xml排除掉，因为如果不排除掉会导致返回给浏览器的对象是xml格式而非json格式</li>
+    <li>MyBatis如果使用bean传参，不要使用&lt;if&gt;标签内的test属性名应该对应bean属性名而非表的列名。否则会报There is no getter for property named 'xx' in 'class xxx</li>
+    <li>在Springboot项目中，如果要在application.properties中写自定义配置项，若该配置项为路径字符串，一定要写全路径，从盘符写起，否则会自动在前面拼接tomcat的临时路径</li>
 </ul>
 </body>
 </html>

@@ -1,0 +1,15 @@
+com\supermarket\common\domain\Cart.class
+com\supermarket\common\domain\Product.class
+com\supermarket\common\domain\Order.class
+com\supermarket\common\vo\SupermarketResult.class
+com\supermarket\common\utils\CookieUtils.class
+com\supermarket\common\domain\OrderItem.class
+com\supermarket\common\utils\UploadUtils.class
+com\supermarket\common\domain\Success.class
+com\supermarket\common\StarterEureka.class
+com\supermarket\common\domain\User.class
+com\supermarket\common\vo\SysResult.class
+com\supermarket\common\utils\MapperUtils.class
+com\supermarket\common\domain\SecondKill.class
+com\supermarket\common\utils\MD5Utils.class
+com\supermarket\common\vo\PicUploadResult.class

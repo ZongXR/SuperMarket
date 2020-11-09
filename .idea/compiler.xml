@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="user" />
+        <module name="common" />
+        <module name="product" />
+        <module name="zuul-gateway" />
+        <module name="image" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="common" target="1.8" />
+      <module name="image" target="1.8" />
+      <module name="product" target="1.8" />
+      <module name="user" target="1.8" />
+      <module name="zuul-gateway" target="1.8" />
+      <module name="网上商城" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="common" options="-parameters" />
+      <module name="image" options="-parameters" />
+      <module name="product" options="-parameters" />
+      <module name="user" options="-parameters" />
+      <module name="zuul-gateway" options="-parameters" />
+    </option>
+  </component>
+</project>

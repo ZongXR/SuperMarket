@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Custom Plugin Examples</title>
+		<style>
+			form {
+				margin: 0;
+			}
+			textarea {
+				display: block;
+			}
+			.ke-icon-example1 {
+				background-image: url(../themes/default/default.gif);
+				background-position: 0px -672px;
+				width: 16px;
+				height: 16px;
+			}
+			.ke-icon-example2 {
+				background-image: url(../themes/default/default.gif);
+				background-position: 0px -672px;
+				width: 16px;
+				height: 16px;
+			}
+		</style>
+		<link rel="stylesheet" href="../themes/default/default.css" />
+		<script charset="utf-8" src="../kindeditor-min.js"></script>
+		<script charset="utf-8" src="../lang/zh_CN.js"></script>
+		<script>
+			// 自定义插件 #1
+			KindEditor.lang({
+				example1 : '插入HTML'
+			});
+			KindEditor.plugin('example1', function(K) {
+				var self = this, name = 'example1';
+				self.clickToolbar(name, function() {
+					self.insertHtml('<strong>测试内容</strong>');
+				});
+			});
+			// 自定义插件 #2
+			KindEditor.lang({
+				example2 : 'CLASS样式'
+			});
+			KindEditor.plugin('example2', function(K) {
+				var self = this, name = 'example2';
+				function click(value) {
+					var cmd = self.cmd;
+					if (value === 'adv_strikethrough') {
+						cmd.wrap('<span style="background-color:#e53333;text-decoration:line-through;"></span>');
+					} else {
+						cmd.wrap('<span class="' + value + '"></span>');
+					}
+					cmd.select();
+					self.hideMenu();
+				}
+				self.clickToolbar(name, function() {
+					var menu = self.createMenu({
+						name : name,
+						width : 150
+					});
+					menu.addItem({
+						title : '红底白字',
+						click : function() {
+							click('red');
+						}
+					});
+					menu.addItem({
+						title : '绿底白字',
+						click : function() {
+							click('green');
+						}
+					});
+					menu.addItem({
+						title : '黄底白字',
+						click : function() {
+							click('yellow');
+						}
+					});
+					menu.addItem({
+						title : '自定义删除线',
+						click : function() {
+							click('adv_strikethrough');
+						}
+					});
+				});
+			});
+			KindEditor.ready(function(K) {
+				K.create('#content1', {
+					cssPath : ['../plugins/code/prettify.css', 'index.css'],
+					items : ['source', 'removeformat', 'example1', 'example2', 'code']
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h3>自定义插件</h3>
+		<textarea id="content1" name="content" style="width:700px;height:200px;visibility:hidden;"></textarea>
+	</body>
+</html>

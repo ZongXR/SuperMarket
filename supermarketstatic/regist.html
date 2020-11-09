@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>欢迎注册Supermarket</title>
+    <link rel="stylesheet" href="css/regist.css"/>
+    <script type="text/javascript" src="js/common/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="js/regist_ajax.js"></script>
+    <meta charset="UTF-8">
+</head>
+<body>
+<img src="./img/head/logo.png" alt="logo" style="position: absolute;top: 8%;left: 12%;">
+<form>
+    <h1>欢迎注册网上商城</h1>
+    <table>
+        <tr><td colspan="2"><font color="red"></font></td></tr>
+        <tr>
+            <td class="tds"><label for="username">用户名：</label></td>
+            <td>
+                <input type="text" name="username" id="username"/>
+                <span style="color: red" id="username_msg"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="tds"><label for="password">密码：</label></td>
+            <td>
+                <input type="password" name="password" id="password"/>
+                <span style="color: red" id="password_msg"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="tds"><label for="password2">确认密码：</label></td>
+            <td>
+                <input type="password" name="password2" id="password2"/>
+                <span style="color: red" id="password2_msg"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="tds"><label for="nickname">昵称：</label></td>
+            <td>
+                <input type="text" name="nickname" id="nickname"/>
+                <span style="color: red" id="nickname_msg"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="tds"><label for="email">邮箱：</label></td>
+            <td>
+                <input type="text" name="email" id="email" />
+                <span style="color: red" id="email_msg"></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="sub_td" colspan="2" >
+                <input type="submit" value="注册用户"/>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

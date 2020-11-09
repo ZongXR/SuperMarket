@@ -1,0 +1,37 @@
+@charset "utf-8";
+body {
+	font-family: "微软雅黑", Arial, Helvetica, sans-serif;
+	text-align: center;
+}
+*{margin:0px;padding:0px;}
+{
+	border: 1px solid red;
+}
+/*-----------------------------------*/
+#warp{
+	margin:0px auto;
+	text-align:left;
+	width: 580px;
+	height: 300px;
+	text-align: center;
+	vertical-align:middle;
+	background-color: #f3f3f3;
+}
+#warp div{
+	margin-top:10px;
+	width: 540px;
+	height:280px;
+	background-color: #EEEEEE;
+}
+#warp h3{
+	margin-top:10px;
+	padding-top:50px;
+	width: 540px;
+	height: 200px;
+	background-color: #EEEEEE;
+}
+#warp form{
+	width: 540px;
+	margin-top:30px;
+	background-color: #EEEEEE;
+}

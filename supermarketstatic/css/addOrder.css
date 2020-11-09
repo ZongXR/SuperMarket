@@ -1,0 +1,72 @@
+@charset "gb2312";
+body {
+	font-family: "Î¢ÈíÑÅºÚ", Arial, Helvetica, sans-serif;
+	text-align:center;
+}
+*{margin:0px;padding:0px;}
+
+{
+	border: 1px solid red;
+}
+/*----ÕûÌå-------------------------------*/
+.warp{
+	margin: 0px auto 80px auto;
+	width:1200px;
+}
+
+.warp h3{
+	text-align:left;
+	width:1200px;
+	margin-bottom:16px;
+	background:#f3f3f3;
+	height:32px;
+	margin:22px 0px 12px 0px;
+	font-size:14px;
+	text-indent:18px;
+	line-height:32px;
+}
+#forminfo{
+	text-align:left;
+	font-size:13px;
+	padding-left:18px;
+	color:#333333;
+	padding-bottom: 5px;
+}
+#forminfo input{
+	margin-top:5px;
+}
+table{
+	color:#333333;
+}
+th{
+	background-color: #f3f3f3;
+}
+td{
+	height: 35px;
+	text-align: center;
+}
+
+.Order_price{
+	width:1200px;
+	text-align:right;
+	color:#F00;
+	font-size:22px;
+	margin:5px 0px;
+	font-weight:bold;
+}
+.add_orderbox{
+	text-align:right;
+	width:1200px;
+	border-top:1px solid #CCC;
+	padding-top:5px;
+}
+.add_order_but{
+	background:#d70000;
+	width:108px;
+	height:38px;
+	border:none;
+	cursor:pointer;
+	color:#FFFFFF;
+	font-weight:bold;
+	font-size:16px;
+}

@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>URL Type Examples</title>
+		<style>
+			form {
+				margin: 0;
+			}
+			textarea {
+				display: block;
+			}
+		</style>
+		<link rel="stylesheet" href="../themes/default/default.css" />
+		<script charset="utf-8" src="../kindeditor-min.js"></script>
+		<script charset="utf-8" src="../lang/zh_CN.js"></script>
+		<script>
+			KindEditor.ready(function(K) {
+				K.create('#content1', {
+					urlType : 'relative'
+				});
+				K.create('#content2', {
+					urlType : 'absolute'
+				});
+				K.create('#content3', {
+					urlType : 'domain'
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h3>相对URL</h3>
+		<textarea id="content1" name="content" style="width:700px;height:200px;visibility:hidden;">
+内部连接：<img border="0" src="./../plugins/emoticons/images/0.gif" /><br />
+外部连接：<img border="0" alt="" src="http://img1.cache.netease.com/img09/logo/logo.gif" /><br />
+内部超级连接：<a href="./demo-19.html" target="_blank">点击这里</a><br />
+外部超级连接：<a href="http://www.163.com/" target="_blank">点击这里</a><br />
+</textarea>
+		<h3>绝对URL</h3>
+		<textarea id="content2" name="content" style="width:700px;height:200px;visibility:hidden;">
+内部连接：<img border="0" src="./../plugins/emoticons/images/0.gif" /><br />
+外部连接：<img border="0" alt="" src="http://img1.cache.netease.com/img09/logo/logo.gif" /><br />
+内部超级连接：<a href="./demo-19.html" target="_blank">点击这里</a><br />
+外部超级连接：<a href="http://www.163.com/" target="_blank">点击这里</a><br />
+</textarea>
+		<h3>绝对URL（包含域名）</h3>
+		<textarea id="content3" name="content" style="width:700px;height:200px;visibility:hidden;">
+内部连接：<img border="0" src="./../plugins/emoticons/images/0.gif" /><br />
+外部连接：<img border="0" alt="" src="http://img1.cache.netease.com/img09/logo/logo.gif" /><br />
+内部超级连接：<a href="./demo-19.html" target="_blank">点击这里</a><br />
+外部超级连接：<a href="http://www.163.com/" target="_blank">点击这里</a><br />
+</textarea>
+	</body>
+</html>
