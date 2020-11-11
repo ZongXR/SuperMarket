@@ -5,7 +5,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class MD5Utils {
-	/** * 使用md5的算法进行加密 */
+	/**
+	 * 使用MD5加密
+	 * @param plainText 要加密的文本
+	 * @return 加密后的文本
+	 */
 	public static String md5(String plainText) {
 		if(plainText!=null){
 			//存放哈希值结果的 byte 数组
@@ -27,6 +31,7 @@ public class MD5Utils {
 			return null;
 		}
 	}
+
 	public static void main(String[] args) {
 		System.out.println(md5("123"));
 	}

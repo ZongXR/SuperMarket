@@ -103,7 +103,8 @@ CREATE TABLE `t_user` (
 
 /*Data for the table `t_user` */
 
-insert  into `t_user`(`user_id`,`user_name`,`user_password`,`user_nickname`,`user_email`,`user_type`) values ('f577f9f9-159e-4aaf-9332-fd7b294bc208','eeee','e10adc3949ba59abbe56e057f20f883e','123','123@sdo.com',0);
+insert  into `t_user`(`user_id`,`user_name`,`user_password`,`user_nickname`,`user_email`,`user_type`) values ('f577f9f9-159e-4aaf-9332-fd7b294bc208','admin','123456','123','123@sdo.com',0);
+update `t_user` set `user_password` = MD5(`user_password`);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

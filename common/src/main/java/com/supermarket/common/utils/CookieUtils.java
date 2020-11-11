@@ -24,9 +24,9 @@ public final class CookieUtils {
     /**
      * 得到Cookie的值, 不编码
      * 
-     * @param request
-     * @param cookieName
-     * @return
+     * @param request 请求
+     * @param cookieName cookie key
+     * @return cookie value
      */
     public static String getCookieValue(HttpServletRequest request, String cookieName) {
         return getCookieValue(request, cookieName, false);
@@ -35,9 +35,9 @@ public final class CookieUtils {
     /**
      * 得到Cookie的值,
      * 
-     * @param request
-     * @param cookieName
-     * @return
+     * @param request 请求
+     * @param cookieName cookie key
+     * @return cookie value
      */
     public static String getCookieValue(HttpServletRequest request, String cookieName, boolean isDecoder) {
         Cookie[] cookieList = request.getCookies();
@@ -65,9 +65,9 @@ public final class CookieUtils {
     /**
      * 得到Cookie的值,
      * 
-     * @param request
-     * @param cookieName
-     * @return
+     * @param request 请求
+     * @param cookieName cookie key
+     * @return cookie value
      */
     public static String getCookieValue(HttpServletRequest request, String cookieName, String encodeString) {
         Cookie[] cookieList = request.getCookies();
@@ -136,13 +136,14 @@ public final class CookieUtils {
         doSetCookie(request, response, cookieName, "", -1, false);
     }
 
+
     /**
      * 设置Cookie的值，并使其在指定时间内生效
      * 
      * @param cookieMaxage cookie生效的最大秒数
      */
-    private static final void doSetCookie(HttpServletRequest request, HttpServletResponse response,
-            String cookieName, String cookieValue, int cookieMaxage, boolean isEncode) {
+    private static void doSetCookie(HttpServletRequest request, HttpServletResponse response,
+                                    String cookieName, String cookieValue, int cookieMaxage, boolean isEncode) {
         try {
             if (cookieValue == null) {
                 cookieValue = "";
@@ -166,8 +167,8 @@ public final class CookieUtils {
      * 
      * @param cookieMaxage cookie生效的最大秒数
      */
-    private static final void doSetCookie(HttpServletRequest request, HttpServletResponse response,
-            String cookieName, String cookieValue, int cookieMaxage, String encodeString) {
+    private static void doSetCookie(HttpServletRequest request, HttpServletResponse response,
+                                    String cookieName, String cookieValue, int cookieMaxage, String encodeString) {
         try {
             if (cookieValue == null) {
                 cookieValue = "";
@@ -189,7 +190,7 @@ public final class CookieUtils {
     /**
      * 得到cookie的域名
      */
-    private static final String getDomainName(HttpServletRequest request) {
+    private static String getDomainName(HttpServletRequest request) {
         String domainName = null;
 
         String serverName = request.getRequestURL().toString();

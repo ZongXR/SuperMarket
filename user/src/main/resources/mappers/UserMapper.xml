@@ -23,8 +23,7 @@
         </trim>
     </insert>
 
-    <select id="selectCount" resultType="java.lang.Integer" parameterType="com.supermarket.common.domain.User">
-        select count(1) from `t_user`
+    <sql id="queryUserConditions">
         <where>
             <if test="userId != null">user_id = #{userId}</if>
             <if test="userName != null">and user_name = #{userName}</if>
@@ -33,7 +32,23 @@
             <if test="userEmail != null">and user_email = #{userEmail}</if>
             <if test="userType != null">and user_type = #{userType}</if>
         </where>
+    </sql>
+
+    <select id="selectCount" resultType="java.lang.Integer" parameterType="com.supermarket.common.domain.User">
+        select count(1) from `t_user`
+        <include refid="queryUserConditions"/>
     </select>
+
+    <select id="selectUsers" resultType="com.supermarket.common.domain.User">
+        select * from `t_user`
+        <include refid="queryUserConditions"/>
+    </select>
+
+    <select id="selectUser" resultType="com.supermarket.common.domain.User">
+        select * from `t_user`
+        <include refid="queryUserConditions"/>
+    </select>
+
 </mapper>
 
 

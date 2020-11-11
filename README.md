@@ -6,7 +6,6 @@
 <img src="./img/product.png" alt="商品页面" /><br />
 <img src="./img/regist.png" alt="注册页面" /><br />
 <img src="./img/login.png" alt="登录页面" /><br />
-<img src="./img/logout.PNG" alt="注销页面" /><br />
 <img src="./img/error.png" alt="错误页面" /><br />
 <h2>声明</h2>
 <ul>
@@ -14,38 +13,45 @@
     <li>未经许可不得将本项目商用，如需商用请联系作者<a href="mailto:zxr@tju.edu.cn">zxr@tju.edu.cn</a></li>
 </ul>
 <h2>关键技术</h2>
-<p>基于SSM框架开发的商城系统，代码严格遵循MVC分层思想，可部署到服务器上，设计精良，不断完善</p>
-<h3>前端</h3>
+<p>基于SpringCloud框架开发的商城系统，代码严格遵循MVC分层思想，可部署到服务器上，设计精良，不断完善</p>
+<h2>包结构说明</h2>
 <ul>
-    <li>前端对应View层</li>
-    <li>前端使用jsp页面展示，并通过EL表达式接收服务器打给浏览器的数据</li>
-    <li>使用js实现网页动态效果，通过jQuery简化操作，并配合html5实现前端的数据校验</li>
-    <li>使用Ajax技术完成前端用户名可用性校验、退出登录功能</li>
+<li>com.supermarket.*.controller对应于微服务的controller层</li>
+<li>com.supermarket.*.service对应于微服务的service层</li>
+<li>com.supermarket.*.dao对应于微服务的dao层</li>
+<li>com.supermarket.*.aspect对应于微服务的切面类</li>
+<li>com.supermarket.*.domain对应于微服务的JavaBean</li>
+<li>com.supermarket.*.utils对应于微服务的工具类</li>
+<li>com.supermarket.*.vo对应于微服务的ViewObject</li>
 </ul>
-<h3>过滤器</h3>
+<h2>功能说明</h2>
+<h3>用户微服务</h3>
 <ul>
-    <li>com.supermarket.filter包用于存放过滤器</li>
-    <li>CharacterEncodingFilter类实现全局乱码处理，包括POST请求、GET请求、响应</li>
-    <li>AutoLogin类实现用户自动登录功能</li>
+<li>用户登录</li>
+<li>用户注册</li>
+<li>用户登出</li>
+<li>用户名可用性校验</li>
+<li>用户登录状态获取</li>
 </ul>
-<h3>Controller层</h3>
+<h3>商品微服务</h3>
 <ul>
-    <li>com.supermarket.web包对应Controller层，通过SpringMVC实现</li>
-    <li>UserController类实现用户登录、注销、注册、检查用户名等功能</li>
-    <li>com.supermarket.interceptor包为SpringMVC拦截器，通过Logging类实现用户请求信息的日志记录</li>
+<li>分页查询</li>
+<li>单个商品查询</li>
+<li>商品新增</li>
+<li>商品修改</li>
 </ul>
-<h3>Service层</h3>
+<h3>公共资源微服务</h3>
 <ul>
-    <li>com.supermarket.service包属于Model层</li>
-    <li>使用com.supermarket.service.UserService实现登录、注册、检查可用性等功能</li>
-    <li>使用com.supermarket.service.ValistrService完成验证码生成和比对相关功能</li>
-    <li>com.supermarket.aspect存放切面类，其中Logging实现异常日志记录、执行时间统计等功能</li>
+<li>公共资源微服务同时也是SpringCloud的Eureka模块</li>
+<li>提供了常用的JavaBean, ViewObject, 工具类</li>
 </ul>
-<h3>DAO层</h3>
+<h3>zuul网关</h3>
 <ul>
-    <li>com.supermarket.dao包属于Model层，通过MyBatis实现</li>
-    <li>UserDao为接口，配合UserMapper使用</li>
-    <li>com.supermarket.mapper为MyBatis的mapper文件存放位置，配合UserDao实现对用户的增删改查</li>
+<li>SpringCloud的zuul网关模块</li>
+</ul>
+<h3>图片微服务</h3>
+<ul>
+<li>图片上传功能</li>
 </ul>
 <h2>版本迭代</h2>
 <table>
@@ -189,6 +195,18 @@
         </td>
         <td>2020年11月10日</td>
     </tr>
+    <tr>
+        <td>0.4.1</td>
+        <td>
+            <ul>
+                <li>新增redis配置，通过redis解决微服务之间数据共享问题</li>
+                <li>完善用户微服务：实现登录、登出、登录状态获取，修复注册未校验密码一致性的Bug</li>
+                <li>改进redis数据结构：将key-value改进为hash，从而实现单点登录</li>
+                <li>使用AOP切面实现登录时长的自动延长</li>
+            </ul>
+        </td>
+        <td>2020年11月12日</td>
+    </tr>
 </table>
 <h2>配置情况</h2>
 <ul>
@@ -212,6 +230,7 @@
     <li>如果间接依赖了spring-cloud-starter-netflix-eureka-server，一定要把jackson-dataformat-xml排除掉，因为如果不排除掉会导致返回给浏览器的对象是xml格式而非json格式</li>
     <li>MyBatis如果使用bean传参，不要使用&lt;if&gt;标签内的test属性名应该对应bean属性名而非表的列名。否则会报There is no getter for property named 'xx' in 'class xxx</li>
     <li>在Springboot项目中，如果要在application.properties中写自定义配置项，若该配置项为路径字符串，一定要写全路径，从盘符写起，否则会自动在前面拼接tomcat的临时路径</li>
+    <li>在4.1版本中忘记在application.properties中配置redis，然后配置了还是不行。结果将所有微服务全部重启就好了。</li>
 </ul>
 </body>
 </html>

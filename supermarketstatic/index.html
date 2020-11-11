@@ -37,8 +37,9 @@
                 success: function (data) {
                     if (data.status === 200) {
                         let _data = JSON.parse(data.data);//jackson
+                        window.console.log(_data);
                         let html = _data.userName + "，欢迎来到Supermarket！<a href=\"javascript:void(0)\" class=\"link-logout\" onclick='logout()'>[退出]</a>  \|<a href=\"http://www.Supermarket.com/manage.html\" class=\"link-logout\">[后台]</a>";
-                        userId = _data[userId];
+                        userId = _data.userId;
                         $("#loginbar").html(html);
                     }
                 },
