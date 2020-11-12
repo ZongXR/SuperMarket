@@ -18,7 +18,6 @@ h1{
 
 table{
 	margin: 0 auto;
-	/*text-align: center;*/
 }
 td{
 	padding-top: 10px;
@@ -53,10 +52,11 @@ input[type='submit']{
 	font-size: 20px;
 	color: #FFFFFF;
 	font-weight: bolder;
-	background-image: url('../img/regist/zc_btn01.jpg');
+	border-radius: 5px;
+	background-color: #C41228;
 }
 
 input[type='submit']:hover{
-	background-image: url('../img/regist/zc_btn02.jpg');
+	background-color: #D01E34;
 }
 

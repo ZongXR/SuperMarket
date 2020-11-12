@@ -6,7 +6,9 @@ import com.supermarket.common.domain.User;
 import com.supermarket.common.utils.MD5Utils;
 import com.supermarket.common.utils.TimeUtils;
 import com.supermarket.user.dao.UserDao;
+import com.supermarket.user.exception.MsgException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -42,22 +44,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registUser(User user, Errors errors, String userPassword2) {
-        // 进行bean校验
+        // 密码一致性校验
         if (! user.getUserPassword().equals(userPassword2))
-            throw new RuntimeException("两次密码输入不一致");
+            throw new MsgException("两次密码输入不一致");
+        // 进行bean校验
         List<FieldError> fieldErrors = errors.getFieldErrors();
         if (fieldErrors.isEmpty()) {
             // bean校验无误，进行用户名重复性校验
-            if (this.checkUserName(user.getUserName())) {
-                // 用户名不存在，可用
+            try {
                 user.setUserId(UUID.randomUUID().toString());
                 user.setUserPassword(MD5Utils.md5(user.getUserPassword()));
                 this.userDao.insertUser(user);
-            } else {
-                throw new RuntimeException("用户名已存在");
+            } catch (DuplicateKeyException e){
+                e.printStackTrace();
+                throw new MsgException("用户名已存在");
             }
         } else {
-            throw new RuntimeException(fieldErrors.get(0).getDefaultMessage());
+            throw new MsgException(fieldErrors.get(0).getDefaultMessage());
         }
     }
 

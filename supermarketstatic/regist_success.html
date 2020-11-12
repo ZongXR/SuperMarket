@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>注册成功</title>
+    <link rel="icon" type="image/x-icon" href="./img/head/icon.ico" />
+    <link rel="stylesheet" href="./css/regist.css"/>
+    <meta charset="UTF-8">
+    <noscript>抱歉，你的浏览器不支持 JavaScript!</noscript>
+    <script type="text/javascript" src="./js/common/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript">
+        // 文档就绪事件
+        $(function () {
+            let timeout = parseInt($("#success_alarm").text().match(/[0-9]+/g)[0]);
+            let timer = window.setInterval(refresh, 1000);
+            function refresh() {
+                if (timeout > 0) {
+                    timeout = timeout - 1;
+                    $("#success_alarm").text("注册成功，" + timeout + "秒后跳转");
+                }else{
+                    window.clearInterval(timer);
+                    window.location.href = "./index.html";
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+<img src="./img/head/logo.png" alt="logo" style="position: absolute;top: 8%;left: 12%;">
+<h1 id="success_alarm" style="width:600px;">
+    注册成功，5秒后跳转
+</h1>
+<p style="color:black;text-align: center;">
+    如未跳转，请手动点击跳转至
+    <a href="./index.html" target="_self" style="color:blue;text-decoration: none;">首页</a>
+</p>
+</body>
+</html>

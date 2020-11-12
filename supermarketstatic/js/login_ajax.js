@@ -27,11 +27,14 @@ function login(){
 		dataType:"json",
 		success:function(result){
 			//result是服务端返回的数据
-			if(result.status===200){
-				//window.location.href="index.html";
-				window.location.href="index.html";
+			if(result.status === 200) {
+				// 登录成功
+				window.location.href = "./index.html";
+			}else if (result.status === 201){
+				// 用户不存在
+				$("#alert").text(result.msg);
 			}else{
-				alert("登录失败");
+				alert(result.msg);
 			}
 		},
 		error:function(){

@@ -7,6 +7,9 @@ $(function () {
                         "user_ajax/verifyCode?" + new Date().toLocaleString());
             });*/
 
+    /**
+     * 用户名输入框离焦事件
+     */
     $("input[name=username]").blur(
         function () {
             let userName = $(this).val();
@@ -19,10 +22,15 @@ $(function () {
                     data: {"userName": userName},
                     dataType: "json",
                     success: function (result) {
-                        if (result.status !== 200) {
-                            $("#username_msg").html("用户名已存在");
-                        } else {
-                            $("#username_msg").text("用户名可用").css("color", "green");
+                        if (result.status === 201) {
+                            // 用户名重复
+                            $("#username_msg").text(result.msg);
+                        } else if (result.status === 200){
+                            // 用户名可用
+                            $("#username_msg").text(result.msg).css("color", "green");
+                        }else{
+                            // 其他异常
+                            alert(result.msg);
                         }
                     },
                     error: function () {
@@ -31,7 +39,10 @@ $(function () {
                 });
             }
         });
-    //给注册表单注册submit事件
+
+    /**
+     * 提交按钮的submit事件
+     */
     $("form").submit(function () {
         return register();
     });
@@ -62,10 +73,13 @@ function register() {
             dataType: "json",
             success: function (result) {
                 if (result.status === 200) {
-                    alert("注册成功,转向登录页面")
-                    window.location.href = "./login.html";
+                    // 注册成功
+                    window.location.href = "./regist_success.html";
+                }else if (result.status === 201){
+                    // 后端校验出错
+                    $("#alert").text(result.msg);
                 } else {
-                    alert(result.message);
+                    alert(result.msg);
                 }
             },
             error: function () {
@@ -94,7 +108,7 @@ var formObj = {
         return flag;
     },
     checkNull: function (name, msg) {
-        var value = $("input[name=" + name + "]").val();
+        let value = $("input[name=" + name + "]").val();
         if ($.trim(value) === "") {
             this.setMsg(name, msg);
             return false;

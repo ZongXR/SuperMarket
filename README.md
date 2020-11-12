@@ -207,6 +207,17 @@
         </td>
         <td>2020年11月12日</td>
     </tr>
+    <tr>
+        <td>0.4.2</td>
+        <td>
+            <ul>
+                <li>调整前端css，增加注册、登录的错误提示</li>
+                <li>新增注册成功页面</li>
+                <li>其他前端页面样式的调整</li>
+            </ul>
+        </td>
+        <td>2020年11月13日</td>
+    </tr>
 </table>
 <h2>配置情况</h2>
 <ul>
@@ -214,6 +225,7 @@
     <li>nginx：1.19.1</li>
     <li>maven: 3.6.3</li>
     <li>MySql: 5.5.27</li>
+    <li>Redis: 3.2.11</li>
     <li>开发环境：IntelliJ Idea 2020.1.4</li>
     <li>框架：Springboot 2.2.5.RELEASE, SpringCloud Hoxton.SR3</li>
     <li>hosts配置: 127.0.0.1 www.supermarket.com</li>

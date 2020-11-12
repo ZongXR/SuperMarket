@@ -3,6 +3,7 @@ package com.supermarket.user.controller;
 import com.supermarket.common.domain.User;
 import com.supermarket.common.utils.CookieUtils;
 import com.supermarket.common.vo.SysResult;
+import com.supermarket.user.exception.MsgException;
 import com.supermarket.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,11 +34,11 @@ public class UserController {
         try{
             boolean available = this.userService.checkUserName(userName);
             if (! available)
-                return new SysResult(201, "ok", null);
+                return new SysResult(201, "用户名已存在", null);
             else
-                return new SysResult(200, "ok", null);
+                return new SysResult(200, "用户名可用", null);
         }catch(Exception e){
-            return new SysResult(500, "other exception", e);
+            return new SysResult(500, e.getMessage(), e);
         }
     }
 
@@ -45,7 +46,7 @@ public class UserController {
      * 注册用户
      * @param user 请求参数封装的bean
      * @param errors bean校验出的错
-     * @return 200成功，500异常
+     * @return 200成功，201后台校验错误，500异常
      */
     @RequestMapping("/manage/save")
     @ResponseBody
@@ -54,19 +55,24 @@ public class UserController {
             @RequestParam("userPassword2") String userPassword2,
             Errors errors
     ){
-        try{
+        try {
             this.userService.registUser(user, errors, userPassword2);
             return new SysResult(200, "ok", null);
-        }catch(Exception e){
+        }catch (MsgException e){
+            // 出现后台校验错误
             e.printStackTrace();
-            return new SysResult(500, "other exception", e);
+            return new SysResult(201, e.getMessage(), e);
+        }catch(Exception e){
+            // 出现其他错误
+            e.printStackTrace();
+            return new SysResult(500, e.getMessage(), e);
         }
     }
 
     /**
      * 登录用户
      * @param user 参数封装的bean
-     * @return 成功200，不存在201，异常500
+     * @return 成功200，用户不存在201，异常500
      */
     @RequestMapping("/manage/login")
     @ResponseBody
@@ -85,7 +91,7 @@ public class UserController {
             }
         }catch(Exception e){
             e.printStackTrace();
-            return SysResult.build(500, "other exception", e);
+            return SysResult.build(500, e.getMessage(), e);
         }
     }
 
@@ -107,7 +113,7 @@ public class UserController {
                 return SysResult.ok(user);
         }catch (Exception e){
             e.printStackTrace();
-            return SysResult.build(500, "other exception", e);
+            return SysResult.build(500, e.getMessage(), e);
         }
     }
 
@@ -128,7 +134,7 @@ public class UserController {
             return SysResult.ok();
         }catch (Exception e){
             e.printStackTrace();
-            return SysResult.build(500, "other exception", e);
+            return SysResult.build(500, e.getMessage(), e);
         }
     }
 }

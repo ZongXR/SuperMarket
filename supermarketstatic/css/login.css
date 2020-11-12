@@ -29,11 +29,11 @@ td{
 	padding-top:10px;
 }
 .tdx{
+	font-size: 18px;
 	text-align: right;
 }
 
 input[type='submit']{
-	background-image: url("../img/login/dlan01.jpg");
 	width:92px;
 	height:44px;
 	border-style:none;
@@ -41,7 +41,9 @@ input[type='submit']{
 	font-weight:bold;
 	color:white;
 	cursor: pointer;
+	border-radius: 5px;
+	background-color: #C41228;
 }
 input[type='submit']:hover{
-	background-image: url("../img/login/dlan02.jpg");
+	background-color: #D01E34;
 }
