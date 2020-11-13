@@ -53,6 +53,9 @@
 <ul>
 <li>图片上传功能</li>
 </ul>
+<h2>交流群</h2>
+点击链接加入群聊【Supermarket项目交流群】：<a href="https://jq.qq.com/?_wv=1027&k=wlpUy5jo">https://jq.qq.com/?_wv=1027&k=wlpUy5jo</a><br /> 
+<a href="https://jq.qq.com/?_wv=1027&k=wlpUy5jo"><img src="./img/交流群.png" alt="交流群二维码"/></a>
 <h2>版本迭代</h2>
 <table>
     <tr>
