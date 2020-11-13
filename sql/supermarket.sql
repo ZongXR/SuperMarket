@@ -79,7 +79,7 @@ CREATE TABLE `t_product` (
   `product_num` int(11) DEFAULT '0',
   `product_description` varchar(255) DEFAULT '',
   PRIMARY KEY (`product_id`),
-#   UNIQUE KEY `UN_product_name` (`product_name`)
+  UNIQUE KEY `UN_product_name` (`product_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `t_product` */
