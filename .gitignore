@@ -15,3 +15,17 @@ hs_err_pid*
 
 /out/
 /接口文件/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+log/
+
+### Maven
+target/
+logs/
+!.mvn/wrapper/maven-wrapper.jar
+
+
