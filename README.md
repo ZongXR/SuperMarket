@@ -20,6 +20,7 @@
 <li>com.supermarket.*.service对应于微服务的service层</li>
 <li>com.supermarket.*.dao对应于微服务的dao层</li>
 <li>com.supermarket.*.aspect对应于微服务的切面类</li>
+<li>com.supermarket.*.exception对应于微服务的自定义异常</li>
 <li>com.supermarket.*.domain对应于微服务的JavaBean</li>
 <li>com.supermarket.*.utils对应于微服务的工具类</li>
 <li>com.supermarket.*.vo对应于微服务的ViewObject</li>
@@ -221,6 +222,17 @@
         </td>
         <td>2020年11月13日</td>
     </tr>
+    <tr>
+        <td>0.4.3</td>
+        <td>
+            <ul>
+                <li>完善图片微服务：新增功能生成验证码、验证码缓存清理(避免前端连续请求验证码爆掉redis)</li>
+                <li>完善用户微服务：登录、注册需要验证码，登录或注册成功后清除验证码缓存(节省redis内存)/li>
+                <li>完善商品微服务：商品新增、查询、编辑触发被动缓存</li>
+            </ul>
+        </td>
+        <td>2020年11月14日</td>
+    </tr>
 </table>
 <h2>配置情况</h2>
 <ul>
@@ -246,6 +258,7 @@
     <li>MyBatis如果使用bean传参，不要使用&lt;if&gt;标签内的test属性名应该对应bean属性名而非表的列名。否则会报There is no getter for property named 'xx' in 'class xxx</li>
     <li>在Springboot项目中，如果要在application.properties中写自定义配置项，若该配置项为路径字符串，一定要写全路径，从盘符写起，否则会自动在前面拼接tomcat的临时路径</li>
     <li>在4.1版本中忘记在application.properties中配置redis，然后配置了还是不行。结果将所有微服务全部重启就好了。</li>
+    <li>html中onsubmit事件要放在form标签内，放在&lt;input type=&quot;submit&quot; /&gt;标签内无效</li>
 </ul>
 </body>
 </html>

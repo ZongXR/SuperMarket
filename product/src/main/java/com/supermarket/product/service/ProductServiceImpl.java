@@ -1,18 +1,28 @@
 package com.supermarket.product.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.supermarket.product.dao.ProductDao;
 import com.supermarket.common.domain.Product;
 import com.supermarket.common.vo.SupermarketResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class ProductServiceImpl implements ProductService{
     @Autowired
     private ProductDao productDao = null;
+
+    @Autowired
+    private StringRedisTemplate template = null;
+
+    @Autowired
+    private ObjectMapper mapper = null;
 
     @Override
     public SupermarketResult queryByPage(Integer page, Integer rows) {
@@ -27,8 +37,18 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Product queryByProductId(String productId) {
-        return this.productDao.queryByProductId(productId);
+    public Product queryByProductId(String productId) throws JsonProcessingException {
+        // TODO 使用redis缓存商品信息
+        Boolean exits = this.template.hasKey("PROD_" + productId);
+        if (exits == null || !exits) {
+            // 如果redis中没有数据，查出来之后缓存进redis
+            Product product = this.productDao.queryByProductId(productId);
+            this.template.opsForValue().set("PROD_" + productId, this.mapper.writeValueAsString(product), 30, TimeUnit.MINUTES);
+            return product;
+        }else {
+            // 如果redis有数据，直接从redis中拿数据
+            return this.mapper.readValue(this.template.opsForValue().get("PROD_" + productId), Product.class);
+        }
     }
 
     @Override
@@ -39,7 +59,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public void updateProduct(Product product) {
+    public void updateProduct(Product product) throws JsonProcessingException {
         this.productDao.updateProduct(product);
     }
 }

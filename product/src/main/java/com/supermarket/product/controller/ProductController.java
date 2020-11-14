@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
-
 @Controller
 //@RequestMapping("/product")
 public class ProductController {
@@ -18,6 +17,7 @@ public class ProductController {
 
     /**
      * 分页查询
+     *
      * @param page 查询第几页
      * @param rows 查询几条记录
      * @return 查询的商品列表
@@ -27,12 +27,13 @@ public class ProductController {
     public SupermarketResult pageManage(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "rows", defaultValue = "5") Integer rows
-    ){
+    ) {
         return this.productService.queryByPage(page, rows);
     }
 
     /**
      * 商品查询
+     *
      * @param productId 商品id
      * @return 查询的商品
      */
@@ -40,12 +41,18 @@ public class ProductController {
     @ResponseBody
     public Product queryProduct(
             @PathVariable("productId") String productId
-    ){
-        return this.productService.queryByProductId(productId);
+    ) {
+        try {
+            return this.productService.queryByProductId(productId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
      * 商品新增
+     *
      * @param product 新增的商品，productId为null
      * @return SysResult
      */
@@ -53,12 +60,12 @@ public class ProductController {
     @ResponseBody
     public SysResult addProduct(
             Product product
-    ){
-        try{
+    ) {
+        try {
             // TODO 业务逻辑
             this.productService.addProduct(product);
             return SysResult.ok();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new SysResult(501, "other exception", e);
         }
@@ -66,6 +73,7 @@ public class ProductController {
 
     /**
      * 商品修改
+     *
      * @param product 修改的商品
      * @return SysResult
      */
@@ -73,12 +81,12 @@ public class ProductController {
     @ResponseBody
     public SysResult updateProduct(
             Product product
-    ){
-        try{
+    ) {
+        try {
             // TODO 业务逻辑
             this.productService.updateProduct(product);
             return SysResult.ok();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new SysResult(501, "other exception", e);
         }

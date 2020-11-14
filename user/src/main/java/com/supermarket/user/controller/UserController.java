@@ -45,6 +45,9 @@ public class UserController {
     /**
      * 注册用户
      * @param user 请求参数封装的bean
+     * @param userPassword2 确认密码
+     * @param valistr 验证码
+     * @param token 验证码的key
      * @param errors bean校验出的错
      * @return 200成功，201后台校验错误，500异常
      */
@@ -53,10 +56,12 @@ public class UserController {
     public SysResult registUser(
             @Valid User user,
             @RequestParam("userPassword2") String userPassword2,
+            @RequestParam("valistr") String valistr,
+            @RequestParam("token") String token,
             Errors errors
     ){
         try {
-            this.userService.registUser(user, errors, userPassword2);
+            this.userService.registUser(user, errors, userPassword2, valistr, token);
             return new SysResult(200, "ok", null);
         }catch (MsgException e){
             // 出现后台校验错误
@@ -78,17 +83,22 @@ public class UserController {
     @ResponseBody
     public SysResult loginUser(
             User user,
+            @RequestParam("valistr") String valistr,
+            @RequestParam("token") String token,
             HttpServletRequest request,
             HttpServletResponse response
     ){
-        try{
-            String ticket = this.userService.loginUser(user);
+        try {
+            String ticket = this.userService.loginUser(user, valistr, token);
             if (StringUtils.isEmpty(ticket))
                 return SysResult.build(201, "用户不存在", null);
             else {
                 CookieUtils.setCookie(request, response, "EM_TICKET", ticket);
                 return SysResult.ok();
             }
+        }catch (MsgException e){
+            e.printStackTrace();
+            return SysResult.build(202, e.getMessage(), e);
         }catch(Exception e){
             e.printStackTrace();
             return SysResult.build(500, e.getMessage(), e);
@@ -107,6 +117,7 @@ public class UserController {
     ){
         try{
             String user = this.userService.loginState(ticket);
+            System.out.println(user);
             if (user == null)
                 return  SysResult.build(201, "尚未登陆", null);
             else

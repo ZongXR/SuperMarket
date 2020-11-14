@@ -12,7 +12,15 @@ h1{
 }
 form{
 	width:400px;
-	margin:25px auto 0;
+	margin:3px auto 0;
+}
+
+input[name='valistr']{
+	width:80px;
+}
+
+img{
+	vertical-align: top;
 }
 
 form input[type='text'],form input[type='password']{

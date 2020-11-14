@@ -3,13 +3,14 @@
 <head>
     <title>欢迎注册Supermarket</title>
     <link rel="stylesheet" href="css/regist.css"/>
+    <link rel="icon" type="image/x-icon" href="img/head/icon.ico" />
     <script type="text/javascript" src="js/common/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="js/regist_ajax.js"></script>
     <meta charset="UTF-8">
 </head>
 <body>
 <img src="./img/head/logo.png" alt="logo" style="position: absolute;top: 8%;left: 12%;">
-<form>
+<form  onsubmit="return register(this);">
     <h1>欢迎注册网上商城</h1>
     <table>
         <tr>
@@ -18,39 +19,46 @@
         <tr>
             <td class="tds"><label for="username">用户名：</label></td>
             <td>
-                <input type="text" name="username" id="username"/>
+                <input type="text" name="username" id="username" onblur="usernameBlur(this)"/>
                 <span style="color: red" id="username_msg"></span>
             </td>
         </tr>
         <tr>
             <td class="tds"><label for="password">密码：</label></td>
             <td>
-                <input type="password" name="password" id="password"/>
+                <input type="password" name="password" id="password" onblur="checkNull('password', '密码不能为空')"/>
                 <span style="color: red" id="password_msg"></span>
             </td>
         </tr>
         <tr>
             <td class="tds"><label for="password2">确认密码：</label></td>
             <td>
-                <input type="password" name="password2" id="password2"/>
+                <input type="password" name="password2" id="password2" onblur="checkNull('password2', '确认密码不能为空');isEqual('password', '两次密码输入不一致');"/>
                 <span style="color: red" id="password2_msg"></span>
             </td>
         </tr>
         <tr>
             <td class="tds"><label for="nickname">昵称：</label></td>
             <td>
-                <input type="text" name="nickname" id="nickname"/>
+                <input type="text" name="nickname" id="nickname" onblur="checkNull('nickname', '昵称不能为空')"/>
                 <span style="color: red" id="nickname_msg"></span>
             </td>
         </tr>
         <tr>
             <td class="tds"><label for="email">邮箱：</label></td>
             <td>
-                <input type="text" name="email" id="email" />
+                <input type="text" name="email" id="email" onblur="checkNull('email', '邮箱不能为空')"/>
                 <span style="color: red" id="email_msg"></span>
             </td>
         </tr>
-
+        <tr>
+            <td class="tds"><label for="valistr">验证码：</label></td>
+            <td>
+                <input type="text" name="valistr" id="valistr" onblur="checkNull('valistr', '验证码不能为空')"/>
+                <img width="" height="" alt="验证码" onclick="refreshValistr(this)"/>
+                <span style="color: red" id="valistr_msg"></span>
+            </td>
+        </tr>
         <tr>
             <td class="sub_td" colspan="2" >
                 <input type="submit" value="注册用户"/>

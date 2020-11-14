@@ -14,16 +14,23 @@ public interface UserService {
 
     /**
      * 注册用户
-     * @param user 用户bean
+     * @param user 用户的bean
+     * @param errors 校验错误
+     * @param userPassword2 确认密码
+     * @param valistr 验证码
+     * @param token 验证码的key
      */
-    public void registUser(User user, Errors errors, String userPassword);
+    public void registUser(User user, Errors errors, String userPassword2, String valistr, String token);
 
     /**
      * 登录用户
-     * @param user 用户bean
-     * @return 存储到redis的ticket
+     * @param user 用户的bean，密码未加密
+     * @param valistr 前端传过来的验证码
+     * @param token 验证码的key
+     * @return 用户在redis的key
+     * @throws JsonProcessingException 向上抛出
      */
-    public String loginUser(User user) throws JsonProcessingException;
+    public String loginUser(User user, String valistr, String token) throws JsonProcessingException;
 
     /**
      * 检查用户登录状态

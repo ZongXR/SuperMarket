@@ -1,6 +1,8 @@
 <component name="ProjectDictionaryState">
   <dictionary name="DrZon">
     <words>
+      <w>abcdef</w>
+      <w>abcdefghjkmnopqrstuvwxyz</w>
       <w>autologin</w>
       <w>buynum</w>
       <w>cval</w>
@@ -48,6 +50,7 @@
       <w>vali</w>
       <w>valicode</w>
       <w>valistr</w>
+      <w>valistrdel</w>
     </words>
   </dictionary>
 </component>

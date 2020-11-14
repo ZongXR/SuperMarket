@@ -1,14 +1,21 @@
 package com.supermarket.image.service;
 
+import com.supermarket.common.utils.TimeUtils;
 import com.supermarket.common.utils.UploadUtils;
+import com.supermarket.common.utils.VerifyCode;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class ImageServiceImpl implements ImageService{
@@ -17,6 +24,9 @@ public class ImageServiceImpl implements ImageService{
 
     @Value("${custom.imgweb}")
     private String imgWeb = null;
+
+    @Autowired
+    private StringRedisTemplate template = null;
 
     @Override
     public String uploadImg(MultipartFile pic) {
@@ -44,5 +54,24 @@ public class ImageServiceImpl implements ImageService{
         }else{
             throw new RuntimeException("文件非法");
         }
+    }
+
+    @Override
+    public String generateValistr(String token, OutputStream out) {
+        VerifyCode img = new VerifyCode();
+        img.drawImage(out);
+        // TODO 生成完验证码之后还需要存入redis，然后把token存入list，再把上一次的token弹出来删掉
+        this.template.opsForValue().set(token, img.getCode(), 20, TimeUnit.MINUTES);
+        this.template.opsForList().leftPush(TimeUtils.cutTimestamp(token), token);
+        String oldKey = this.template.opsForList().rightPop(TimeUtils.cutTimestamp(token));
+        if (oldKey != null && !oldKey.equals(token))
+            this.template.delete(oldKey);
+        return img.getCode();
+    }
+
+    @Override
+    public void delValistr(String token) {
+        this.template.delete(token);
+        this.template.delete(TimeUtils.cutTimestamp(token));
     }
 }

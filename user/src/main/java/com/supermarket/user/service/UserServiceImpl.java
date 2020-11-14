@@ -10,6 +10,7 @@ import com.supermarket.user.exception.MsgException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.validation.FieldError;
@@ -43,10 +44,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registUser(User user, Errors errors, String userPassword2) {
+    public void registUser(User user, Errors errors, String userPassword2, String valistr, String token) {
         // 密码一致性校验
-        if (! user.getUserPassword().equals(userPassword2))
+        if (!user.getUserPassword().equals(userPassword2))
             throw new MsgException("两次密码输入不一致");
+        // 验证码非空校验
+        if (StringUtils.isEmpty(valistr))
+            throw new MsgException("验证码不能为空");
+        // 验证码一致性校验
+        if (!valistr.equals(this.template.opsForValue().get(token)))
+            throw new MsgException("验证码不对");
         // 进行bean校验
         List<FieldError> fieldErrors = errors.getFieldErrors();
         if (fieldErrors.isEmpty()) {
@@ -55,7 +62,10 @@ public class UserServiceImpl implements UserService {
                 user.setUserId(UUID.randomUUID().toString());
                 user.setUserPassword(MD5Utils.md5(user.getUserPassword()));
                 this.userDao.insertUser(user);
-            } catch (DuplicateKeyException e){
+                // 注册完成后删除redis中的验证码缓存
+                this.template.delete(TimeUtils.cutTimestamp(token));
+                this.template.delete(token);
+            } catch (DuplicateKeyException e) {
                 e.printStackTrace();
                 throw new MsgException("用户名已存在");
             }
@@ -65,17 +75,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String loginUser(User user) throws JsonProcessingException {
+    public String loginUser(User user, String valistr, String token) throws JsonProcessingException {
+        // TODO 先进行验证码校验
+        String valicode = this.template.opsForValue().get(token);
+        if (valicode == null || !valicode.equals(valistr)) {
+            System.out.println(valistr);
+            System.out.println(valicode);
+            System.out.println(token);
+            throw new MsgException("验证码不正确");
+        }
         // 传过来请求的密码没加密
         user.setUserPassword(MD5Utils.md5(user.getUserPassword()));
         List<User> users = this.userDao.selectUsers(user);
         if (users.size() == 0)
             return null;
+        // 找到了用户名，进行登录
         String ticket = "EM_TICKET_" + users.get(0).getUserName();
         String value = this.mapper.writeValueAsString(users.get(0));
         this.template.opsForHash().put(ticket, "data", value);
         this.template.opsForHash().put(ticket, "timestamp", TimeUtils.getTimestamp());
         this.template.expire(ticket, 30, TimeUnit.MINUTES);
+        this.template.delete(token);
         return ticket + this.template.opsForHash().get(ticket, "timestamp");
     }
 

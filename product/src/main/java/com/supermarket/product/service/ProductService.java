@@ -1,5 +1,6 @@
 package com.supermarket.product.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.supermarket.common.domain.Product;
 import com.supermarket.common.vo.SupermarketResult;
 
@@ -17,7 +18,7 @@ public interface ProductService {
      * @param productId 商品id
      * @return 查询出的商品
      */
-    public Product queryByProductId(String productId);
+    public Product queryByProductId(String productId) throws JsonProcessingException;
 
     /**
      * 商品新增
@@ -29,5 +30,5 @@ public interface ProductService {
      * 修改商品
      * @param product 修改的商品
      */
-    public void updateProduct(Product product);
+    public void updateProduct(Product product) throws JsonProcessingException;
 }
