@@ -13,7 +13,7 @@
 /*标题行*/
 #title{
 	width:1200px;
-	margin:20px auto 0px;
+	margin:20px auto 0;
 	background-color: #F3F3F3;
 	border: 1px solid #CCCCCC;
 	height:45px;
@@ -44,7 +44,7 @@
 /*购物车商品列表*/
 #prods{
 	width:1200px;
-	margin:10px auto 0px;
+	margin:10px auto 0;
 	background-color: #FEF4E8;
 	border-top: 1px solid #ABAAA8;
 	height:100px;

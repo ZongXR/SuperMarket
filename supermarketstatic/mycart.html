@@ -15,9 +15,13 @@
     <script type="text/javascript" src="js/jquery-extend.js"></script>
     <script type="text/javascript" src="js/lib-v1.js" charset="utf-8"></script>
     <link href="css/prodList.css" rel="stylesheet" type="text/css">
+    <link rel="icon" type="image/x-icon" href="img/head/icon.ico" />
     <script type="text/javascript" src="js/logout.js"></script>
     <meta charset="UTF-8">
     <script type="text/javascript">
+        /**
+         * 文档就绪事件
+         */
         $(function(){
             let userId = "";
             let _ticket = $.cookie("EM_TICKET");
@@ -31,26 +35,31 @@
                 dataType : "json",
                 type : "GET",
                 success : function(data){
-
                     if(data.status === 200){
                         let _data = JSON.parse(data.data);//jackson
                         if(_data==null){
-                            alert("啥也别说了，你的用户超时了,赶紧查查redis还有数据没有");
                             window.location.href="./login.html";
-                            return;}
+                            return;
+                        }
                         let html = _data.userName + "，欢迎来到Supermarket！<a href=\"javascript:void(0)\" class=\"link-logout\" onclick='logout()'>[退出]</a>  \|<a href=\"http://www.supermarket.com/manage.html\" class=\"link-logout\">[后台]</a>";
                         userId=_data.userId;
                         $("#loginbar").html(html);
                         query(userId);
                     }else{
-                        alert("购物车为空");
+                        alert(data.msg);
                     }
                 },
                 error : function(){
-                    alert('index error.');
+                    alert("请求失败");
                 }
             });
         });
+
+        /**
+         * 删除购物车
+         * @param productId 商品id
+         * @param userId 用户id
+         */
         function del(productId,userId){
             if(productId==null||userId==null){
                 alert("删除参数有误");
@@ -65,48 +74,65 @@
                         if(data.status===200){
                             window.location.href="http://www.supermarket.com/mycart.html";
                         }else{
-                            alert("删除有问题");
+                            alert(data.msg);
                         }
                     },
                     error:function () {
-                        alert("删除发送失败");
+                        alert("请求失败");
                     }
                 });
-
             }
         }
-        function inputNum(productId,userId){
 
+        /**
+         * 修改商品数量
+         * @param productId 商品id
+         * @param userId 用户id
+         */
+        function inputNum(productId,userId){
             let num = document.getElementById(productId).value;
             let numOld = document.getElementById("hid_" + productId).value;
             if(num===""||num==null){
-                alert("num填写错误");
-                return;
-            }
-            if(num===numOld){
-                alert("没有变化数值");
-                return;
-            }
-            if(num>200){
-                alert("购买数量最大200");
+                alert("数量填写错误");
                 return;
             }
             $.ajax({
-               url:"http://www.supermarket.com/cart/update?productId="+productId+"&userId="+userId+"&num="+num,
+                url:"http://www.supermarket.com/products/item/"+productId,
                 dataType:"json",
-               type:"GET",
-                success:function (data) {
-                    if(data.status===200){
-                        window.location.href="./mycart.html";
-                    }else{
-                        alert("出现未知错误");
+                type:"POST",
+                success:function(data){
+                    let total = data.productNum;
+                    if(num > total){
+                        alert("购买数量最大" + total);
+                        document.getElementById(productId).value = numOld;
+                        return;
                     }
+                    $.ajax({
+                        url:"http://www.supermarket.com/cart/update?productId="+productId+"&userId="+userId+"&num="+num,
+                        dataType:"json",
+                        type:"GET",
+                        success:function (data) {
+                            if(data.status===200){
+                                window.location.href="./mycart.html";
+                            }else{
+                                alert(data.msg);
+                            }
+                        },
+                        error:function () {
+                            alert("请求失败");
+                        }
+                    });
                 },
                 error:function () {
-                    alert("ajax遇到error");
+                    alert("请求失败");
                 }
             });
         }
+
+        /**
+         * 查询购物车
+         * @param userId 用户id
+         */
         function query(userId){
             $.ajax({
                 url:"http://www.supermarket.com/cart/query?userId="+userId,
@@ -125,25 +151,27 @@
                             let inputId = "hid_" + productId;
                             let itemMoney = productPrice * num;
                             money=money+itemMoney;
-
                             $("#carts").append("<div id='prods'><input name='prodC' type='checkbox' value=''/><a href='"+prodHtml+"'><img src='"+productImage+"' width='80' height='90'/></a><a href='"+prodHtml+"'><span id='prods_name'>"+productName+"</span></a><span id='prods_price'>"+productPrice+"元</span><span><input type='hidden' id='"+inputId+"' value='"+num+"'/><input class='buyNumInp1' id='"+productId+"' type='text' value='"+num+"'onblur='inputNum(\""+productId+"\",\""+userId+"\")'/></span><span id='prods_money'>"+itemMoney+"</span ><span id='prods_del'><a href='javascript:void(0)' class='delNum' onclick='del(\""+productId+"\",\""+userId+"\")'>删除</a></span></div>");
                         })
                        document.getElementById("span_2").innerText=money+"￥";
-                        //alert(money);
                     }else{
-                        alert("你是不是没登陆啊");
+                        alert("购物车为空");
                     }
                 }
             });
         }
+
+        /**
+         * 搜索
+         * @param a
+         */
         function search(a){
             let query = document.getElementById(a).value;
-            // alert(query);
             window.location.href="./search.html?query="+query;
-
         }
     </script>
 </head>
+
 <body>
 <div id="common_head">
     <div class="line1">

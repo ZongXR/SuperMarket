@@ -6,6 +6,7 @@ import com.supermarket.product.dao.ProductDao;
 import com.supermarket.common.domain.Product;
 import com.supermarket.common.vo.SupermarketResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,13 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public Product queryByProductId(String productId) throws JsonProcessingException {
         // TODO 使用redis缓存商品信息
-        Boolean exits = this.template.hasKey("PROD_" + productId);
+        Boolean exits = null;
+        try {
+            exits = this.template.hasKey("PROD_" + productId);
+        }catch (RedisConnectionFailureException e){
+            // redis未连接
+            return this.productDao.queryByProductId(productId);
+        }
         if (exits == null || !exits) {
             // 如果redis中没有数据，查出来之后缓存进redis
             Product product = this.productDao.queryByProductId(productId);

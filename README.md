@@ -26,7 +26,7 @@
 <li>com.supermarket.*.vo对应于微服务的ViewObject</li>
 </ul>
 <h2>功能说明</h2>
-<h3>用户微服务</h3>
+<h3>用户微服务(com.supermarket.user)</h3>
 <ul>
 <li>用户登录</li>
 <li>用户注册</li>
@@ -34,25 +34,34 @@
 <li>用户名可用性校验</li>
 <li>用户登录状态获取</li>
 </ul>
-<h3>商品微服务</h3>
+<h3>商品微服务(com.supermarket.product)</h3>
 <ul>
 <li>分页查询</li>
 <li>单个商品查询</li>
 <li>商品新增</li>
 <li>商品修改</li>
 </ul>
-<h3>公共资源微服务</h3>
+<h3>公共资源微服务(com.supermarket.common)</h3>
 <ul>
 <li>公共资源微服务同时也是SpringCloud的Eureka模块</li>
 <li>提供了常用的JavaBean, ViewObject, 工具类</li>
 </ul>
-<h3>zuul网关</h3>
+<h3>zuul网关(com.supermarket.gateway)</h3>
 <ul>
 <li>SpringCloud的zuul网关模块</li>
 </ul>
-<h3>图片微服务</h3>
+<h3>图片微服务(com.supermarket.image)</h3>
 <ul>
 <li>图片上传功能</li>
+<li>生成验证码功能</li>
+<li>清除验证码在redis中的缓存</li>
+</ul>
+<h3>购物车微服务(com.supermarket.cart)</h3>
+<ul>
+<li>购物车查询</li>
+<li>购物车新增商品</li>
+<li>购物车删除商品</li>
+<li>购物车修改商品</li>
 </ul>
 <h2>交流群</h2>
 点击链接加入群聊【Supermarket项目交流群】：<a href="https://jq.qq.com/?_wv=1027&k=wlpUy5jo">https://jq.qq.com/?_wv=1027&k=wlpUy5jo</a><br /> 
@@ -233,6 +242,17 @@
         </td>
         <td>2020年11月14日</td>
     </tr>
+    <tr>
+        <td>0.4.4</td>
+        <td>
+            <ul>
+                <li>新增购物车微服务：实现商品查询、商品新增、商品修改、商品删除功能</li>
+                <li>通过事务实现购买数量后端校验：防止购买量大于库存</li>
+                <li>在前端实现购买数量校验校验：防止购买量大于库存</li>
+            </ul>
+        </td>
+        <td>2020年11月15日</td>
+    </tr>
 </table>
 <h2>配置情况</h2>
 <ul>
@@ -259,6 +279,9 @@
     <li>在Springboot项目中，如果要在application.properties中写自定义配置项，若该配置项为路径字符串，一定要写全路径，从盘符写起，否则会自动在前面拼接tomcat的临时路径</li>
     <li>在4.1版本中忘记在application.properties中配置redis，然后配置了还是不行。结果将所有微服务全部重启就好了。</li>
     <li>html中onsubmit事件要放在form标签内，放在&lt;input type=&quot;submit&quot; /&gt;标签内无效</li>
+    <li>启动的时候需要先启动redis再启动微服务，否则会报RedisConnectionFailureException</li>
+    <li>redis作为缓存使用时，建议捕获RedisConnectionFailureException异常，从而在redis崩掉的情况下能够直接访问数据库</li>
+    <li>基于SpringCloud的Ribbon模块在微服务之间相互调用时，不经过zuul网关</li>
 </ul>
 </body>
 </html>

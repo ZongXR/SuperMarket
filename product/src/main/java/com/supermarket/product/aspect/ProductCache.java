@@ -8,6 +8,7 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.CodeSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +43,12 @@ public class ProductCache {
             map.put(names[i], values[i]);
         }
         Product product = (Product) map.get("product");
-        this.template.opsForValue().set("PROD_" + product.getProductId(), mapper.writeValueAsString(product), 30, TimeUnit.MINUTES);
+        try {
+            this.template.opsForValue().set("PROD_" + product.getProductId(), mapper.writeValueAsString(product), 30, TimeUnit.MINUTES);
+        }catch (RedisConnectionFailureException e){
+            // redis未连接
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -59,6 +65,11 @@ public class ProductCache {
             map.put(names[i], values[i]);
         }
         String productId = (String) map.get("productId");
-        this.template.expire("PROD_" + productId, 30, TimeUnit.MINUTES);
+        try {
+            this.template.expire("PROD_" + productId, 30, TimeUnit.MINUTES);
+        }catch (RedisConnectionFailureException e){
+            // redis未连接
+            e.printStackTrace();
+        }
     }
 }

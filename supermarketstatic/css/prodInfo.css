@@ -3,8 +3,9 @@ price_red{
 	color:red;
 }
 body {
-	margin:0px;padding:0px;
-	font-family:"微软雅黑";
+	margin:0;
+	padding:0;
+	font-family: "微软雅黑", serif;
 }
 {
 	border:solid red 1px;
@@ -109,9 +110,15 @@ body {
 	height:200px;
 }
 #right #right_bottom .add_cart_but{
-	background-image: url("../img/prodInfo/jr.jpg");
 	width:189px;
 	height:42px;
 	border-style:none;
 	margin:30px;
+	border-radius: 5px;
+	background-color: #C41228;
+	color: white;
+	font-family: "微软雅黑", serif;
+}
+#right #right_bottom .add_cart_but:hover{
+	background-color: #D01E34;
 }

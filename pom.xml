@@ -18,6 +18,7 @@
         <module>zuul-gateway</module>
         <module>image</module>
         <module>user</module>
+        <module>cart</module>
     </modules>
     <!--  依赖的版本  -->
     <dependencyManagement>

@@ -117,7 +117,6 @@ public class UserController {
     ){
         try{
             String user = this.userService.loginState(ticket);
-            System.out.println(user);
             if (user == null)
                 return  SysResult.build(201, "尚未登陆", null);
             else

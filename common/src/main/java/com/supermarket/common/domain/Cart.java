@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.io.Serializable;
 
 /**
- * 购物车的bean，对应t_cart
+ * 购物车的bean，对应t_cart。注意：每一个对象是某一个用户存储的某一个商品
  */
 @Setter
 @Getter

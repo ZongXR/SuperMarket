@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermarket.cart.dao.CartDao">
+
+    <sql id="queryCartConditions" >
+        <where>
+            <if test="id != null">id = #{id}</if>
+            <if test="userId != null">and user_id = #{userId}</if>
+            <if test="productId != null">and product_id = #{productId}</if>
+            <if test="productImage != null">and product_image = #{productImage}</if>
+            <if test="productName != null">and product_name = #{productName}</if>
+            <if test="productPrice != null">and product_price &lt; #{productPrice}</if>
+            <if test="num != null">and num = #{num}</if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.supermarket.common.domain.Cart">
+        insert into `t_cart`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">`user_id`,</if>
+            <if test="productId != null">`product_id`,</if>
+            <if test="productImage != null">`product_image`,</if>
+            <if test="productName != null">`product_name`,</if>
+            <if test="productPrice != null">`product_price`,</if>
+            <if test="num != null">`num`,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="productId != null">#{productId},</if>
+            <if test="productImage != null">#{productImage},</if>
+            <if test="productName != null">#{productName},</if>
+            <if test="productPrice != null">#{productPrice},</if>
+            <if test="num != null">#{num},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCart" parameterType="com.supermarket.common.domain.Cart">
+        update `t_cart`
+        <set>
+            <if test="productName != null">product_name = #{productName},</if>
+            <if test="productImage != null">product_image = #{productImage},</if>
+            <if test="productPrice != null">product_price = #{productPrice},</if>
+            <if test="num != null">num = num + #{num},</if>
+        </set>
+        <where>
+            <if test="id != null">id = #{id}</if>
+            <if test="userId != null">and user_id = #{userId}</if>
+            <if test="productId != null">and product_id = #{productId}</if>
+        </where>
+    </update>
+
+    <update id="update" parameterType="com.supermarket.common.domain.Cart">
+        update `t_cart`
+        <set>
+            <if test="productName != null">product_name = #{productName},</if>
+            <if test="productImage != null">product_image = #{productImage},</if>
+            <if test="productPrice != null">product_price = #{productPrice},</if>
+            <if test="num != null">num = #{num},</if>
+        </set>
+        <where>
+            <if test="id != null">id = #{id}</if>
+            <if test="userId != null">and user_id = #{userId}</if>
+            <if test="productId != null">and product_id = #{productId}</if>
+        </where>
+    </update>
+
+    <delete id="delete" parameterType="com.supermarket.common.domain.Cart">
+        delete from `t_cart`
+        <include refid="queryCartConditions"/>
+    </delete>
+
+
+    <select id="selectCarts" resultType="com.supermarket.common.domain.Cart">
+        select * from `t_cart`
+        <include refid="queryCartConditions"/>
+    </select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

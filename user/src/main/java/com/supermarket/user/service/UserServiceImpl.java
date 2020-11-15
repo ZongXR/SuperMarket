@@ -79,9 +79,6 @@ public class UserServiceImpl implements UserService {
         // TODO 先进行验证码校验
         String valicode = this.template.opsForValue().get(token);
         if (valicode == null || !valicode.equals(valistr)) {
-            System.out.println(valistr);
-            System.out.println(valicode);
-            System.out.println(token);
             throw new MsgException("验证码不正确");
         }
         // 传过来请求的密码没加密

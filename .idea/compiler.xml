@@ -7,13 +7,15 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="user" />
-        <module name="common" />
-        <module name="product" />
         <module name="zuul-gateway" />
+        <module name="product" />
+        <module name="common" />
+        <module name="cart" />
         <module name="image" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="cart" target="1.8" />
       <module name="common" target="1.8" />
       <module name="image" target="1.8" />
       <module name="product" target="1.8" />
@@ -24,6 +26,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="cart" options="-parameters" />
       <module name="common" options="-parameters" />
       <module name="image" options="-parameters" />
       <module name="product" options="-parameters" />
