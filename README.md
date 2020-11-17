@@ -16,10 +16,11 @@
 <p>基于SpringCloud框架开发的商城系统，代码严格遵循MVC分层思想，可部署到服务器上，设计精良，不断完善</p>
 <h2>包结构说明</h2>
 <ul>
+<li>com.supermarket.*.filter对应于微服务的过滤器</li>
 <li>com.supermarket.*.controller对应于微服务的controller层</li>
+<li>com.supermarket.*.aspect对应于微服务的切面类</li>
 <li>com.supermarket.*.service对应于微服务的service层</li>
 <li>com.supermarket.*.dao对应于微服务的dao层</li>
-<li>com.supermarket.*.aspect对应于微服务的切面类</li>
 <li>com.supermarket.*.exception对应于微服务的自定义异常</li>
 <li>com.supermarket.*.domain对应于微服务的JavaBean</li>
 <li>com.supermarket.*.utils对应于微服务的工具类</li>
@@ -49,6 +50,7 @@
 <h3>zuul网关(com.supermarket.gateway)</h3>
 <ul>
 <li>SpringCloud的zuul网关模块</li>
+<li>自动登录功能</li>
 </ul>
 <h3>图片微服务(com.supermarket.image)</h3>
 <ul>
@@ -253,6 +255,16 @@
         </td>
         <td>2020年11月15日</td>
     </tr>
+    <tr>
+        <td>0.4.5</td>
+        <td>
+            <ul>
+                <li>完善图片微服务：解决redis中验证码缓存无法清理的BUG</li>
+                <li>完善用户微服务：新增记住用户名、自动登录功能</li>
+            </ul>
+        </td>
+        <td>2020年11月18日</td>
+    </tr>
 </table>
 <h2>配置情况</h2>
 <ul>
@@ -263,7 +275,11 @@
     <li>Redis: 3.2.11</li>
     <li>开发环境：IntelliJ Idea 2020.1.4</li>
     <li>框架：Springboot 2.2.5.RELEASE, SpringCloud Hoxton.SR3</li>
-    <li>hosts配置: 127.0.0.1 www.supermarket.com</li>
+    <li>
+        hosts配置: <br />
+        127.0.0.1 www.supermarket.com <br />
+        127.0.0.1 image.supermarket.com
+    </li>
 </ul>
 <h2>遇到的bug锦集(作为记录，博君一笑)</h2>
 <ul>
@@ -277,11 +293,11 @@
     <li>如果间接依赖了spring-cloud-starter-netflix-eureka-server，一定要把jackson-dataformat-xml排除掉，因为如果不排除掉会导致返回给浏览器的对象是xml格式而非json格式</li>
     <li>MyBatis如果使用bean传参，不要使用&lt;if&gt;标签内的test属性名应该对应bean属性名而非表的列名。否则会报There is no getter for property named 'xx' in 'class xxx</li>
     <li>在Springboot项目中，如果要在application.properties中写自定义配置项，若该配置项为路径字符串，一定要写全路径，从盘符写起，否则会自动在前面拼接tomcat的临时路径</li>
-    <li>在4.1版本中忘记在application.properties中配置redis，然后配置了还是不行。结果将所有微服务全部重启就好了。</li>
     <li>html中onsubmit事件要放在form标签内，放在&lt;input type=&quot;submit&quot; /&gt;标签内无效</li>
     <li>启动的时候需要先启动redis再启动微服务，否则会报RedisConnectionFailureException</li>
     <li>redis作为缓存使用时，建议捕获RedisConnectionFailureException异常，从而在redis崩掉的情况下能够直接访问数据库</li>
     <li>基于SpringCloud的Ribbon模块在微服务之间相互调用时，不经过zuul网关</li>
+    <li>MySQL主从高可用时，如果因为错误数据导致挂接失败，需要先取消挂接(stop slave)，手动删除错误数据，再重新挂接(start slave)</li>
 </ul>
 </body>
 </html>

@@ -38,14 +38,14 @@
             <td class="tdx"><label for="valistr">验证码：</label></td>
             <td>
                 <input type="text" name="valistr" id="valistr"/>
-                <img width="" height="" alt="验证码" onclick="refreshValistr(this)"/>
+                <img src="" width="" height="" alt="验证码" onclick="refreshValistr(this)"/>
                 <span style="color:red"></span>
             </td>
         </tr>
         <tr>
             <td colspan="2" style="text-align: center;">
-                <input type="checkbox" name="remname" value="true" checked="checked"/>记住用户名
-                <input type="checkbox" name="autologin" value="true"/>30天内自动登陆
+                <input type="checkbox" name="remname" value="true" checked="checked" id="remname"/><label for="remname">记住用户名</label>
+                <input type="checkbox" name="autologin" value="true" id="autologin"/><label for="autologin">30天内自动登陆</label>
             </td>
         </tr>
         <tr>

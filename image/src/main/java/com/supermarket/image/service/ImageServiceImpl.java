@@ -6,6 +6,7 @@ import com.supermarket.common.utils.VerifyCode;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +19,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class ImageServiceImpl implements ImageService{
+public class ImageServiceImpl implements ImageService {
     @Value("${custom.imglocal}")
     private String imgLocal = null;
 
@@ -34,24 +35,24 @@ public class ImageServiceImpl implements ImageService{
         String fileName = pic.getOriginalFilename();
         if (
                 fileName != null        // 文件名非空
-                && (fileName.endsWith(".jpg") || fileName.endsWith(".png") || fileName.endsWith(".jpeg") || fileName.endsWith(".gif"))  // 后缀符合要求
-                && Strings.isNotBlank(fileName.substring(0, fileName.lastIndexOf(".")))    // 前缀非空
-        ){
+                        && (fileName.endsWith(".jpg") || fileName.endsWith(".png") || fileName.endsWith(".jpeg") || fileName.endsWith(".gif"))  // 后缀符合要求
+                        && Strings.isNotBlank(fileName.substring(0, fileName.lastIndexOf(".")))    // 前缀非空
+        ) {
             // TODO 处理文件
             String path = UploadUtils.getUploadPath(fileName, "/upload");
             String suffixName = fileName.substring(fileName.lastIndexOf("."));
             boolean mkdirs = false;
-            if (! new File(imgLocal + path).exists())
+            if (!new File(imgLocal + path).exists())
                 mkdirs = new File(imgLocal + path).mkdirs();
-                String fullName = path + "/" + UUID.randomUUID().toString() + suffixName;
-                try {
-                    pic.transferTo(new File(imgLocal + fullName));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException("路径不存在");
-                }
-                return imgWeb + fullName;
-        }else{
+            String fullName = path + "/" + UUID.randomUUID().toString() + suffixName;
+            try {
+                pic.transferTo(new File(imgLocal + fullName));
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("路径不存在");
+            }
+            return imgWeb + fullName;
+        } else {
             throw new RuntimeException("文件非法");
         }
     }
@@ -61,11 +62,18 @@ public class ImageServiceImpl implements ImageService{
         VerifyCode img = new VerifyCode();
         img.drawImage(out);
         // TODO 生成完验证码之后还需要存入redis，然后把token存入list，再把上一次的token弹出来删掉
-        this.template.opsForValue().set(token, img.getCode(), 20, TimeUnit.MINUTES);
-        this.template.opsForList().leftPush(TimeUtils.cutTimestamp(token), token);
-        String oldKey = this.template.opsForList().rightPop(TimeUtils.cutTimestamp(token));
-        if (oldKey != null && !oldKey.equals(token))
-            this.template.delete(oldKey);
+        try {
+            this.template.opsForValue().set(token, img.getCode(), 20, TimeUnit.MINUTES);
+            this.template.opsForList().leftPush(TimeUtils.cutTimestamp(token), token);
+            String oldKey = this.template.opsForList().index(TimeUtils.cutTimestamp(token), -1);
+            if (oldKey != null && !oldKey.equals(token)) {
+                this.template.delete(oldKey);
+                this.template.opsForList().rightPop(TimeUtils.cutTimestamp(token));
+            }
+        } catch (RedisConnectionFailureException e) {
+            // 如果redis连接失败，则不存入验证码
+            e.printStackTrace();
+        }
         return img.getCode();
     }
 

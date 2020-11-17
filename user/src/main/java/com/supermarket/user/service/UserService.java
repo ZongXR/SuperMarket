@@ -44,4 +44,11 @@ public interface UserService {
      * @param ticket redis的key
      */
     public void deleteTicket(String ticket);
+
+    /**
+     * 免密码登录
+     * @param user bean
+     * @return json
+     */
+    public String loginUser(User user) throws JsonProcessingException;
 }

@@ -111,4 +111,33 @@ public class UserServiceImpl implements UserService {
         String key = TimeUtils.cutTimestamp(ticket);
         this.template.delete(key);
     }
+
+    @Override
+    public String loginUser(User user) throws JsonProcessingException {
+        // cookie保存的是加密密码，不需要再次MD5
+        // TODO 需要进行时间校验
+        String key = "AUTOLOGIN_" + user.getUserName();
+        String value = String.valueOf(System.currentTimeMillis());
+        this.template.opsForList().leftPush(key, value);
+        this.template.expire(key, 30, TimeUnit.MINUTES);
+        List<String> lst = this.template.opsForList().range(key, 0, -1);
+        if (lst == null || lst.size() == 0)
+            return null;
+        if (lst.size() > 1){
+            String oldValue = this.template.opsForList().rightPop(key);
+            if (oldValue == null || Long.parseLong(value) - Long.parseLong(oldValue) < 500000)
+                // 间隔小于500000毫秒，返回
+                return null;
+        }
+        List<User> users = this.userDao.selectUsers(user);
+        if (users.size() == 0)
+            throw new MsgException("用户名或密码错误");
+        // 找到了用户名，进行登录
+        String ticket = "EM_TICKET_" + users.get(0).getUserName();
+        String data = this.mapper.writeValueAsString(users.get(0));
+        this.template.opsForHash().put(ticket, "data", data);
+        this.template.opsForHash().put(ticket, "timestamp", TimeUtils.getTimestamp());
+        this.template.expire(ticket, 30, TimeUnit.MINUTES);
+        return ticket + this.template.opsForHash().get(ticket, "timestamp");
+    }
 }

@@ -1,4 +1,4 @@
-let randomKey = uuid() + new Date().getTime();
+let UUID = uuid();
 
 /**
  * 文档就绪事件
@@ -67,7 +67,7 @@ function register(element) {
  * @param element 标签
  */
 function refreshValistr(element) {
-    randomKey = uuid() + new Date().getTime();
+    window.randomKey = UUID + new Date().getTime();
     $(element).attr("src", "/valistr?token=VALISTR_" + randomKey);
 }
 

@@ -1,11 +1,15 @@
 //@ sourceURL=login_ajax.js
-let randomKey = uuid() + new Date().getTime();
+let UUID = uuid();
 
 /**
  * 文档就绪事件
  */
 $(function(){
+	// 刷新验证码
 	refreshValistr($("input[name=valistr]").next("img").get(0))
+	// 显示用户名
+	let userName = $.trim(getCookie("USERNAME"));
+	$("input[name=username]").val(userName);
 	//给form表单添加submit事件
 	$("form").submit(function(){
 		return login();
@@ -30,9 +34,9 @@ window.onunload = function(){
  */
 function login(){
 	//获取页面数据
-	let userName = $("form input[name=username]").val();
-	let userPassword = $("form input[name=password]").val();
-	let valistr = $("form input[name=valistr]").val();
+	let userName = $.trim($("form input[name=username]").val());
+	let userPassword = $.trim($("form input[name=password]").val());
+	let valistr = $.trim($("form input[name=valistr]").val());
 	if(userName===""){
 		$("form table tr:eq(0) td span").html("用户名不能为空");
 		return false;
@@ -49,7 +53,14 @@ function login(){
 	$.ajax({
 		url:"http://www.supermarket.com/user/login",
 		type:"get",
-		data:{"userName": userName, "userPassword": userPassword, "token": "VALISTR_" + randomKey, "valistr": valistr},
+		data:{
+			"userName": userName,
+			"userPassword": userPassword,
+			"token": "VALISTR_" + randomKey,
+			"valistr": valistr,
+			"remname": $("input[name=remname]").is(":checked"),
+			"autologin": $("input[name=autologin]").is(":checked")
+		},
 		dataType:"json",
 		success:function(result){
 			//result是服务端返回的数据
@@ -75,7 +86,7 @@ function login(){
  * @param element 标签
  */
 function refreshValistr(element) {
-	randomKey = uuid() + new Date().getTime();
+	window.randomKey = UUID + new Date().getTime();
 	$(element).attr("src", "/valistr?token=VALISTR_" + randomKey);
 }
 

@@ -85,6 +85,8 @@ public class UserController {
             User user,
             @RequestParam("valistr") String valistr,
             @RequestParam("token") String token,
+            @RequestParam(value = "remname") boolean remname,
+            @RequestParam(value = "autologin") boolean autologin,
             HttpServletRequest request,
             HttpServletResponse response
     ){
@@ -93,7 +95,12 @@ public class UserController {
             if (StringUtils.isEmpty(ticket))
                 return SysResult.build(201, "用户不存在", null);
             else {
-                CookieUtils.setCookie(request, response, "EM_TICKET", ticket);
+                // 这里的EM_TICKET类似于JSESSIONID
+                CookieUtils.setCookie(request, response, "EM_TICKET", ticket, -1, true);
+                if (remname || autologin)
+                    CookieUtils.setCookie(request, response, "USERNAME", user.getUserName(), Integer.MAX_VALUE, true);
+                if (autologin)
+                    CookieUtils.setCookie(request, response, "PASSWORD", user.getUserPassword(), 2592000, true);
                 return SysResult.ok();
             }
         }catch (MsgException e){
@@ -101,6 +108,29 @@ public class UserController {
             return SysResult.build(202, e.getMessage(), e);
         }catch(Exception e){
             e.printStackTrace();
+            return SysResult.build(500, e.getMessage(), e);
+        }
+    }
+
+    @RequestMapping("/manage/autologin")
+    @ResponseBody
+    public SysResult autoLogin(
+            User user,
+            HttpServletRequest request,
+            HttpServletResponse response
+    ){
+        try {
+            String ticket = this.userService.loginUser(user);
+            if (StringUtils.isEmpty(ticket))
+                return SysResult.build(201, "间隔时间太短", null);
+            else {
+                // 这里的EM_TICKET类似于JSESSIONID
+                CookieUtils.setCookie(request, response, "EM_TICKET", ticket, -1, true);
+                return SysResult.ok(user);
+            }
+        }catch (MsgException e){
+            return SysResult.build(201, e.getMessage(), e);
+        }catch(Exception e){
             return SysResult.build(500, e.getMessage(), e);
         }
     }
@@ -141,6 +171,8 @@ public class UserController {
         try{
             this.userService.deleteTicket(ticket);
             CookieUtils.deleteCookie(request, response, "EM_TICKET");
+            CookieUtils.deleteCookie(request, response, "USERNAME");
+            CookieUtils.deleteCookie(request, response, "PASSWORD");
             return SysResult.ok();
         }catch (Exception e){
             e.printStackTrace();

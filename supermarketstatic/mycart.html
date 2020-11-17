@@ -25,9 +25,15 @@
         $(function(){
             let userId = "";
             let _ticket = $.cookie("EM_TICKET");
+            let userPassword = $.cookie("PASSWORD");
+            let userName = $.cookie("USERNAME");
             if(!_ticket){
-                window.location.href="login.html";
-                return ;
+                if (!userPassword || !userName) {
+                    // 二者缺一无法自动登录
+                    window.location.href="login.html";
+                    return;
+                }else
+                    autoLogin(userName, userPassword);
             }
             //当dataType类型为jsonp时，jQuery就会自动在请求链接上增加一个callback的参数
             $.ajax({
@@ -45,7 +51,10 @@
                         userId=_data.userId;
                         $("#loginbar").html(html);
                         query(userId);
-                    }else{
+                    }else if (data.status === 201){
+                        // 在redis中没找到用户
+                        autoLogin(userName, userPassword);
+                    }else if (data.status === 500){
                         alert(data.msg);
                     }
                 },
@@ -54,6 +63,36 @@
                 }
             });
         });
+
+        /**
+         * 自动登录
+         * @param userName 用户名
+         * @param userPassword 密码
+         */
+        function autoLogin(userName, userPassword) {
+            $.ajax({
+                url:"http://www.supermarket.com/user/autologin",
+                type:"get",
+                data:{
+                    "userName": userName,
+                    "userPassword": userPassword
+                },
+                dataType:"json",
+                success: function (data) {
+                    if (data.status === 200) {
+                        let _data = data.data;//jackson
+                        let html = _data.userName + "，欢迎来到Supermarket！<a href=\"javascript:void(0)\" class=\"link-logout\" onclick='logout()'>[退出]</a>  \|<a href=\"http://www.Supermarket.com/manage.html\" class=\"link-logout\">[后台]</a>";
+                        userId = _data.userId;
+                        $("#loginbar").html(html);
+                    }else if (data.status === 500){
+                        alert(data.msg);
+                    }
+                },
+                error: function () {
+                    alert('请求失败');
+                }
+            });
+        }
 
         /**
          * 删除购物车
