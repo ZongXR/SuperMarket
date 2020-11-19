@@ -1,5 +1,6 @@
 ﻿body{
 	background-image: url("../img/login/dl.jpg");
+	background-repeat: no-repeat;
 	background-position: top;
 	font-family: "微软雅黑", serif;
 }
