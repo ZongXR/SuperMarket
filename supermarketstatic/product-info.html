@@ -73,7 +73,9 @@
                         $("#loginbar").html(html);
                     }else if (data.status === 201){
                         // 在redis中没找到用户
-                        autoLogin(userName, userPassword);
+                        delCookie("EM_TICKET");
+                        delCookie("USERNAME");
+                        delCookie("PASSWORD");
                     }else if (data.status === 500){
                         alert(data.msg);
                     }
@@ -228,9 +230,9 @@
 
 <div id="common_foot">
     <p>
-        Copyright © 2011-2019 国电家网有限公司 版权所有 保留一切权利 京B2-20180185 | 京ICP备17064178号-1
-        <br/>
-        京公网安备 11010202001007号
+        Copyright © 2011-2019 网上商城 版权所有 保留一切权利 粤CM-20201119 | 粤ICP备20201119号-1
+        <br />
+        粤公网安备  20201119号
     </p>
 </div>
 </body>

@@ -112,6 +112,13 @@ public class UserController {
         }
     }
 
+    /**
+     * 自动登录
+     * @param user bean
+     * @param request 请求
+     * @param response 响应
+     * @return vo
+     */
     @RequestMapping("/manage/autologin")
     @ResponseBody
     public SysResult autoLogin(
@@ -143,13 +150,19 @@ public class UserController {
     @RequestMapping("/manage/query/{ticket}")
     @ResponseBody
     public SysResult loginState(
-            @PathVariable String ticket
+            @PathVariable String ticket,
+            HttpServletRequest request,
+            HttpServletResponse response
     ){
         try{
             String user = this.userService.loginState(ticket);
-            if (user == null)
-                return  SysResult.build(201, "尚未登陆", null);
-            else
+            if (user == null) {
+                // 如果没有登录则删除cookie
+                CookieUtils.deleteCookie(request, response, "EM_TICKET");
+                CookieUtils.deleteCookie(request, response, "USERNAME");
+                CookieUtils.deleteCookie(request, response, "PASSWORD");
+                return SysResult.build(201, "尚未登陆", null);
+            }else
                 return SysResult.ok(user);
         }catch (Exception e){
             e.printStackTrace();

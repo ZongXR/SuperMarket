@@ -46,7 +46,7 @@ public interface UserService {
     public void deleteTicket(String ticket);
 
     /**
-     * 免密码登录
+     * 免密码登录，此方法是loginUser的绕过验证码版本，不能无限制调用.
      * @param user bean
      * @return json
      */

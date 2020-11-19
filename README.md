@@ -6,7 +6,6 @@
 <img src="./img/product.png" alt="商品页面" /><br />
 <img src="./img/regist.png" alt="注册页面" /><br />
 <img src="./img/login.png" alt="登录页面" /><br />
-<img src="./img/error.png" alt="错误页面" /><br />
 <h2>声明</h2>
 <ul>
     <li>本项目静态资源由网络收集得来，并加以大范围修改</li>
@@ -264,6 +263,16 @@
             </ul>
         </td>
         <td>2020年11月18日</td>
+    </tr>
+    <tr>
+        <td>0.4.6</td>
+        <td>
+            <ul>
+                <li>修复自动登录与单点登录功能冲突的bug。</li>
+                <li>替换网页logo，避免不必要的责任纠纷</li>
+            </ul>
+        </td>
+        <td>2020年11月19日</td>
     </tr>
 </table>
 <h2>配置情况</h2>
