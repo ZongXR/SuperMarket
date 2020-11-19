@@ -275,6 +275,7 @@
         <td>2020年11月19日</td>
     </tr>
 </table>
+
 <h2>配置情况</h2>
 <ul>
     <li>JDK版本：OpenJDK11</li>
