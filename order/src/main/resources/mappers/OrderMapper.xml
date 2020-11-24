@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermarket.order.dao.OrderDao">
+
+    <!--  选择语句复用  -->
+    <sql id="selectOrderConditions">
+        <where>
+            <if test="orderId != null">`order_id` = #{orderId}</if>
+            <if test="orderReceiverinfo != null">and `order_receiverinfo` = #{orderReceiverinfo}</if>
+            <if test="orderPaystate != null">and `order_paystate` = #{orderPaystate}</if>
+            <if test="orderTime != null">and `order_time` = #{orderTime}</if>
+            <if test="userId != null">and `user_id` = #{userId}</if>
+        </where>
+    </sql>
+
+    <!--  插入语句复用  -->
+    <sql id="insertOrder">
+        insert into `t_order`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">`order_id`,</if>
+            <if test="orderMoney != null">`order_money`,</if>
+            <if test="orderReceiverinfo != null">`order_receiverinfo`,</if>
+            <if test="orderPaystate != null">`order_paystate`,</if>
+            <if test="orderTime != null">`order_time`,</if>
+            <if test="userId != null">`user_id`,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">#{orderId},</if>
+            <if test="orderMoney != null">#{orderMoney},</if>
+            <if test="orderReceiverinfo != null">#{orderReceiverinfo},</if>
+            <if test="orderPaystate != null">#{orderPaystate},</if>
+            <if test="orderTime != null">#{orderTime},</if>
+            <if test="userId != null">#{userId},</if>
+        </trim>
+    </sql>
+
+    <!--  查询订单商品复用  -->
+    <sql id="selectItemConditions">
+        <where>
+            <if test="id != null">`id` = #{id}</if>
+            <if test="orderId != null">and `order_id` = #{orderId}</if>
+            <if test="productId != null">and `product_id` = #{productId}</if>
+            <if test="num != null">and `num` = #{num}</if>
+            <if test="productImage != null">and `product_image` = #{productImage}</if>
+            <if test="productName != null">and `product_name` = #{productName}</if>
+        </where>
+    </sql>
+
+    <!--  增加订单和商品  -->
+    <insert id="addOrderAndItem" parameterType="com.supermarket.common.domain.Order">
+        insert into `t_order`
+        (`order_id`, `order_money`, `order_receiverinfo`, `order_paystate`, `order_time`, `user_id`)
+        values (#{orderId}, #{orderMoney}, #{orderReceiverinfo}, #{orderPaystate}, #{orderTime}, #{userId});
+
+        <foreach collection="orderItems" item="item">
+            insert into `t_order_item`
+            (`id`, `order_id`, `product_id`, `num`, `product_image`, `product_name`, `product_price`)
+            values
+            (#{item.id}, #{orderId}, #{item.productId}, #{item.num}, #{item.productImage}, #{item.productName}, #{item.productPrice});
+        </foreach>
+    </insert>
+
+    <!--  增加订单  -->
+    <insert id="addOrder" parameterType="com.supermarket.common.domain.Order">
+        <include refid="insertOrder"/>
+    </insert>
+
+    <!--  删除订单  -->
+    <delete id="deleteOrder" parameterType="com.supermarket.common.domain.Order">
+        delete from `t_order`
+        <include refid="selectOrderConditions"/>
+    </delete>
+
+    <!--  删除订单关联的商品  -->
+    <delete id="deleteOrderItems">
+        delete from `t_order_item`
+        <include refid="selectOrderConditions"/>
+    </delete>
+
+    <!--  查询订单  -->
+    <select id="selectOrder" resultType="com.supermarket.common.domain.Order">
+        select * from `t_order`
+        <include refid="selectOrderConditions"/>
+    </select>
+
+    <!--  计算订单总价  -->
+    <select id="selectItemsMoney" resultType="java.lang.Double">
+        select sum(`num` * `product_price`) from `t_order_item`
+        <include refid="selectItemConditions"/>
+    </select>
+
+    <!--  查询订单商品  -->
+    <select id="selectOrderItems" resultType="com.supermarket.common.domain.OrderItem">
+        select * from `t_order_item`
+        <include refid="selectItemConditions" />
+    </select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

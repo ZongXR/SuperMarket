@@ -11,5 +11,23 @@
         <property name="serverTimezone" value="Asia/Shanghai" />
       </driver-properties>
     </data-source>
+    <data-source source="LOCAL" name="MyCat服务器" uuid="ba88463c-c4ba-4e57-9bbd-6bffe3889649">
+      <driver-ref>mysql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://10.42.83.8:8066/supermarket</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="服务器1" uuid="5a5ea562-6a76-4f63-ad87-9a6b700d3b08">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://10.42.46.195:3306/supermarket</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="服务器3" uuid="63bfe2c8-1e91-4b61-84d5-8d4e1a138087">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://10.42.83.8:3306/supermarket</jdbc-url>
+    </data-source>
   </component>
 </project>

@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isEmpty(valistr))
             throw new MsgException("验证码不能为空");
         // 验证码一致性校验
-        if (!valistr.equals(this.template.opsForValue().get(token)))
+        if (!valistr.equalsIgnoreCase(this.template.opsForValue().get(token)))
             throw new MsgException("验证码不对");
         // 进行bean校验
         List<FieldError> fieldErrors = errors.getFieldErrors();
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
     public String loginUser(User user, String valistr, String token) throws JsonProcessingException {
         // TODO 先进行验证码校验
         String valicode = this.template.opsForValue().get(token);
-        if (valicode == null || !valicode.equals(valistr)) {
+        if (valicode == null || !valicode.equalsIgnoreCase(valistr)) {
             throw new MsgException("验证码不正确");
         }
         // 传过来请求的密码没加密
@@ -88,6 +88,8 @@ public class UserServiceImpl implements UserService {
             return null;
         // 找到了用户名，进行登录
         String ticket = "EM_TICKET_" + users.get(0).getUserName();
+        // TODO 应该在token中加入UUID，再加盐，当前版本未解决
+
         String value = this.mapper.writeValueAsString(users.get(0));
         this.template.opsForHash().put(ticket, "data", value);
         this.template.opsForHash().put(ticket, "timestamp", TimeUtils.getTimestamp());
@@ -134,6 +136,8 @@ public class UserServiceImpl implements UserService {
             throw new MsgException("用户名或密码错误");
         // 找到了用户名，进行登录
         String ticket = "EM_TICKET_" + users.get(0).getUserName();
+        // TODO 应该在token中加入UUID，再加盐，当前版本未解决
+
         String data = this.mapper.writeValueAsString(users.get(0));
         this.template.opsForHash().put(ticket, "data", data);
         this.template.opsForHash().put(ticket, "timestamp", TimeUtils.getTimestamp());

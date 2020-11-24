@@ -17,7 +17,6 @@ public class ProductController {
 
     /**
      * 分页查询
-     *
      * @param page 查询第几页
      * @param rows 查询几条记录
      * @return 查询的商品列表
@@ -33,7 +32,6 @@ public class ProductController {
 
     /**
      * 商品查询
-     *
      * @param productId 商品id
      * @return 查询的商品
      */
@@ -52,7 +50,6 @@ public class ProductController {
 
     /**
      * 商品新增
-     *
      * @param product 新增的商品，productId为null
      * @return SysResult
      */
@@ -73,7 +70,6 @@ public class ProductController {
 
     /**
      * 商品修改
-     *
      * @param product 修改的商品
      * @return SysResult
      */
@@ -91,4 +87,5 @@ public class ProductController {
             return new SysResult(501, "other exception", e);
         }
     }
+
 }

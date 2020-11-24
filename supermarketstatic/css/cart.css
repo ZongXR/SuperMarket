@@ -11,7 +11,7 @@
 
 /*购物车样式*/
 /*标题行*/
-#title{
+#items,.title{
 	width:1200px;
 	margin:20px auto 0;
 	background-color: #F3F3F3;
@@ -19,30 +19,9 @@
 	height:45px;
 	line-height:45px;
 }
-#title input[name='allC']{
-	margin-left:40px;
-	vertical-align: middle;
-}
-#title #title_checkall_text{
-	margin-left:3px;
-}
-#title #title_name{
-	margin-left:210px;
-}
-#title #title_price{
-	margin-left:180px;
-}
-#title #title_buynum{
-	margin-left:150px;
-}
-#title #title_money{
-	margin-left:125px;
-}
-#title #title_del{
-	margin-left:95px;
-}
+
 /*购物车商品列表*/
-#prods{
+.prods{
 	width:1200px;
 	margin:10px auto 0;
 	background-color: #FEF4E8;
@@ -50,47 +29,31 @@
 	height:100px;
 	line-height:100px;
 }
-#prods img ,#prods span{
-	vertical-align: middle;
-}
-#prods input[name='prodC']{
+.prods input[name='prodC']{
 	margin-left:40px;
-
 }
 
-#prods img{
-	margin-left:30px;
-	margin-bottom:4px;
+.prods img{
+	vertical-align: middle;
+	/*margin-left:30px;*/
+	/*margin-bottom:4px;*/
+	padding: 0;
+	margin: 0;
 	border: 1px solid #DEDEDE;
 }
 
-#prods #prods_name{
-	margin-left:120px;
-	white-space: normal !important;
+.prods #prods_name{
+	/*white-space: normal !important;*/
+	text-align: center;
 }
 
-#prods #prods_price{
-	margin-left:190px;
-}
 
-#prods #prods_buynum a{
+.prods #prods_buynum a{
 	padding: 2px 8px;
 	border: 1px solid #CCC;
 	text-decoration: none;
 }
-#prods #prods_buynum{
-	margin-left:135px;
-}
-#prods #prods_buynum #buyNumInp{
-	width:60px;
-	height:30px;
-	border-top: 1px solid #CCC;
-	border-bottom: 1px solid #CCC;
-	border-left: none;
-	border-right: none;
-	text-align: center;
-	vertical-align: middle;
-}
+
 .buyNumInp1{
 	width:60px;
 	height:30px;
@@ -101,13 +64,8 @@
 	text-align: center;
 	vertical-align: middle;
 }
-#prods #prods_money{
-	margin-left:85px;
-}
-#prods #prods_del{
-	margin-left:120px;
-}
-#prods #prods_del a{
+
+.prods #prods_del a{
 	text-decoration:none;
 }
 
@@ -126,17 +84,17 @@
 #total #total_1 *{
 	vertical-align: middle;
 }
-#total #total_1 input[name='allC']{
-	margin-left:40px;
-}
+
 #total #total_1 #del_a{
 	margin-left: 15px;
 	text-decoration: none;
 }
 #total #total_1 #span_1{
-	margin-left:720px;
+	/*margin-left:720px;*/
+	float: right;
 }
 #total #total_1 #span_2{
+	float: right;
 	font-size: 20px;
 	color:#FF0000;
 }
@@ -154,4 +112,23 @@
 }
 #total #total_2 a:hover{
 	background-color: #DD4343;
+}
+
+#carts{
+	vertical-align: middle;
+}
+
+td{
+	text-align: center;
+}
+
+.warp h3{
+	text-align:left;
+	width:1200px;
+	background:#f3f3f3;
+	height:32px;
+	/*margin: 22px 0 12px;*/
+	font-size:14px;
+	text-indent:18px;
+	line-height:32px;
 }

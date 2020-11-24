@@ -16,4 +16,17 @@ public class OrderItem {
 	private String productImage;
 	private String productName;
 	private Double productPrice;
+
+	public OrderItem(Long id, String orderId, String productId, Integer num, String productImage, String productName, Double productPrice) {
+		this.id = id;
+		this.orderId = orderId;
+		this.productId = productId;
+		this.num = num;
+		this.productImage = productImage;
+		this.productName = productName;
+		this.productPrice = productPrice;
+	}
+
+	public OrderItem() {
+	}
 }

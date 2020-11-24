@@ -17,15 +17,20 @@
     <script type="text/javascript" src="js/lib-v1.js" charset="utf-8"></script>
     <meta charset="UTF-8">
 </head>
-<body style="text-align:center;">
+<body>
 <script type="text/javascript">
     $(function(){
-        // alert("好啊1");
         let userId = "";
         let _ticket = $.cookie("EM_TICKET");
+        let userPassword = $.cookie("PASSWORD");
+        let userName = $.cookie("USERNAME");
         if(!_ticket){
-            window.location.href="login.html";
-            return ;
+            if (!userPassword || !userName) {
+                // 二者缺一无法自动登录
+                window.location.href="login.html";
+                return;
+            }else
+                autoLogin(userName, userPassword);
         }
         //当dataType类型为jsonp时，jQuery就会自动在请求链接上增加一个callback的参数
         $.ajax({
@@ -33,18 +38,23 @@
             dataType : "json",
             type : "GET",
             success : function(data){
-                if(data.status === 200){
+                if(data.status === 200) {
                     let _data = JSON.parse(data.data);//jackson
-                    if(_data==null){
-                        alert("啥也别说了，你的用户超时了,赶紧查查redis还有数据没有");
-                        window.location.href="./login.html";
-                        return;}
-                    let html = _data.userName + "，欢迎来到Supermarket！<a href=\"javascript:void(0)\" onclick='logout()'>[退出]</a>  \|<a href=\"http://www.supermarket.com/manage.html\" >[后台]</a>";
-                    userId=_data.userId;
+                    if (_data == null) {
+                        window.location.href = "./login.html";
+                        return;
+                    }
+                    let html = _data.userName + "，欢迎来到Supermarket！<a href=\"javascript:void(0)\" class=\"link-logout\" onclick='logout()'>[退出]</a>  \|<a href=\"http://www.Supermarket.com/manage.html\" class=\"link-logout\">[后台]</a>";
+                    userId = _data.userId;
                     $("#loginbar").html(html);
                     queryOrder(userId);
-                }else{
-                    alert("查询订单出问题了兄嘚");
+                }else if (data.status === 201){
+                    // 在redis中没找到用户
+                    delCookie("EM_TICKET");
+                    delCookie("USERNAME");
+                    delCookie("PASSWORD");
+                }else if (data.status === 500){
+                    alert(data.msg);
                 }
             },
             error : function(){
@@ -52,6 +62,12 @@
             }
         });
     });
+
+    /**
+     * 删除购物车
+     * @param productId 商品id
+     * @param userId 用户id
+     */
     function del(productId,userId){
         if(productId==null||userId==null){
             alert("删除参数有误");
@@ -66,48 +82,66 @@
                     if(data.status===200){
                         window.location.href="http://www.supermarket.com/mycart.html";
                     }else{
-                        alert("删除有问题");
+                        alert(data.msg);
                     }
                 },
                 error:function () {
-                    alert("删除发送失败");
+                    alert("请求失败");
                 }
             });
-
         }
     }
-    function inputNum(productId,userId){
 
+
+    /**
+     * 修改商品数量
+     * @param productId 商品id
+     * @param userId 用户id
+     */
+    function inputNum(productId,userId){
         let num = document.getElementById(productId).value;
         let numOld = document.getElementById("hid_" + productId).value;
         if(num===""||num==null){
-            alert("num填写错误");
-            return;
-        }
-        if(num===numOld){
-            alert("没有变化数值");
-            return;
-        }
-        if(num>200){
-            alert("购买数量最大200");
+            alert("数量填写错误");
             return;
         }
         $.ajax({
-            url:"http://www.supermarket.com/cart/update?productId="+productId+"&userId="+userId+"&num="+num,
+            url:"http://www.supermarket.com/products/item/"+productId,
             dataType:"json",
-            type:"GET",
-            success:function (data) {
-                if(data.status===200){
-                    window.location.href="./mycart.html";
-                }else{
-                    alert("更新返回的不是成功数据");
+            type:"POST",
+            success:function(data){
+                let total = data.productNum;
+                if(num > total){
+                    alert("购买数量最大" + total);
+                    document.getElementById(productId).value = numOld;
+                    return;
                 }
+                $.ajax({
+                    url:"http://www.supermarket.com/cart/update?productId="+productId+"&userId="+userId+"&num="+num,
+                    dataType:"json",
+                    type:"GET",
+                    success:function (data) {
+                        if(data.status===200){
+                            window.location.href="./mycart.html";
+                        }else{
+                            alert(data.msg);
+                        }
+                    },
+                    error:function () {
+                        alert("请求失败");
+                    }
+                });
             },
             error:function () {
-                alert("咋回事，改个num还能出错，没访问到cart系统吧兄弟");
+                alert("请求失败");
             }
         });
     }
+
+    /**
+     * 查询订单
+     * @param userId 用户id
+     */
     function queryOrder(userId){
         if(userId===""){
             window.location.href="./login.html";
@@ -126,28 +160,71 @@
                         let orderMoney = order.orderMoney;
                         let payState = order.orderPaystate;
                         let orderItems = order.orderItems;
+                        $("#orders").append("<div class='warp'><h3 style='text-align: center;' class='title'>订单信息</h3></div>");
                         if(payState===0){
-                            $("#orders").append("<dl class='Order_information'><dt><h3>订单信息</h3></dt></dl><dd>订单编号:"+orderId+"</br>下单时间:"+orderTime+"</br>订单金额:"+orderMoney+"</br>支付状态:<font color=\"red\">未支付</font><a href='javascript:void()' onclick='delOrder(\""+orderId+"\")'><img src=\"img/orderList/sc.jpg\" width=\"69\" height=\"19\"></a><a href=\"${app}/pay.jsp?id=${order.orderId}&money=${order.orderMoney}\"> <img src=\"img/orderList/zx.jpg\" width=\"69\" height=\"19\"></a><br />收货地址: "+order.orderReceiverinfo+"<br/>支付方式：在线支付</dd>");
+                            $("#orders").append(
+                                "<dd>订单编号:"+orderId+"<br />" +
+                                "下单时间:"+orderTime+"<br />" +
+                                "订单金额:"+orderMoney+"<br />" +
+                                "支付状态:<p style='color: red;' >未支付</p>" +
+                                "<a href='javascript:void(0)' onclick='delOrder(\""+orderId+"\")'><img src=\"img/orderList/sc.jpg\" width=\"69\" height=\"19\" alt='删除订单' /></a>" +
+                                "<a href='javascript:void(0)'> <img src=\"img/orderList/zx.jpg\" width=\"69\" height=\"19\" alt='在线支付' /></a><br />" +
+                                "收货地址:"+order.orderReceiverinfo+"<br />" +
+                                "支付方式：在线支付</dd>"
+                            );
                         }else{
-                            $("#orders").append("<dl class='Order_information'><dt><h3>订单信息</h3></dt></dl><dd>订单编号:"+orderId+"</br>下单时间:"+orderTime+"</br>订单金额:"+orderMoney+"</br>支付状态:<font color=\"blue\">已支付</font><br/>收货地址: "+order.orderReceiverinfo+"<br/>支付方式：在线支付</dd>");
+                            $("#orders").append(
+                                "<dd>订单编号:"+orderId+"<br />" +
+                                "下单时间:"+orderTime+"<br />" +
+                                "订单金额:"+orderMoney+"<br />" +
+                                "支付状态:<p style='color: blue;'>已支付</p><br />" +
+                                "收货地址: "+order.orderReceiverinfo+"<br />" +
+                                "支付方式：在线支付</dd>"
+                            );
                         }
-                        $("#orders").append("<table id='orderTable_"+orderId+"' width=\"1200\" border=\"0\" cellpadding=\"0\"cellspacing=\"1\" style=\"background:#d8d8d8;color:#333333\"><tr><th width=\"276\" height=\"30\" align=\"center\" valign=\"middle\" bgcolor=\"#f3f3f3\">商品图片</th><th width=\"247\" align=\"center\" valign=\"middle\" bgcolor=\"#f3f3f3\">商品名称</th><th width=\"231\" align=\"center\" valign=\"middle\" bgcolor=\"#f3f3f3\">商品单价</th><th width=\"214\" align=\"center\" valign=\"middle\" bgcolor=\"#f3f3f3\">购买数量</th><th width=\"232\" align=\"center\" valign=\"middle\" bgcolor=\"#f3f3f3\">小计</th></tr></table><div class=\"Order_price\">"+orderMoney+"元</div>");
+                        $("#orders").append(
+                            "<table id='orderTable_"+orderId+"' class='title'>" +
+                                "<tr >" +
+                                "<th >商品图片</th>" +
+                                "<th >商品名称</th>" +
+                                "<th >商品单价</th>" +
+                                "<th >购买数量</th>" +
+                                "<th >小计</th>" +
+                                "</tr>" +
+                            "</table>" +
+                            "<div class='Order_price'>"+orderMoney+"元</div>"
+                        );
+                        console.log(order);
                         if(orderItems.length>0){
                             $.each(orderItems,function (indexnumber,orderItem) {
                                 let money = orderItem.num * orderItem.productPrice;
-                                $("#orderTable_"+orderId).append("<tr><td align=\"center\" valign=\"middle\" bgcolor=\"#FFFFFF\"><img src=\""+orderItem.productImage+"\" width=\"90\" height=\"105\"></td><td align=\"center\" valign=\"middle\" bgcolor=\"#FFFFFF\">"+orderItem.productName+"</td><td align=\"center\" valign=\"middle\" bgcolor=\"#FFFFFF\">"+orderItem.productPrice+"元</td><td align=\"center\" valign=\"middle\" bgcolor=\"#FFFFFF\">"+orderItem.num+"件</td><td align=\"center\" valign=\"middle\" bgcolor=\"#FFFFFF\">"+money+"元</td></tr>");
+                                $("#orderTable_"+orderId).append(
+                                    "<tr class='prods'>" +
+                                        "<td ><img src='"+orderItem.productImage+"' width='80' height='90' alt='商品图片'></td>" +
+                                        "<td >"+orderItem.productName+"</td>" +
+                                        "<td >"+orderItem.productPrice+"元</td>" +
+                                        "<td >"+orderItem.num+"件</td>" +
+                                        "<td >"+money+"元</td>" +
+                                    "</tr>"
+                                );
                             });
                         }
-
                     });
                     document.getElementById("span_2").innerText=money+"￥";
-                    //alert(money);
                 }else{
-                    alert("你是不是没登陆啊");
+                    alert(data.msg);
                 }
+            },
+            error: function () {
+                alert("请求失败");
             }
         });
     }
+
+    /**
+     * 删除订单
+     * @param orderId 订单id
+     */
     function delOrder(orderId){
         $.ajax({
             url:"http://www.supermarket.com/order/delete/"+orderId,
@@ -157,19 +234,19 @@
                 if(data.status===200){
                     window.location.href="http://www.supermarket.com/myorder.html";
                 }else{
-                    alert("删除失败");
+                    alert(data.msg);
                 }
             },
             error:function () {
-                alert("请求删除订单失败");
+                alert("请求失败");
             }
         })
     }
+
+
     function search(a){
         let query = document.getElementById(a).value;
-        //alert(query);
         window.location.href="./search.html?query="+query;
-
     }
 </script>
 <div id="common_head">
@@ -215,7 +292,7 @@
     </div>
 </div>
 
-<div id="orders"></div>
+<div id="orders" style="text-align: center;"></div>
 
 <div id="common_foot">
     <p>

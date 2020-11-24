@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE mycat:schema SYSTEM "schema.dtd">
+<mycat:schema xmlns:mycat="http://org.opencloudb/" >
+
+	<schema name="supermarket" checkSQLschema="true" sqlMaxLimit="100">
+		<table name="t_order" primaryKey="order_id" dataNode="dn1,dn2" rule="order_id_murmur" >
+			<childTable name="t_order_item" primaryKey="id" parentKey="order_id" joinKey="order_id" />
+		</table>
+		<table name="t_user" primaryKey="user_id" dataNode="dn1,dn2" rule="user_id_murmur" >
+			<childTable name="t_cart" primaryKey="id" parentKey="user_id" joinKey="user_id" />
+		</table>
+		<table name="t_product" primaryKey="product_id" dataNode="dn1,dn2" rule="product_id_murmur" />
+	</schema>
+	<dataNode name="dn1" dataHost="dn1" database="supermarket" />
+	<dataNode name="dn2" dataHost="dn2" database="supermarket" />
+	<dataHost name="dn1" maxCon="1000" minCon="10" balance="1" writeType="0" dbType="mysql" dbDriver="native" switchType="1"  slaveThreshold="100">
+		<heartbeat>select user()</heartbeat>
+		<writeHost host="dn1_host1" url="10.42.46.195:3306" user="root" password="root" />
+		<writeHost host="dn1_host1" url="10.42.46.196:3306" user="root" password="root" />
+	</dataHost>
+	<dataHost name="dn2" maxCon="1000" minCon="10" balance="1" writeType="0" dbType="mysql" dbDriver="native" switchType="1"  slaveThreshold="100">
+		<heartbeat>select user()</heartbeat>
+		<writeHost host="dn2_host1" url="10.42.83.8:3306" user="root" password="root" />
+		<writeHost host="dn2_host1" url="10.42.83.9:3306" user="root" password="root" />
+	</dataHost>
+</mycat:schema>

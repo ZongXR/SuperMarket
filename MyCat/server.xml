@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mycat:server SYSTEM "server.dtd">
+<mycat:server xmlns:mycat="http://org.opencloudb/">
+	<system>
+	<property name="defaultSqlParser">druidparser</property>
+	</system>
+	<user name="root">
+		<property name="password">root</property>
+		<property name="schemas">supermarket</property>
+	</user>
+</mycat:server>

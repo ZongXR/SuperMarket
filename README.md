@@ -6,6 +6,9 @@
 <img src="./img/product.png" alt="商品页面" /><br />
 <img src="./img/regist.png" alt="注册页面" /><br />
 <img src="./img/login.png" alt="登录页面" /><br />
+<img src="./img/cart.png" alt="购物车" /><br />
+<img src="./img/order.png" alt="订单" /><br />
+<img src="./img/manage.png" alt="后台" /><br />
 <h2>声明</h2>
 <ul>
     <li>本项目静态资源由网络收集得来，并加以大范围修改</li>
@@ -15,7 +18,6 @@
 <p>基于SpringCloud框架开发的商城系统，代码严格遵循MVC分层思想，可部署到服务器上，设计精良，不断完善</p>
 <h2>包结构说明</h2>
 <ul>
-<li>com.supermarket.*.filter对应于微服务的过滤器</li>
 <li>com.supermarket.*.controller对应于微服务的controller层</li>
 <li>com.supermarket.*.aspect对应于微服务的切面类</li>
 <li>com.supermarket.*.service对应于微服务的service层</li>
@@ -28,41 +30,48 @@
 <h2>功能说明</h2>
 <h3>用户微服务(com.supermarket.user)</h3>
 <ul>
-<li>用户登录</li>
-<li>用户注册</li>
-<li>用户登出</li>
-<li>用户名可用性校验</li>
-<li>用户登录状态获取</li>
+    <li>用户登录</li>
+    <li>免验证码登录</li>
+    <li>用户注册</li>
+    <li>用户登出</li>
+    <li>用户名可用性校验</li>
+    <li>用户登录状态获取</li>
 </ul>
 <h3>商品微服务(com.supermarket.product)</h3>
 <ul>
-<li>分页查询</li>
-<li>单个商品查询</li>
-<li>商品新增</li>
-<li>商品修改</li>
+    <li>分页查询</li>
+    <li>单个商品查询</li>
+    <li>商品新增</li>
+    <li>商品修改</li>
 </ul>
 <h3>公共资源微服务(com.supermarket.common)</h3>
 <ul>
-<li>公共资源微服务同时也是SpringCloud的Eureka模块</li>
-<li>提供了常用的JavaBean, ViewObject, 工具类</li>
+    <li>公共资源微服务同时也是SpringCloud的Eureka模块</li>
+    <li>提供了常用的JavaBean, ViewObject, 工具类</li>
 </ul>
 <h3>zuul网关(com.supermarket.gateway)</h3>
 <ul>
-<li>SpringCloud的zuul网关模块</li>
-<li>自动登录功能</li>
+    <li>SpringCloud的zuul网关模块</li>
 </ul>
 <h3>图片微服务(com.supermarket.image)</h3>
 <ul>
-<li>图片上传功能</li>
-<li>生成验证码功能</li>
-<li>清除验证码在redis中的缓存</li>
+    <li>图片上传功能</li>
+    <li>生成验证码功能</li>
+    <li>清除验证码在redis中的缓存</li>
 </ul>
 <h3>购物车微服务(com.supermarket.cart)</h3>
 <ul>
-<li>购物车查询</li>
-<li>购物车新增商品</li>
-<li>购物车删除商品</li>
-<li>购物车修改商品</li>
+    <li>购物车查询</li>
+    <li>购物车新增商品</li>
+    <li>购物车删除商品</li>
+    <li>购物车修改商品</li>
+    <li>购物车价格查询</li>
+</ul>
+<h3>订单微服务(com.supermarket.order)</h3>
+<ul>
+    <li>新增订单</li>
+    <li>删除订单</li>
+    <li>查询订单</li>
 </ul>
 <h2>交流群</h2>
 点击链接加入群聊【Supermarket项目交流群】：<a href="https://jq.qq.com/?_wv=1027&k=wlpUy5jo">https://jq.qq.com/?_wv=1027&k=wlpUy5jo</a><br /> 
@@ -274,6 +283,18 @@
         </td>
         <td>2020年11月19日</td>
     </tr>
+    <tr>
+        <td>0.4.7</td>
+        <td>
+            <ul>
+                <li>新增订单微服务：实现订单新增、订单查询、订单删除功能</li>
+                <li>完善购物车微服务：新增总价格查询功能</li>
+                <li>数据库迁移至服务器，并通过MyCat管理分库分表</li>
+                <li>每个数据分片通过双向主从实现MySQL高可用，并开启读写分离</li>
+            </ul>
+        </td>
+        <td>2020年11月24日</td>
+    </tr>
 </table>
 
 <h2>配置情况</h2>
@@ -283,6 +304,7 @@
     <li>maven: 3.6.3</li>
     <li>MySql: 5.5.27</li>
     <li>Redis: 3.2.11</li>
+    <li>MyCat: 1.5.1</li>
     <li>开发环境：IntelliJ Idea 2020.1.4</li>
     <li>框架：Springboot 2.2.5.RELEASE, SpringCloud Hoxton.SR3</li>
     <li>
@@ -308,6 +330,8 @@
     <li>redis作为缓存使用时，建议捕获RedisConnectionFailureException异常，从而在redis崩掉的情况下能够直接访问数据库</li>
     <li>基于SpringCloud的Ribbon模块在微服务之间相互调用时，不经过zuul网关</li>
     <li>MySQL主从高可用时，如果因为错误数据导致挂接失败，需要先取消挂接(stop slave)，手动删除错误数据，再重新挂接(start slave)</li>
+    <li>MyCat1.5.1版本还不支持复杂SQL，比如update...select..., insert ...select...等</li>
+    <li>insert的时候加上列名是一个好习惯，因为MyCat1.5.1不支持省略列名的写法</li>
 </ul>
 </body>
 </html>

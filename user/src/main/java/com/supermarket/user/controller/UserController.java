@@ -104,7 +104,6 @@ public class UserController {
                 return SysResult.ok();
             }
         }catch (MsgException e){
-            e.printStackTrace();
             return SysResult.build(202, e.getMessage(), e);
         }catch(Exception e){
             e.printStackTrace();

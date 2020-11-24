@@ -19,6 +19,11 @@ public class ImageController {
     @Autowired
     private ImageService imageService = null;
 
+    /**
+     * 上传图片
+     * @param pic 图片
+     * @return vo
+     */
     @RequestMapping("/upload")
     @ResponseBody
     public PicUploadResult imgUpload(
@@ -38,6 +43,11 @@ public class ImageController {
         }
     }
 
+    /**
+     * 生成验证码
+     * @param token token
+     * @param response 相应
+     */
     @RequestMapping("/valistr")
     public void valiCode(
             @RequestParam("token") String token,
@@ -50,6 +60,10 @@ public class ImageController {
         }
     }
 
+    /**
+     * 删除验证码
+     * @param token token
+     */
     @RequestMapping("/valistrdel")
     public void delValistr(
             @RequestParam("token") String token
@@ -60,6 +74,5 @@ public class ImageController {
             e.printStackTrace();
         }
     }
-
 
 }

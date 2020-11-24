@@ -3,9 +3,11 @@ package com.supermarket.cart.controller;
 import com.supermarket.cart.exception.MsgException;
 import com.supermarket.cart.service.CartService;
 import com.supermarket.common.domain.Cart;
+import com.supermarket.common.domain.OrderItem;
 import com.supermarket.common.vo.SysResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -89,6 +91,31 @@ public class CartController {
         }catch (MsgException e){
             return SysResult.build(201, e.getMessage(), e);
         }catch(Exception e){
+            e.printStackTrace();
+            return SysResult.build(500, e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 查询指定商品价格
+     * @param productId 商品id
+     * @param userId 用户id
+     * @return 总价格
+     */
+    @RequestMapping("/get/money")
+    @ResponseBody
+    public SysResult getMoney(
+            @RequestParam("productIds") String productIds,
+            @RequestParam("productNums") String productNums,
+            @RequestParam("userId") String userId
+    ){
+        try {
+            Double money = this.cartService.getMoney(productIds, productNums, userId);
+            System.out.println(money);
+            return SysResult.ok(money);
+        }catch (MsgException e){
+            return SysResult.build(201, e.getMessage(), e);
+        }catch (Exception e){
             e.printStackTrace();
             return SysResult.build(500, e.getMessage(), e);
         }
