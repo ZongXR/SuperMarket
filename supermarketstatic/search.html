@@ -4,9 +4,11 @@
     <style>
         .divcss5{ border:1px solid #F00; width:200px; height:100px}
     </style>
+    <link rel="icon" type="image/x-icon" href="img/head/favicon.ico" />
     <link rel="stylesheet" href="css/foot.css"/>
     <link rel="stylesheet" href="css/head.css"/>
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+    <noscript>抱歉，你的浏览器不支持 JavaScript!</noscript>
     <script type="text/javascript" src="js/base-v1.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/jquery-1.2.6.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/cookie.js" charset="utf-8"></script>
@@ -22,20 +24,27 @@
     <script type="text/javascript">
         window.onload=function(){
             queryUser();
-            let localUrl = decodeURI(window.location.href);
-            let args = localUrl.substr(localUrl.lastIndexOf("?") + 1);
-            if(!args.startsWith("query")){
-                alert("参数不对");
-                window.location.href="./index.html";
-            }
-
+            let args = decodeURI(window.location.href.substr(window.location.href.lastIndexOf("?") + 1));
             search(args);
         }
 
+        /**
+         * 获取用户
+         */
         function queryUser(){
+            let userId = "";
             let _ticket = $.cookie("EM_TICKET");
-            if(!_ticket){
-                return ;
+            let userPassword = $.cookie("PASSWORD");
+            let userName = $.cookie("USERNAME");
+            if (!_ticket) {
+                // 如果没有ticket，说明无法获得登录状态，尝试用cookie的密码自动登录
+                if (!userPassword || !userName)
+                    // 二者缺一无法自动登录
+                    return;
+                else {
+                    autoLogin(userName, userPassword);
+                    return;
+                }
             }
             //当dataType类型为jsonp时，jQuery就会自动在请求链接上增加一个callback的参数
             $.ajax({
@@ -43,22 +52,76 @@
                 dataType : "json",
                 type : "GET",
                 success : function(data){
-                    //alert("好啊2");
                     if(data.status === 200){
                         let _data = JSON.parse(data.data);//jackson
                         let html = _data.userName + "，欢迎来到Supermarket！<a href=\"javascript:void(0)\" class=\"link-logout\" onclick='logout()'>[退出]</a>  \|<a href=\"http://www.supermarket.com/manage.html\" class=\"link-logout\">[后台]</a>";
                         userId=_data.userId;
                         $("#loginbar").html(html);
+                    }else if (data.status === 201){
+                        // 在redis中没找到用户
+                        delCookie("EM_TICKET");
+                        delCookie("USERNAME");
+                        delCookie("PASSWORD");
+                    }else if (data.status === 500){
+                        alert(data.msg);
                     }
                 },
                 error : function(){
-                    alert('index error.');
+                    alert("请求失败");
                 }
             });
         }
-        function search(param){
+
+        /**
+         * 自动登录
+         * @param userName 用户名
+         * @param userPassword 密码
+         */
+        function autoLogin(userName, userPassword) {
             $.ajax({
-                url:"http://www.supermarket.com/searchs/query?"+param+"&page=1&rows=10",
+                url:"http://www.supermarket.com/user/autologin",
+                type:"get",
+                data:{
+                    "userName": userName,
+                    "userPassword": userPassword
+                },
+                dataType:"json",
+                success: function (data) {
+                    if (data.status === 200) {
+                        let _data = data.data;//jackson
+                        let html = _data.userName + "，欢迎来到Supermarket！<a href=\"javascript:void(0)\" class=\"link-logout\" onclick='logout()'>[退出]</a>  \|<a href=\"http://www.Supermarket.com/manage.html\" class=\"link-logout\">[后台]</a>";
+                        userId = _data.userId;
+                        $("#loginbar").html(html);
+                    }else if (data.status === 500){
+                        alert(data.msg);
+                    }
+                },
+                error: function () {
+                    alert('请求失败');
+                }
+            });
+        }
+
+        /**
+         * 查询
+         * @param param 查询关键词
+         */
+        function search(param){
+            let url;
+            if (/^query=.*&page=[0-9]*&rows=[0-9]*$/.test(param)){
+                // 如果有查询词，有页数，有条数
+                url = "http://www.supermarket.com/searchs/query?"+param;
+            }else if (/^query=.*$/.test(param)){
+                // 如果仅有查询条件
+                url = "http://www.supermarket.com/searchs/query?"+param+"&page=1&rows=30";
+            }else if (/^page=[0-9]*&rows=[0-9]*$/.test(param)){
+                // 如果仅有分页信息
+                return;
+            }else {
+                return;
+            }
+            $.ajax({
+                url: url,
                 dataType:"json",
                 type:"GET",
                 success:function(data){
@@ -70,8 +133,18 @@
                             let productPrice = product.productPrice;
                             let productCategory = product.productCategory;
                             let productNum = product.productNum;
-                            $("#prod_content").append("<div id='prod_div'><a href="+product_html+"><img src='"+product.productImgurl+"' width=\"200px\" height=\"200px\" alt='product_url'/> </a><div id='prod_name_div'><a href="+product_html+">"+product.productName+"</a></div><div id='prod_price_div'>￥"+product.productPrice+"元</div><div><div id='gotocart_div'><a href='"+product_html+"'>查看详细</a></div><div id='say_div'>库存"+product.productNum+"件</div></div></div>");
-                        })
+                            $("#prod_content").append(
+                                "<div id='prod_div'>" +
+                                    "<a href="+product_html+"><img src='"+product.productImgurl+"' width='200px' height='200px' alt='product_url'/></a>" +
+                                    "<div id='prod_name_div'><a href="+product_html+">"+product.productName+"</a></div>" +
+                                    "<div id='prod_price_div'>￥"+product.productPrice+"元</div>" +
+                                    "<div>" +
+                                        "<div id='gotocart_div'><a href='"+product_html+"'>查看详细</a></div>" +
+                                        "<div id='say_div'>库存"+product.productNum+"件</div>" +
+                                    "</div>" +
+                                "</div>"
+                            );
+                        });
                     }
                 },
                 error : function(){
@@ -79,15 +152,67 @@
                 }
             });
         }
+
         function sleep(delay) {
             let start = (new Date()).getTime();
             while ((new Date()).getTime() - start < delay) {
                 continue;
             }
         }
+
         function searchStart(a){
             let query = document.getElementById(a).value;
             window.location.href="./search.html?query="+query;
+        }
+
+
+        /**
+         * 上一页
+         */
+        function pagePrev() {
+            let queryPageParam = decodeURI(window.location.href.substr(window.location.href.lastIndexOf("?") + 1));
+            let query = queryPageParam.match(/^query=(.*)&page=[0-9]*&rows=[0-9]*$/)[1];
+            let page = parseInt(queryPageParam.match(/^query=.*&page=([0-9]*)&rows=[0-9]*$/)[1]);
+            let rows = parseInt(queryPageParam.match(/^query=.*&page=[0-9]*&rows=([0-9]*)$/)[1]);
+            if (page === 1)
+                page = 1;
+            else
+                page = page - 1;
+            window.location.href = "./search.html?query="+query+"page=" + page + "&rows=" + rows;
+        }
+
+        /**
+         * 下一页
+         */
+        function pageNext() {
+            let queryPageParam = decodeURI(window.location.href.substr(window.location.href.lastIndexOf("?") + 1));
+            let query = queryPageParam.match(/^query=(.*)&page=[0-9]*&rows=[0-9]*$/)[1];
+            let page = parseInt(queryPageParam.match(/^query=.*&page=([0-9]*)&rows=[0-9]*$/)[1]);
+            let rows = parseInt(queryPageParam.match(/^query=.*&page=[0-9]*&rows=([0-9]*)$/)[1]);
+            page = page + 1;
+            window.location.href = "./search.html?query="+query+"page=" + page + "&rows=" + rows;
+        }
+
+        /**
+         * 加载更多
+         */
+        function showMore() {
+            let param;
+            let queryPageParam = decodeURI(window.location.href.substr(window.location.href.lastIndexOf("?") + 1));
+            let num = $("#prod_content").children("#prod_div").length;
+            let page = Math.floor(num / 30) + 1;
+            let query = queryPageParam.match(/^query=(.*)&page=[0-9]*&rows=[0-9]*$/)[1];
+            if (/^query=.*&page=[0-9]*&rows=[0-9]*$/.test(queryPageParam)){
+                // 如果有查询词，有页数，有条数
+                let rows = parseInt(queryPageParam.match(/^query=.*&page=[0-9]*&rows=([0-9]*)$/)[1]);
+                param = "query="+query+"&page="+page+"&rows=" + rows;
+            }else if (/^query=.*$/.test(queryPageParam)) {
+                // 如果仅有查询条件
+                param = "query=" + query + "&page=" + page + "&rows=30";
+            }else{
+                return;
+            }
+            search(param);
         }
     </script>
 </head>
@@ -110,8 +235,8 @@
     <div class="line2">
         <img id="logo" src="img/head/logo.png" alt="logo"/>
         <input type="text" value="" accesskey="s" id="key" autocomplete="off"
-               onkeydown="if(event.keyCode===13) search('key');"/>
-        <input type="button" value="搜 索" onclick="search('key')"/>
+               onkeydown="if(event.keyCode===13) searchStart('key');"/>
+        <input type="button" value="搜 索" onclick="searchStart('key')"/>
         <span id="goto">
 			<a id="goto_order" href="./myorder.html">我的订单</a>
 			<a id="goto_cart" href="./mycart.html">我的购物车</a>
@@ -136,11 +261,22 @@
     </div>
 </div>
 
-<div id="content">
+<div id="content" style="display: grid;">
     <div id="prod_content">
     </div>
 </div>
+<div id="prev_next">
+    <a href="javascript:void(0)" onclick="pagePrev()" class="link_button">上一页</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="javascript:void(0)" onclick="showMore()" class="link_button">加载更多</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="javascript:void(0)" onclick="pageNext()" class="link_button">下一页</a>
+</div>
 
+<div class="fixed">
+    <a href="https://github.com/GoogleLLP/SuperMarket" target="_blank">
+        <img src="./img/head/qr.jpg" width="100" alt="qrcode"/>
+    </a>
+    <a href="#common_head" class="toTop"></a>
+</div>
 <div id="common_foot">
     <p>
         Copyright © 2011-2019 网上商城 版权所有 保留一切权利 粤CM-20201119 | 粤ICP备20201119号-1

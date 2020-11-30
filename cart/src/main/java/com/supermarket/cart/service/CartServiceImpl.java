@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -82,7 +83,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Double getMoney(String productIdss, String productNumss, String userId) throws JsonProcessingException {
+    public Double getMoney(String productIdss, String productNumss, String userId) throws IOException {
         String[] productIds = this.mapper.readValue(productIdss, String[].class);
         Integer[] productNums = this.mapper.readValue(productNumss, Integer[].class);
         Double money = 0.0;

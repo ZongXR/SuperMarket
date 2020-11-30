@@ -30,7 +30,6 @@
             <if test="userPassword != null">and user_password = #{userPassword}</if>
             <if test="userNickname != null">and user_nickname = #{userNickname}</if>
             <if test="userEmail != null">and user_email = #{userEmail}</if>
-            <if test="userType != null">and user_type = #{userType}</if>
         </where>
     </sql>
 

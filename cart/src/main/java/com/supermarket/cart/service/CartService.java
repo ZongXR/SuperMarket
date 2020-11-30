@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.supermarket.common.domain.Cart;
 import com.supermarket.common.domain.OrderItem;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface CartService {
@@ -39,5 +40,5 @@ public interface CartService {
      * @param userId 用户id
      * @return 总钱数
      */
-    public Double getMoney(String productIds, String productNums, String userId) throws JsonProcessingException;
+    public Double getMoney(String productIds, String productNums, String userId) throws IOException;
 }

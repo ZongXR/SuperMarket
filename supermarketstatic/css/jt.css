@@ -7,7 +7,7 @@ ul{
 }
 
 .itemParam ul{
-	padding-left: 0px;
+	padding-left: 0;
 }
 .itemParam li{
 	line-height: 25px;
@@ -15,7 +15,7 @@ ul{
 
 .itemForm .pics ul{
 	list-style: none;
-	padding-left: 0px;
+	padding-left: 0;
 }
 .itemForm .pics ul li{
 	float: left;

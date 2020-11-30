@@ -24,7 +24,7 @@
     <script type="text/javascript" src="js/jquery-extend.js"></script>
     <script type="text/javascript" src="js/logout.js"></script>
     <script type="text/javascript" src="js/lib-v1.js" charset="utf-8"></script>
-    <link rel="icon" type="image/x-icon" href="img/head/icon.ico"/>
+    <link rel="icon" type="image/x-icon" href="img/head/favicon.ico"/>
     <link href="css/prodList.css" rel="stylesheet" type="text/css">
     <meta charset="UTF-8">
     <title>商品分页</title>
@@ -34,7 +34,7 @@
             queryUser();
             let localUrl = decodeURI(window.location.href);
             let queryPageParam = localUrl.substr(localUrl.lastIndexOf("?") + 1);
-            if (!queryPageParam.match("^page=[0-9]*&rows=[0-9]*$")) {
+            if (!/^page=[0-9]*&rows=[0-9]*$/.test(queryPageParam)) {
                 queryPages("page=1&rows=30");
                 return;
             }
@@ -107,8 +107,10 @@
                 if (!userPassword || !userName)
                     // 二者缺一无法自动登录
                     return;
-                else
+                else{
                     autoLogin(userName, userPassword);
+                    return;
+                }
             }
             //当dataType类型为jsonp时，jQuery就会自动在请求链接上增加一个callback的参数
             $.ajax({
@@ -155,7 +157,17 @@
                         $.each(data.rows, function (index, product) {
                             let product_html = "product-info.html?productId=" + product.productId;
                             let productId = product.productId;
-                            $("#prod_content").append("<div id='prod_div'><a href=" + product_html + "><img src='" + product.productImgurl + "'width=\"200px\" height=\"200px\"/> </a><div id='prod_name_div'><a href=" + product_html + ">" + product.productName + "</a></div><div id='prod_price_div'>￥" + product.productPrice + "元</div><div><div id='gotocart_div'><a href='javascript:void(0)' onclick='addCartOne(\"" + productId + "\",\"" + userId + "\")'>加入购物车</a></div><div id='say_div'>库存" + product.productNum + "件</div></div></div>");
+                            $("#prod_content").append(
+                                "<div id='prod_div'>" +
+                                    "<a href=" + product_html + "><img src='" + product.productImgurl + "' width='200px' height='200px' alt='商品图片'/> </a>" +
+                                    "<div id='prod_name_div'><a href=" + product_html + ">" + product.productName + "</a></div>" +
+                                    "<div id='prod_price_div'>￥" + product.productPrice + "元</div>" +
+                                    "<div>" +
+                                        "<div id='gotocart_div'><a href='javascript:void(0)' onclick='addCartOne(\"" + productId + "\",\"" + userId + "\")'>加入购物车</a></div>" +
+                                        "<div id='say_div'>库存" + product.productNum + "件</div>" +
+                                    "</div>" +
+                                "</div>"
+                            );
                         })
                     }
                 },
@@ -273,6 +285,7 @@
         </div>
     </div>
 </div>
+
 <div id="content" style="display:grid;">
     <div id="prod_content">
     </div>
@@ -282,6 +295,7 @@
     <a href="javascript:void(0)" onclick="showMore()" class="link_button">加载更多</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <a href="javascript:void(0)" onclick="pageNext()" class="link_button">下一页</a>
 </div>
+
 <div class="fixed">
     <a href="https://github.com/GoogleLLP/SuperMarket" target="_blank">
         <img src="./img/head/qr.jpg" width="100" alt="qrcode"/>

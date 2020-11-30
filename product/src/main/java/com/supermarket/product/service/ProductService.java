@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.supermarket.common.domain.Product;
 import com.supermarket.common.vo.SupermarketResult;
 
+import java.io.IOException;
+import java.util.List;
+
 public interface ProductService {
     /**
      * 分页查询
@@ -18,7 +21,7 @@ public interface ProductService {
      * @param productId 商品id
      * @return 查询出的商品
      */
-    public Product queryByProductId(String productId) throws JsonProcessingException;
+    public Product queryByProductId(String productId) throws IOException;
 
     /**
      * 商品新增
@@ -31,4 +34,10 @@ public interface ProductService {
      * @param product 修改的商品
      */
     public void updateProduct(Product product) throws JsonProcessingException;
+
+    /**
+     * 查询全部商品
+     * @return 全部商品列表
+     */
+    public List<Product> queryProducts();
 }

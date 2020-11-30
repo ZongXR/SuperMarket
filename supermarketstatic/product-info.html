@@ -8,9 +8,11 @@
             height: 100px
         }
     </style>
+    <link rel="icon" type="image/x-icon" href="img/head/favicon.ico" />
     <link rel="stylesheet" href="css/foot.css"/>
     <link rel="stylesheet" href="css/head.css"/>
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
+    <noscript>抱歉，你的浏览器不支持 JavaScript!</noscript>
     <script type="text/javascript" src="js/base-v1.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/jquery-1.2.6.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/cookie.js" charset="utf-8"></script>
@@ -56,8 +58,10 @@
                 if (!userPassword || !userName)
                     // 二者缺一无法自动登录
                     return;
-                else
+                else{
                     autoLogin(userName, userPassword);
+                    return;
+                }
             }
 
             //当dataType类型为jsonp时，jQuery就会自动在请求链接上增加一个callback的参数

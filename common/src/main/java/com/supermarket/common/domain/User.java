@@ -26,7 +26,15 @@ public class User {
 	@Email(message = "邮箱格式不对")
 	private String userEmail;
 
-	private Integer userType = 0;//默认都是0
+	/**
+	 * 0: 游客
+	 * 1: 买家
+	 * 2: 卖家
+	 * 3: 预留
+	 * 4: 管理员
+	 * 5: 根用户
+	 */
+	private Integer userType = 0;
 
 	public User() {
 	}

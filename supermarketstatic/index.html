@@ -20,7 +20,7 @@
     <script type="text/javascript" src="js/logout.js"></script>
     <script type="text/javascript" src="js/lib-v1.js" charset="utf-8"></script>
     <link href="css/prodList.css" rel="stylesheet" type="text/css">
-    <link rel="icon" type="image/x-icon" href="img/head/icon.ico" />
+    <link rel="icon" type="image/x-icon" href="img/head/favicon.ico" />
     <meta charset="UTF-8">
     <script type="text/javascript">
         window.onload = function () {
@@ -33,8 +33,10 @@
                 if (!userPassword || !userName)
                     // 二者缺一无法自动登录
                     return;
-                else
+                else{
                     autoLogin(userName, userPassword);
+                    return;
+                }
             }
             //当dataType类型为jsonp时，jQuery就会自动在请求链接上增加一个callback的参数
             $.ajax({

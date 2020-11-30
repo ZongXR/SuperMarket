@@ -8,17 +8,15 @@
     <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.4.1/themes/default/easyui.css" />
     <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.4.1/themes/icon.css" />
     <link rel="stylesheet" type="text/css" href="css/jt.css" />
-    <link rel="icon" type="image/x-icon" href="img/head/icon.ico" />
+    <link rel="icon" type="image/x-icon" href="img/head/favicon.ico" />
     <meta name="keywords" content="网上商城, 电商平台, 能源互联网">
     <meta name="description" content="能源互联网, 网上商城, 电商平台, 电子商务, 掌上e宝, 科技金服, 不正经网站研究中心">
-    <title>管理商品</title>
     <noscript>抱歉，你的浏览器不支持 JavaScript!</noscript>
     <script type="text/javascript" src="js/jquery-easyui-1.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery-easyui-1.4.1/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="js/jquery-easyui-1.4.1/locale/easyui-lang-zh_CN.js"></script>
-    <!-- 自己实现业务逻辑 -->
     <script type="text/javascript" src="js/common.js"></script>
-
+    <script type="text/javascript" src="js/jquery.cookie.js" charset="utf-8"></script>
     <title>Supermarket后台管理系统</title>
     <style type="text/css">
         .content {
@@ -65,7 +63,80 @@
                 }
             }
         });
+
+        let _ticket = $.cookie("EM_TICKET");
+        let userPassword = $.cookie("PASSWORD");
+        let userName = $.cookie("USERNAME");
+        if (!_ticket) {
+            // 如果没有ticket，说明无法获得登录状态，尝试用cookie的密码自动登录
+            if (!userPassword || !userName) {
+                // 二者缺一无法自动登录
+                alert("越权访问");
+                window.location.href = "./index.html";
+                return;
+            }else{
+                autoLogin(userName, userPassword);
+                return;
+            }
+        }
+        //如果有ticket
+        $.ajax({
+            url: "http://www.Supermarket.com/user/query/" + _ticket,
+            dataType: "json",
+            type: "GET",
+            success: function (data) {
+                if (data.status === 200) {
+                    // 在redis中找到了用户
+                    let _data = JSON.parse(data.data);//jackson
+                    if (_data.userType < 3){
+                        alert("越权访问");
+                        window.location.href = "./index.html";
+                    }
+                }else{
+                    alert(data.msg);
+                    window.location.href = "./index.html";
+                }
+            },
+            error: function () {
+                alert('请求失败');
+                window.location.href = "./index.html";
+            }
+        });
     });
+
+
+    /**
+     * 自动登录
+     * @param userName 用户名
+     * @param userPassword 密码
+     */
+    function autoLogin(userName, userPassword) {
+        $.ajax({
+            url:"http://www.supermarket.com/user/autologin",
+            type:"get",
+            data:{
+                "userName": userName,
+                "userPassword": userPassword
+            },
+            dataType:"json",
+            success: function (data) {
+                if (data.status === 200) {
+                    let _data = data.data;//jackson
+                    if (_data.userType < 3){
+                        alert("越权访问");
+                        window.location.href = "./index.html";
+                    }
+                }else {
+                    alert(data.msg);
+                    window.location.href = "./index.html";
+                }
+            },
+            error: function () {
+                alert('请求失败');
+                window.location.href = "./index.html";
+            }
+        });
+    }
 </script>
 </body>
 </html>

@@ -2,6 +2,7 @@ package com.supermarket.product.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.supermarket.common.vo.SysResult;
 import com.supermarket.product.dao.ProductDao;
 import com.supermarket.common.domain.Product;
 import com.supermarket.common.vo.SupermarketResult;
@@ -9,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -25,6 +28,9 @@ public class ProductServiceImpl implements ProductService{
     @Autowired
     private ObjectMapper mapper = null;
 
+    @Autowired
+    private RestTemplate restTemplate = null;
+
     @Override
     public SupermarketResult queryByPage(Integer page, Integer rows) {
         // 非框架类对象不建议从容器中拿
@@ -38,7 +44,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Product queryByProductId(String productId) throws JsonProcessingException {
+    public Product queryByProductId(String productId) throws IOException {
         // TODO 使用redis缓存商品信息
         Boolean exits = null;
         try {
@@ -68,5 +74,10 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public void updateProduct(Product product) throws JsonProcessingException {
         this.productDao.updateProduct(product);
+    }
+
+    @Override
+    public List<Product> queryProducts() {
+        return this.productDao.selectProducts();
     }
 }

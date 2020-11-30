@@ -12,6 +12,7 @@
         <module name="common" />
         <module name="order" />
         <module name="cart" />
+        <module name="search" />
         <module name="image" />
       </profile>
     </annotationProcessing>
@@ -21,6 +22,7 @@
       <module name="image" target="1.8" />
       <module name="order" target="1.8" />
       <module name="product" target="1.8" />
+      <module name="search" target="1.8" />
       <module name="user" target="1.8" />
       <module name="zuul-gateway" target="1.8" />
       <module name="网上商城" target="1.8" />
@@ -33,6 +35,7 @@
       <module name="image" options="-parameters" />
       <module name="order" options="-parameters" />
       <module name="product" options="-parameters" />
+      <module name="search" options="-parameters" />
       <module name="user" options="-parameters" />
       <module name="zuul-gateway" options="-parameters" />
     </option>

@@ -1,0 +1,68 @@
+导入整个项目
+maven格式
+common是微服务的服务端，其他都是客户端
+首先启动common
+如果报错
+改成这个
+
+参照这个博客
+mysql 放到客户端运行
+
+mysql的表
+改变mysql数据源和自己的一样
+
+下载redis
+启动redis服务
+（
+启动redis客服端
+测测redis
+打开图形界面
+）
+
+redis没问题
+
+下载nginx 
+负载均衡，动静分离，反向代理
+
+配置nginx.conf
+
+打开项目
+
+
+复制粘贴
+把原来的覆盖
+
+
+配置你的nginx文件位置
+
+配置你项目的地址
+
+把\替换成/
+
+ok到这一步就是nginx完成了
+
+启动微服务
+
+先启动服务端  eureka的
+访问微服务
+启动客户端
+每个客户端对应一个Springboot 改变单体应用
+全启动完了，访问一下
+
+后台。。。
+
+
+用户名和密码对应mysql 表
+eeee 123456(md5)
+
+ok
+
+
+需要Lombok
+如果报错可能是pom中mybatis导包问题  ，加上版本号就解决了
+   <!--    mybatis连接spring    -->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>2.1.3</version>
+        </dependency>

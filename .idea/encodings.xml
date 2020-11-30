@@ -6,7 +6,10 @@
     <file url="file://$PROJECT_DIR$/image/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/order/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/product/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/search/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/user/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/zuul-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/部署教程/ssm10月1号版本使用.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/部署教程/supermarket部署视频.txt" charset="GBK" />
   </component>
 </project>

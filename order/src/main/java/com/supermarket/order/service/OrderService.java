@@ -1,6 +1,7 @@
 package com.supermarket.order.service;
 
 import com.supermarket.common.domain.Order;
+import com.supermarket.common.domain.Product;
 
 import java.util.List;
 
@@ -23,4 +24,5 @@ public interface OrderService {
      * @param orderId 用户id
      */
     public void deleteOrder(String orderId);
+
 }

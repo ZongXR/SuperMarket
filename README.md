@@ -8,6 +8,7 @@
 <img src="./img/login.png" alt="登录页面" /><br />
 <img src="./img/cart.png" alt="购物车" /><br />
 <img src="./img/order.png" alt="订单" /><br />
+<img src="./img/search.png" alt="检索" /><br />
 <img src="./img/manage.png" alt="后台" /><br />
 <h2>声明</h2>
 <ul>
@@ -18,6 +19,7 @@
 <p>基于SpringCloud框架开发的商城系统，代码严格遵循MVC分层思想，可部署到服务器上，设计精良，不断完善</p>
 <h2>包结构说明</h2>
 <ul>
+<li>com.supermarket.*.listener对应于微服务的监听器</li>
 <li>com.supermarket.*.controller对应于微服务的controller层</li>
 <li>com.supermarket.*.aspect对应于微服务的切面类</li>
 <li>com.supermarket.*.service对应于微服务的service层</li>
@@ -43,6 +45,7 @@
     <li>单个商品查询</li>
     <li>商品新增</li>
     <li>商品修改</li>
+    <li>查询全部商品</li>
 </ul>
 <h3>公共资源微服务(com.supermarket.common)</h3>
 <ul>
@@ -73,9 +76,22 @@
     <li>删除订单</li>
     <li>查询订单</li>
 </ul>
+<h3>检索微服务(com.supermarket.search)</h3>
+<ul>
+    <li>分页检索</li>
+    <li>增加文档</li>
+    <li>删除文档</li>
+    <li>修改文档</li>
+</ul>
 <h2>交流群</h2>
 点击链接加入群聊【Supermarket项目交流群】：<a href="https://jq.qq.com/?_wv=1027&k=wlpUy5jo">https://jq.qq.com/?_wv=1027&k=wlpUy5jo</a><br /> 
 <a href="https://jq.qq.com/?_wv=1027&k=wlpUy5jo"><img src="./img/交流群.png" alt="交流群二维码"/></a>
+<h2>部署教程</h2>
+<ul>
+    <li><a href="https://blog.csdn.net/sjdjjd6466446/article/details/110005937" target="_blank">0.4.x版本博客教程</a>(感谢<a href="https://github.com/BlackPeachLawn" target="_blank">BlackPeachLawn</a>)</li>
+    <li><a href="./部署教程/supermarket部署视频.mp4" target="_blank">0.4.x版本视频教程</a>(感谢<a href="https://github.com/20427492" target="_blank">20427492</a>)</li>
+    <li><a href="./部署教程/ssm10月1号版本使用.txt" target="_blank">0.3.x版本文档教程</a>(感谢<a href="https://github.com/20427492" target="_blank">20427492</a>)</li>
+</ul>
 <h2>版本迭代</h2>
 <table>
     <tr>
@@ -295,18 +311,31 @@
         </td>
         <td>2020年11月24日</td>
     </tr>
+    <tr>
+        <td>0.4.8</td>
+        <td>
+            <ul>
+                <li>新增检索微服务：分页检索、增加文档、删除文档、修改文档</li>
+                <li>完善商品微服务：查询全部商品</li>
+                <li>完善前端：进入后台权限校验</li>
+            </ul>
+        </td>
+        <td>2020年11月30日</td>
+    </tr>
 </table>
 
 <h2>配置情况</h2>
 <ul>
-    <li>JDK版本：OpenJDK11</li>
-    <li>nginx：1.19.1</li>
-    <li>maven: 3.6.3</li>
-    <li>MySql: 5.5.27</li>
-    <li>Redis: 3.2.11</li>
-    <li>MyCat: 1.5.1</li>
-    <li>开发环境：IntelliJ Idea 2020.1.4</li>
-    <li>框架：Springboot 2.2.5.RELEASE, SpringCloud Hoxton.SR3</li>
+    <li>JDK版本：<a href="http://openjdk.java.net/projects/jdk/11/" target="_blank">OpenJDK11</a></li>
+    <li><a href="http://nginx.org/en/download.html" target="_blank">nginx：1.19.1</a></li>
+    <li><a href="https://maven.apache.org/download.cgi" target="_blank">maven: 3.6.3</a></li>
+    <li><a href="https://downloads.mysql.com/archives/community/" target="_blank">MySql: 5.5.27</a></li>
+    <li><a href="http://download.redis.io/releases/" target="_blank">Redis: 3.2.11</a></li>
+    <li><a href="https://github.com/MyCATApache/Mycat-download/tree/master/1.5-RELEASE" target="_blank">MyCat: 1.5.1</a></li>
+    <li><a href="https://www.elastic.co/cn/downloads/past-releases/elasticsearch-6-8-6" target="_blank">ElasticSearch: 6.8.6</a></li>
+    <li><a href="https://github.com/medcl/elasticsearch-analysis-ik/releases/tag/v6.8.6" target="_blank">IK分词器: 6.8.6</a></li>
+    <li>开发环境：<a href="https://www.jetbrains.com/idea/download/other.html" target="_blank">IntelliJ Idea 2020.1.4</a></li>
+    <li>框架：<a href="https://github.com/spring-projects/spring-boot/releases/tag/v2.2.5.RELEASE" target="_blank">Springboot 2.2.5.RELEASE</a>, <a href="https://spring.io/blog/2020/03/05/spring-cloud-hoxton-service-release-3-sr3-is-available" target="_blank">SpringCloud Hoxton.SR3</a></li>
     <li>
         hosts配置: <br />
         127.0.0.1 www.supermarket.com <br />

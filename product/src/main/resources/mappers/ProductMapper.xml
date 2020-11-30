@@ -49,6 +49,11 @@
         select * from `t_product` where `product_id` = #{productId};
     </select>
 
+    <!--  查询全部商品  -->
+    <select id="selectProducts" resultType="com.supermarket.common.domain.Product">
+        select * from `t_product`;
+    </select>
+
 
 </mapper>
 

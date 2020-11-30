@@ -40,4 +40,10 @@ public interface ProductDao {
      * @param product 修改的商品
      */
     public void updateProduct(Product product);
+
+    /**
+     * 查询全部商品
+     * @return 全部商品列表
+     */
+    public List<Product> selectProducts();
 }

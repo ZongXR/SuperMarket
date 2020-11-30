@@ -1,0 +1,9 @@
+因为作者是jdk11,tom7
+导进idea修改jdk，tom和自己的一样
+配置数据源
+启动报错没找到数据库
+c3p0jar包问题，下载c3p0连接数据源的jar包，或者用druid自行在applicationContext.xml中修改
+因为不是maven项目，需要自己手动导包，自行百度idea导jar包
+如果没有servlet.jar jsp.jar需要自己导包，在tomat里lib里有servlet-api.jar jsp-api.jar
+WebUtil 报错，需要.toString try-catch
+ssm版本就只有登录注册。
