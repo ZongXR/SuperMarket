@@ -2,14 +2,14 @@
 <body>
 <h1>网上商城</h1>
 <h2>截图展示</h2>
-<img src="./img/index.png" alt="首页" /><br />
-<img src="./img/product.png" alt="商品页面" /><br />
-<img src="./img/regist.png" alt="注册页面" /><br />
-<img src="./img/login.png" alt="登录页面" /><br />
-<img src="./img/cart.png" alt="购物车" /><br />
-<img src="./img/order.png" alt="订单" /><br />
-<img src="./img/search.png" alt="检索" /><br />
-<img src="./img/manage.png" alt="后台" /><br />
+<img src="./img/product.gif" alt="商品页面" /><br />
+<img src="./img/regist.gif" alt="注册页面" /><br />
+<img src="./img/login.gif" alt="登录页面" /><br />
+<img src="./img/cart.gif" alt="购物车" /><br />
+<img src="./img/order.gif" alt="订单" /><br />
+<img src="./img/search.gif" alt="检索" /><br />
+<img src="./img/manage_product.gif" alt="管理商品" /><br />
+<img src="./img/add_product.gif" alt="新增商品" /><br />
 <h2>声明</h2>
 <ul>
     <li>本项目静态资源由网络收集得来，并加以大范围修改</li>

@@ -48,7 +48,10 @@
                         window.location.href = "./login.html";
                         return;
                     }
-                    let html = _data.userName + "，欢迎来到Supermarket！<a href=\"javascript:void(0)\" class=\"link-logout\" onclick='logout()'>[退出]</a>  \|<a href=\"http://www.Supermarket.com/manage.html\" class=\"link-logout\">[后台]</a>";
+                    let html = _data.userName +
+                        "，欢迎来到Supermarket！<a href='javascript:void(0)' class='link-logout' onclick='logout()'>[退出]</a>";
+                    if (_data.userType >= 3)
+                        html = html + "&nbsp;&nbsp;|&nbsp;&nbsp;<a href='http://www.Supermarket.com/manage.html' class='link-logout'>[后台]</a>";
                     userId = _data.userId;
                     $("#loginbar").html(html);
                     queryOrder(userId);
@@ -66,6 +69,39 @@
             }
         });
     });
+
+    /**
+     * 自动登录
+     * @param userName 用户名
+     * @param userPassword 密码
+     */
+    function autoLogin(userName, userPassword) {
+        $.ajax({
+            url: "http://www.supermarket.com/user/autologin",
+            type: "get",
+            data: {
+                "userName": userName,
+                "userPassword": userPassword
+            },
+            dataType: "json",
+            success: function (data) {
+                if (data.status === 200) {
+                    let _data = data.data;//jackson
+                    let html = _data.userName +
+                        "，欢迎来到Supermarket！<a href='javascript:void(0)' class='link-logout' onclick='logout()'>[退出]</a>";
+                    if (_data.userType >= 3)
+                        html = html + "&nbsp;&nbsp;|&nbsp;&nbsp;<a href='http://www.Supermarket.com/manage.html' class='link-logout'>[后台]</a>";
+                    userId = _data.userId;
+                    $("#loginbar").html(html);
+                } else if (data.status === 500) {
+                    alert(data.msg);
+                }
+            },
+            error: function () {
+                alert('请求失败');
+            }
+        });
+    }
 
     /**
      * 删除购物车
@@ -258,8 +294,7 @@
                 <li class="fore1" id="loginbar" clstag="homepage|keycount|home2013|01b">
                     <span id="head_span" >
                         <a href="login.html">登录</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-                        <a href="regist.html">注册</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-                        <a href="manage.html">后台</a>
+                        <a href="regist.html">注册</a>
                     </span>
                 </li>
             </ul>

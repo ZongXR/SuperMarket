@@ -37,10 +37,9 @@ public class SearchServiceImpl implements SearchService{
 
     @Override
     public List<Product> searchProducts(String query, Integer page, Integer rows) {
-        int start = (page - 1) * rows;
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(multiMatchQuery(query, "productName", "productCategory", "productDescription"))
-                .withPageable(PageRequest.of(start, rows))
+                .withPageable(PageRequest.of(page - 1, rows))
                 .build();
         return this.elasticsearchTemplate.queryForList(searchQuery, Product.class);
     }

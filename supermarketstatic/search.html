@@ -54,7 +54,10 @@
                 success : function(data){
                     if(data.status === 200){
                         let _data = JSON.parse(data.data);//jackson
-                        let html = _data.userName + "，欢迎来到Supermarket！<a href=\"javascript:void(0)\" class=\"link-logout\" onclick='logout()'>[退出]</a>  \|<a href=\"http://www.supermarket.com/manage.html\" class=\"link-logout\">[后台]</a>";
+                        let html = _data.userName +
+                            "，欢迎来到Supermarket！<a href='javascript:void(0)' class='link-logout' onclick='logout()'>[退出]</a>";
+                        if (_data.userType >= 3)
+                            html = html + "&nbsp;&nbsp;|&nbsp;&nbsp;<a href='http://www.Supermarket.com/manage.html' class='link-logout'>[后台]</a>";
                         userId=_data.userId;
                         $("#loginbar").html(html);
                     }else if (data.status === 201){
@@ -89,7 +92,10 @@
                 success: function (data) {
                     if (data.status === 200) {
                         let _data = data.data;//jackson
-                        let html = _data.userName + "，欢迎来到Supermarket！<a href=\"javascript:void(0)\" class=\"link-logout\" onclick='logout()'>[退出]</a>  \|<a href=\"http://www.Supermarket.com/manage.html\" class=\"link-logout\">[后台]</a>";
+                        let html = _data.userName +
+                            "，欢迎来到Supermarket！<a href='javascript:void(0)' class='link-logout' onclick='logout()'>[退出]</a>";
+                        if (_data.userType >= 3)
+                            html = html + "&nbsp;&nbsp;|&nbsp;&nbsp;<a href='http://www.Supermarket.com/manage.html' class='link-logout'>[后台]</a>";
                         userId = _data.userId;
                         $("#loginbar").html(html);
                     }else if (data.status === 500){
@@ -128,11 +134,6 @@
                     if(data.length>0){
                         $.each(data,function(index, product){
                             let product_html = "product-info.html?productId=" + product.productId;
-                            let productId = product.productId;
-                            let productName = product.productName;
-                            let productPrice = product.productPrice;
-                            let productCategory = product.productCategory;
-                            let productNum = product.productNum;
                             $("#prod_content").append(
                                 "<div id='prod_div'>" +
                                     "<a href="+product_html+"><img src='"+product.productImgurl+"' width='200px' height='200px' alt='product_url'/></a>" +
@@ -225,8 +226,7 @@
                 <li class="fore1" id="loginbar" clstag="homepage|keycount|home2013|01b">
                     <span id="head_span" >
                         <a href="login.html">登录</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-                        <a href="regist.html">注册</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-                        <a href="manage.html">后台</a>
+                        <a href="regist.html">注册</a>
                     </span>
                 </li>
             </ul>
