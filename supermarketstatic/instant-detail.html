@@ -1,33 +1,46 @@
-<!DOCTYPE HTML>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="css/index.css"/>
+    <title>商品详情页</title>
     <link rel="stylesheet" href="css/foot.css"/>
     <link rel="stylesheet" href="css/head.css"/>
-    <meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
-    <meta name="keywords" content="网上商城, 电商平台, 能源互联网">
-    <meta name="description" content="能源互联网, 网上商城, 电商平台, 电子商务, 掌上e宝, 科技金服, 不正经网站研究中心">
-    <title>网上商城-能源工业云平台_国电网商|网上金融科技|电子金服</title>
     <noscript>抱歉，你的浏览器不支持 JavaScript!</noscript>
-    <script type="text/javascript" src="js/base-v1.js" charset="utf-8"></script>
-    <script type="text/javascript" src="js/jquery-1.2.6.min.js" charset="utf-8"></script>
-    <script type="text/javascript" src="js/cookie.js" charset="utf-8"></script>
-    <script type="text/javascript" src="js/common.js" charset="utf-8"></script>
-    <script type="text/javascript" src="js/jquery.cookie.js" charset="utf-8"></script>
-    <script type="text/javascript" src="js/jquery.min.js" charset="utf-8"></script>
-    <script type="text/javascript" src="js/jquery-extend.js"></script>
-    <script type="text/javascript" src="js/logout.js"></script>
-    <script type="text/javascript" src="js/lib-v1.js" charset="utf-8"></script>
-    <link href="css/prodList.css" rel="stylesheet" type="text/css">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
     <link rel="icon" type="image/x-icon" href="img/head/favicon.ico" />
     <meta charset="UTF-8">
+    <style>
+        .disappearBtn{
+            display:none;
+        }
+
+        .showBtn{
+            display:block;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./css/instantbuy.css" rel="stylesheet">
     <script type="text/javascript">
-        window.onload = function () {
+        var itemId="";
+        var userName="";
+
+        /**
+         * 文档就绪事件
+         */
+        $(function() {
+            let localUrl = window.location.href;
+            let args = localUrl.substr(localUrl.lastIndexOf("?") + 1);
+            if(!args.match("^itemId=.*$")){
+                alert("参数有误")
+                return;
+            }
+            queryDetail(args);
+
+
             let userId = "";
             let _ticket = $.cookie("EM_TICKET");
             let userPassword = $.cookie("PASSWORD");
-            let userName = $.cookie("USERNAME");
+            userName = $.cookie("USERNAME");
             if (!_ticket) {
                 // 如果没有ticket，说明无法获得登录状态，尝试用cookie的密码自动登录
                 if (!userPassword || !userName)
@@ -38,7 +51,6 @@
                     return;
                 }
             }
-            //当dataType类型为jsonp时，jQuery就会自动在请求链接上增加一个callback的参数
             $.ajax({
                 url: "http://www.Supermarket.com/user/query/" + _ticket,
                 dataType: "json",
@@ -53,6 +65,7 @@
                             html = html + "&nbsp;&nbsp;|&nbsp;&nbsp;<a href='http://www.Supermarket.com/manage.html' class='link-logout'>[后台]</a>";
                         userId = _data.userId;
                         $("#loginbar").html(html);
+                        userName = _data.userName;
                     }else if (data.status === 201){
                         // 在redis中没找到用户
                         delCookie("EM_TICKET");
@@ -66,7 +79,8 @@
                     alert('请求失败');
                 }
             });
-        }
+        });
+
 
         /**
          * 自动登录
@@ -91,6 +105,7 @@
                             html = html + "&nbsp;&nbsp;|&nbsp;&nbsp;<a href='http://www.Supermarket.com/manage.html' class='link-logout'>[后台]</a>";
                         userId = _data.userId;
                         $("#loginbar").html(html);
+                        window.userName = _data.userName
                     }else if (data.status === 500){
                         alert(data.msg);
                     }
@@ -101,12 +116,110 @@
             });
         }
 
+
+        /**
+         * 开始秒杀
+         */
+        function startInstantbuy(){
+            $.ajax({
+                url:"http://www.supermarket.com/instantbuy/"+itemId + "/" + userName,
+                dataType:"json",
+                type:"GET",
+                success:function(data){
+                    if(data.status===200){
+                        alert("秒杀成功");
+                    }else if(data.status===202){
+                        // 尚未登陆
+                        window.location.href="./login.html";
+                    }else{
+                        alert(data.msg);
+                    }
+                },
+                error:function(){
+                    alert("请求失败");
+                }
+            });
+        }
+
+        /**
+         * 查询秒杀商品
+         * @param args itemId=UUID
+         */
+        function queryDetail(args){
+            $.ajax({
+                url:"http://www.supermarket.com/instantbuy/detail?"+args,
+                dataType:"json",
+                type:"GET",
+                success:function (data) {
+                    if(data!=null){
+                        $("#instantbuy_content").append(
+                            "<h1>"+data.name+"<small>（秒杀价"+data.buyPrice+"元）</small></h1>"
+                        );
+                        let nowTime = new Date().getTime();
+                        itemId=data.itemId;
+                        countdown(nowTime,data.startTime,data.endTime);
+                    }else{
+                        alert("商品不存在");
+                    }
+                },
+                error:function () {
+                    alert("请求失败");
+                }
+            })
+        }
+
+        /**
+         * 倒计时
+         * @param nowTime 现在的时间
+         * @param startTime 开始时间
+         * @param endTime 结束时间
+         */
+        function countdown(nowTime,startTime,endTime){
+            let countdownBtn = $('#countdown-btn');
+            if(nowTime>endTime){
+                countdownBtn.html('秒杀结束');
+            }else if(nowTime < startTime){
+                let killTime = new Date(startTime);
+                countdownBtn.countdown(killTime,function(event){
+                    let format = event.strftime('秒杀倒计时：%D天 %H时 %M分 %S秒');
+                    countdownBtn.html(format);
+                }).on('finish.countdown',function(){
+                    //倒计时结束后回调事件
+                    $('#countdown-div').addClass('disappearBtn');
+                    $('#instantbuy-div').addClass('showBtn');
+                })
+            }else{
+                //执行秒杀
+                $('#countdown-div').addClass('disappearBtn');
+                $('#instantbuy-div').addClass('showBtn');
+            }
+        }
+
+        function success(sekillId){
+            $.ajax({
+                url: "http://www.supermarket.com/instantbuys/"+instantbuyId+"/userPhone",
+                type: 'GET',
+                dataType: 'json',
+                success: function(result) {
+                    //console.log(result);
+                    let i = 0;
+                    let str = "";
+                    for(i=0;i<result.length;i++){
+                        str += "非常感谢您参与本次秒杀活动，恭喜手机号为"+result[i]+"的幸运用户${instantbuy.sellPoint}<br/>";
+                    }
+                    document.getElementById("showSuccess").innerHTML=str;
+                }
+            });
+        }
+        // window.setInterval("success(instantbuyId)",1000);
+
         function search(a) {
             let query = document.getElementById(a).value;
             window.location.href = "./search.html?query=" + query;
         }
     </script>
 </head>
+
 
 <body>
 <div id="common_head">
@@ -151,41 +264,19 @@
     </div>
 </div>
 
-<div id="index">
-    <div id="line1">
-        <img src="img/index/banner_big.jpg" alt="banner"/>
-    </div>
-    <div id="line2">
-        <img id="line2_1" src="img/index/adv1.jpg" alt="adv1"/>
-        <img id="line2_2" src="img/index/adv2.jpg" alt="adv2"/>
-        <img id="line2_3" src="img/index/adv_l1.jpg" alt="adv_l1"/>
-    </div>
-    <div id="line3">
-        <img id="line3_1" src="img/index/adv3.jpg" alt="adv3"/>
-        <img id="line3_2" src="img/index/adv4.jpg" alt="adv4"/>
-        <div id="line3_right">
-            <img id="line3_3" src="img/index/adv_l2.jpg" alt="adv_l2"/>
-            <img id="line3_4" src="img/index/adv_l3.jpg" alt="adv_l3"/>
+<div class="container">
+    <div class="panel panel-default text-center">
+        <div id="instantbuy_content" class="pannel-heading"></div>
+        <div class="panel-body"  id="countdown-div">
+            <button type="button" class="btn  btn-lg btn-block btn-danger" id="countdown-btn"></button>
         </div>
-    </div>
-    <div id="line4">
-        <img src="img/index/217.jpg" alt="217"/>
-    </div>
-    <div id="line5">
-			<span id="line5_1">
-				<img src="img/index/icon_g1.png" alt="icon_g1"/>&nbsp;&nbsp;500强企业 品质保证
-			</span>
-        <span id="line5_2">
-				<img src="img/index/icon_g2.png" alt="icon_g2"/>&nbsp;&nbsp;7天退货 15天换货
-			</span>
-        <span id="line5_3">
-				<img src="img/index/icon_g3.png" alt="icon_g3"/>&nbsp;&nbsp;100元起免运费
-			</span>
-        <span id="line5_4">
-				<img src="img/index/icon_g4.png" alt="icon_g4"/>&nbsp;&nbsp;448家维修网点 全国联保
-			</span>
+        <div class="panel-body disappearBtn"  id="instantbuy-div">
+            <button type="button" class="btn btn-primary btn-lg btn-block btn-info" id="instantbuy-btn" onclick="startInstantbuy()">开始进入商品秒杀环节</button>
+        </div>
+        <div id="showSuccess"></div>
     </div>
 </div>
+
 <div class="fixed">
     <a href="https://github.com/GoogleLLP/SuperMarket" target="_blank">
         <img src="./img/head/qr.jpg" width="100" alt="qrcode"/>
@@ -200,4 +291,5 @@
     </p>
 </div>
 </body>
+<script src="./js/jquery.countdown.js"></script>
 </html>

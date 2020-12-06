@@ -64,6 +64,22 @@
 		</rule>
 	</tableRule>
 
+	<!--item_id的散列规则-->
+	<tableRule name="item_id_murmur">
+		<rule>
+			<columns>item_id</columns>
+			<algorithm>murmur</algorithm>
+		</rule>
+	</tableRule>
+
+	<!--success_id的散列规则-->
+	<tableRule name="success_id_sharding_long">
+		<rule>
+			<columns>success_id</columns>
+			<algorithm>rang-long</algorithm>
+		</rule>
+	</tableRule>
+
 	<tableRule name="sharding-by-month">
 		<rule>
 			<columns>create_date</columns>

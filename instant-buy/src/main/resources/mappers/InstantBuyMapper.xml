@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermarket.instantbuy.dao.InstantBuyDao">
+
+    <sql id="selectItemConditions">
+        <where>
+            <if test="itemId != null">`item_id` = #{itemId}</if>
+            <if test="date != null"> and date_sub(`start_time`, interval 500 day) &lt; #{date} and #{date} &lt; date_add(`end_time`, interval 500 day)</if>
+        </where>
+    </sql>
+
+    <!--  插入秒杀成功记录  -->
+    <insert id="insertItemSuccess" parameterType="com.supermarket.common.domain.InstantBuySuccess">
+        insert into `instant_buy_success`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="itemId != null">`item_id`,</if>
+            <if test="userName != null">`user_name`,</if>
+            <if test="state != null">`state,`</if>
+            <if test="createTime != null">`create_time`,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="itemId != null">#{itemId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="state != null">#{state},</if>
+            <if test="createTime != null">#{createTime}</if>
+        </trim>
+    </insert>
+
+    <!--  商品数量减一  -->
+    <update id="decreaseItemNum">
+        update `instant_buy_item`
+        set `number` = `number` - 1
+        where `item_id` = #{itemId}
+    </update>
+
+    <!--  查询所有秒杀商品  -->
+    <select id="selectItems" resultType="com.supermarket.common.domain.InstantBuyItem">
+        select * from `instant_buy_item`
+        where date_sub(`start_time`, interval 500 day) &lt; #{date}
+        and #{date} &lt; date_add(`end_time`, interval 500 day);
+    </select>
+
+
+
+    <!--  查询单个秒杀商品  -->
+    <select id="selectItem" resultType="com.supermarket.common.domain.InstantBuyItem">
+        select * from `instant_buy_item`
+        <include refid="selectItemConditions"/>
+    </select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

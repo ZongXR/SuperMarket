@@ -23,7 +23,8 @@
 <li>com.supermarket.*.controller对应于微服务的controller层</li>
 <li>com.supermarket.*.aspect对应于微服务的切面类</li>
 <li>com.supermarket.*.service对应于微服务的service层</li>
-<li>com.supermarket.*.dao对应于微服务的dao层</li>
+<li>com.supermarket.*.dao对应于微服务的持久层</li>
+<li>com.supermarket.*.schedule对应于微服务的定时任务</li>
 <li>com.supermarket.*.exception对应于微服务的自定义异常</li>
 <li>com.supermarket.*.domain对应于微服务的JavaBean</li>
 <li>com.supermarket.*.utils对应于微服务的工具类</li>
@@ -82,6 +83,12 @@
     <li>增加文档</li>
     <li>删除文档</li>
     <li>修改文档</li>
+</ul>
+<h3>秒杀微服务(com.supermarket.instantbuy)</h3>
+<ul>
+    <li>全部秒杀商品查询</li>
+    <li>单个秒杀商品查询</li>
+    <li>发起秒杀</li>
 </ul>
 <h2>交流群</h2>
 点击链接加入群聊【Supermarket项目交流群】：<a href="https://jq.qq.com/?_wv=1027&k=wlpUy5jo">https://jq.qq.com/?_wv=1027&k=wlpUy5jo</a><br /> 
@@ -321,6 +328,16 @@
             </ul>
         </td>
         <td>2020年11月30日</td>
+    </tr>
+    <tr>
+        <td>0.4.9</td>
+        <td>
+            <ul>
+                <li>新增秒杀微服务：全部秒杀商品查询、单个秒杀商品查询、发起秒杀(尚未联调)</li>
+                <li>修改部分前端页面</li>
+            </ul>
+        </td>
+        <td>2020年12月6日</td>
     </tr>
 </table>
 

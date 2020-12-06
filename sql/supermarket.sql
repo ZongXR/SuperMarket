@@ -5,11 +5,11 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- 创建数据库
+-- ------------------创建数据库 ------------------
 CREATE DATABASE /*!32312 IF NOT EXISTS*/`supermarket` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `supermarket`;
 
--- 创建购物车表格
+-- -----------------创建购物车表格----------------
 DROP TABLE IF EXISTS `t_cart`;
 CREATE TABLE `t_cart` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -22,7 +22,7 @@ CREATE TABLE `t_cart` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
 
--- 创建订单表格
+-- ------------------------创建订单表格-------------------
 DROP TABLE IF EXISTS `t_order`;
 CREATE TABLE `t_order` (
   `order_id` char(36) NOT NULL DEFAULT '',
@@ -34,7 +34,7 @@ CREATE TABLE `t_order` (
   PRIMARY KEY (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 创建订单商品表格
+-- ----------------创建订单商品表格----------------------
 DROP TABLE IF EXISTS `t_order_item`;
 CREATE TABLE `t_order_item` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -47,7 +47,7 @@ CREATE TABLE `t_order_item` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=138 DEFAULT CHARSET=utf8;
 
--- 创建商品表格
+-- ---------------------创建商品表格----------------------
 DROP TABLE IF EXISTS `t_product`;
 CREATE TABLE `t_product` (
   `product_id` char(36) NOT NULL DEFAULT '',
@@ -60,7 +60,7 @@ CREATE TABLE `t_product` (
   PRIMARY KEY (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 创建用户表格
+-- ------------------------创建用户表格----------------------
 DROP TABLE IF EXISTS `t_user`;
 CREATE TABLE `t_user` (
   `user_id` char(36) NOT NULL COMMENT '用户id uuid 主键',
@@ -68,17 +68,48 @@ CREATE TABLE `t_user` (
   `user_password` varchar(32) NOT NULL DEFAULT '""' COMMENT '用户密码 md5',
   `user_nickname` varchar(50) DEFAULT '上帝' COMMENT '用户昵称',
   `user_email` varchar(30) DEFAULT '""' COMMENT '用户邮箱',
-  `user_type` int(11) DEFAULT '0' COMMENT '用户状态 0(普通用户),1(管理员),2(超级管理员)',
+  `user_type` int(11) DEFAULT '0' COMMENT '用户权限 0(游客),1(买家),2(卖家),3(未定义),4(管理员),5(根用户)',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `UN_user_name` (`user_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------创建秒杀商品表格---------------------
+DROP TABLE IF EXISTS `instant_buy_item`;
+CREATE TABLE `instant_buy_item` (
+  `item_id` char(36) NOT NULL DEFAULT '' COMMENT '商品库存id',
+  `name` varchar(120) NOT NULL COMMENT '商品名称',
+  `number` int(11) NOT NULL COMMENT '库存数量',
+  `initial_price` bigint(20) NOT NULL COMMENT '原价',
+  `buy_price` bigint(20) NOT NULL COMMENT '秒杀价',
+  `sell_point` varchar(500) NOT NULL COMMENT '卖点',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '秒杀创建时间',
+  `start_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '秒杀开始时间',
+  `end_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '秒杀结束时间',
+  PRIMARY KEY (`item_id`),
+  KEY `idx_create_time` (`create_time`),
+  KEY `idx_start_time` (`start_time`),
+  KEY `idx_end_time` (`end_time`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='秒杀库存表';
+
+-- -------------------创建秒杀成功表格-----------------------------
+DROP TABLE IF EXISTS `instant_buy_success`;
+CREATE TABLE `instant_buy_success` (
+   `success_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '秒杀成功id',
+   `item_id` char(36) NOT NULL DEFAULT '' COMMENT '秒杀商品id',
+   `user_name` varchar(100) NOT NULL COMMENT '用户登陆名称',
+   `state` tinyint(4) NOT NULL DEFAULT '-1' COMMENT '状态标志：-1：无效；0：成功；1：已付款；2：已发货',
+   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '秒杀成功创建时间',
+   PRIMARY KEY (`success_id`),
+   KEY `idx_create_time` (`create_time`)
+) ENGINE=InnoDB AUTO_INCREMENT=6382 DEFAULT CHARSET=utf8 COMMENT='秒杀成功明细表';
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- 插入商品数据
+-- ------------------------插入商品数据-------------------------
 INSERT INTO `t_product`
     (`product_id`,`product_name`,`product_price`,`product_category`,`product_imgurl`,`product_num`,`product_description`)
 VALUES
@@ -145,11 +176,11 @@ VALUES
        ('ff838641-feb5-42a1-b061-042b9113a95c','烈性炸药',5899,'电子数码','http://image.supermarket.com/upload/c/7/4/1/4/2/3/2/a99e691b-88d4-43a2-ac12-82ec54db123d_738f47e2-9605-46aa-b647-fc8dca814074.jpg',435,'www.supermarket.com/充电会自动引爆, 再也不用担心自杀shi不了了');
 
 
--- 插入用户数据
+-- -------------------------------插入用户数据----------------------
 insert  into `t_user`(`user_id`,`user_name`,`user_password`,`user_nickname`,`user_email`,`user_type`) values ('f577f9f9-159e-4aaf-9332-fd7b294bc208','admin','123456','123','123@sdo.com',0);
 update `t_user` set `user_password` = MD5(`user_password`);
 
--- 插入购物车数据
+-- ------------------------------插入购物车数据----------------------
 insert into `t_cart`
 (`product_id`, `product_image`, `product_name`, `product_price`)
 select
@@ -160,3 +191,15 @@ update `t_cart`, `t_user`
 set
 `t_cart`.`user_id` = (select `user_id` from `t_user` where `user_name` = 'admin')
 , `num` = 5;
+
+-- -----------------------插入秒杀商品数据-------------------------
+insert  into `instant_buy_item`
+    (`item_id`,`name`,`number`,`initial_price`,`buy_price`,`sell_point`,`create_time`,`start_time`,`end_time`)
+values
+       ('b257a6f8-36d3-11eb-a3dc-dc7196467f25','oppo10',719,2000,1000,'1000元成功秒杀oppo10','2018-05-17 11:12:49','2019-05-09 13:13:49','2020-05-18 00:00:00'),
+       ('d1d63d52-36d3-11eb-8b05-dc7196467f25','荣耀8',80,1800,800,'800元成功秒杀荣耀8','2018-01-21 22:08:49','2018-01-23 00:00:00','2018-01-24 00:00:00'),
+       ('d937985c-36d3-11eb-9176-dc7196467f25','iPhone6',60,1600,600,'600元成功秒杀iPhone6','2018-01-21 22:08:49','2018-01-24 00:00:00','2018-01-25 00:00:00'),
+       ('ea8bc04a-36d3-11eb-b916-dc7196467f25','小米4',40,1400,400,'400元成功秒杀小米4','2018-01-21 22:08:49','2018-01-25 00:00:00','2018-01-26 00:00:00'),
+       ('f1fd27a8-36d3-11eb-99b3-dc7196467f25','vivo2',20,1200,200,'200元成功秒杀vivo2','2018-01-21 22:08:49','2018-01-26 00:00:00','2018-01-27 00:00:00'),
+       ('f7b4da46-36d3-11eb-a824-dc7196467f25','魅族1',10,1000,100,'100元成功秒杀魅族1','2018-01-21 22:08:49','2018-01-27 00:00:00','2018-01-28 00:00:00');
+

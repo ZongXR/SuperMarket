@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>秒杀列表页面</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="img/head/favicon.ico" />
+    <link rel="stylesheet" href="css/foot.css"/>
+    <link rel="stylesheet" href="css/head.css"/>
+    <noscript>抱歉，你的浏览器不支持 JavaScript!</noscript>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <link href="css/instantbuy.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <script type="text/javascript">
+        /**
+         * 前往秒杀商品页面
+         * @param itemId 秒杀商品id
+         */
+        function goDetail(itemId){
+            window.location.href="http://www.supermarket.com/instant-detail.html?itemId="+itemId;
+        }
+
+
+        /**
+         * 自动登录
+         * @param userName 用户名
+         * @param userPassword 密码
+         */
+        function autoLogin(userName, userPassword) {
+            $.ajax({
+                url:"http://www.supermarket.com/user/autologin",
+                type:"get",
+                data:{
+                    "userName": userName,
+                    "userPassword": userPassword
+                },
+                dataType:"json",
+                success: function (data) {
+                    if (data.status === 200) {
+                        let _data = data.data;//jackson
+                        let html = _data.userName +
+                            "，欢迎来到Supermarket！<a href='javascript:void(0)' class='link-logout' onclick='logout()'>[退出]</a>";
+                        if (_data.userType >= 3)
+                            html = html + "&nbsp;&nbsp;|&nbsp;&nbsp;<a href='http://www.Supermarket.com/manage.html' class='link-logout'>[后台]</a>";
+                        userId = _data.userId;
+                        $("#loginbar").html(html);
+                    }else if (data.status === 500){
+                        alert(data.msg);
+                    }
+                },
+                error: function () {
+                    alert('请求失败');
+                }
+            });
+        }
+
+
+        /**
+         * 文档就绪事件
+         */
+        $(function () {
+            let userId = "";
+            let _ticket = $.cookie("EM_TICKET");
+            let userPassword = $.cookie("PASSWORD");
+            let userName = $.cookie("USERNAME");
+            if (!_ticket) {
+                // 如果没有ticket，说明无法获得登录状态，尝试用cookie的密码自动登录
+                if (!userPassword || !userName)
+                    // 二者缺一无法自动登录
+                    return;
+                else{
+                    autoLogin(userName, userPassword);
+                    return;
+                }
+            }
+            $.ajax({
+                url: "http://www.Supermarket.com/user/query/" + _ticket,
+                dataType: "json",
+                type: "GET",
+                success: function (data) {
+                    if (data.status === 200) {
+                        // 在redis中找到了用户
+                        let _data = JSON.parse(data.data);//jackson
+                        let html = _data.userName +
+                            "，欢迎来到Supermarket！<a href='javascript:void(0)' class='link-logout' onclick='logout()'>[退出]</a>";
+                        if (_data.userType >= 3)
+                            html = html + "&nbsp;&nbsp;|&nbsp;&nbsp;<a href='http://www.Supermarket.com/manage.html' class='link-logout'>[后台]</a>";
+                        userId = _data.userId;
+                        $("#loginbar").html(html);
+                    }else if (data.status === 201){
+                        // 在redis中没找到用户
+                        delCookie("EM_TICKET");
+                        delCookie("USERNAME");
+                        delCookie("PASSWORD");
+                    }else if (data.status === 500){
+                        alert(data.msg);
+                    }
+                },
+                error: function () {
+                    alert('请求失败');
+                }
+            });
+
+            $.ajax({
+                url:"http://www.supermarket.com/instantbuy/list",
+                dataType:"json",
+                type:"GET",
+                success:function (data) {
+                    if(data.length>0){
+                        $.each(data,function (index,instantBuyItem) {
+                            let itemId = instantBuyItem.itemId;
+                            let itemName = instantBuyItem.name;
+                            let number = instantBuyItem.number;
+                            let initialPrice = instantBuyItem.initialPrice;
+                            let buyPrice = instantBuyItem.buyPrice;
+                            let sellPoint = instantBuyItem.sellPoint;
+                            let createTime = instantBuyItem.createTime;
+                            let startTimeStamp = instantBuyItem.startTime;
+                            let start = new Date(startTimeStamp);
+                            //转化成日期
+                            let dateStart = (start.getFullYear()) + "-" +
+                                (start.getMonth() + 1) + "-" +
+                                (start.getDate()) + " " +
+                                (start.getHours()) + ":" +
+                                (start.getMinutes()) + ":" +
+                                (start.getSeconds());
+                            let endTimeStamp = instantBuyItem.endTime;
+                            let end = new Date(endTimeStamp);
+                            let dateEnd = (end.getFullYear()) + "-" +
+                                (end.getMonth() + 1) + "-" +
+                                (end.getDate()) + " " +
+                                (end.getHours()) + ":" +
+                                (end.getMinutes()) + ":" +
+                                (end.getSeconds());
+                            $("#instantBuyItemList").append(
+                                "<tr class='success'>" +
+                                "<td>"+itemName+"</td>" +
+                                "<td>"+number+"</td>" +
+                                "<td>"+initialPrice+"</td>" +
+                                "<td>"+buyPrice+"</td>" +
+                                "<td>"+sellPoint+"</td>" +
+                                "<td>"+dateStart+"</td>" +
+                                "<td>"+dateEnd+"</td>" +
+                                "<td><a class='btn btn-primary btn-md' href='javascript:void(0)' onclick='goDetail(\""+itemId+"\")' target='_blank'>详情页面</a></td>" +
+                                "</tr>"
+                            )
+                        })
+                    }
+                }
+            }) ;
+        });
+
+        function search(a) {
+            let query = document.getElementById(a).value;
+            window.location.href = "./search.html?query=" + query;
+        }
+    </script>
+</head>
+
+<body>
+<div id="common_head">
+    <div class="line1">
+        <div class="content">
+            <ul>
+                <li class="fore1" id="loginbar" clstag="homepage|keycount|home2013|01b">
+                    <span id="head_span" >
+                        <a href="login.html">登录</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                        <a href="regist.html">注册</a>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="line2">
+        <img id="logo" src="img/head/logo.png" alt="logo"/>
+        <input type="text" value="" accesskey="s" id="key" autocomplete="off"
+               onkeydown="if(event.keyCode===13) search('key');"/>
+        <input type="button" value="搜 索" onclick="search('key')"/>
+        <span id="goto">
+			<a id="goto_order" href="./myorder.html">我的订单</a>
+			<a id="goto_cart" href="./mycart.html">我的购物车</a>
+		</span>
+        <img id="erwm" src="img/head/e2.png" alt="e2" width="76"/>
+    </div>
+    <div class="line3">
+        <div class="content">
+            <ul>
+                <li><a href="./index.html">首页</a></li>
+                <li><a href="./product-list.html?page=1&rows=30">全部商品</a></li>
+                <li><a href="./instant-buy.html">秒杀商品</a></li>
+                <li><a href="javascript:void(0)">电脑平板</a></li>
+                <li><a href="javascript:void(0)">家用电器</a></li>
+                <li><a href="javascript:void(0)">汽车用品</a></li>
+                <li><a href="javascript:void(0)">食品饮料</a></li>
+                <li><a href="javascript:void(0)">图书杂志</a></li>
+                <li><a href="javascript:void(0)">服装服饰</a></li>
+                <li><a href="javascript:void(0)">大英理财</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- 页面显示部分 -->
+<div class="container">
+    <div class="panel header-default">
+        <div class="panel-heading text-center">
+            <h1>秒杀商品列表</h1>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover">
+                <thead>
+                <tr class="danger">
+                    <th>名称</th>
+                    <th>库存</th>
+                    <th>原价</th>
+                    <th>秒杀价</th>
+                    <th>商品卖点</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                    <th>商品详情页</th>
+                </tr>
+                </thead>
+                <tbody id="instantBuyItemList">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="fixed">
+    <a href="https://github.com/GoogleLLP/SuperMarket" target="_blank">
+        <img src="./img/head/qr.jpg" width="100" alt="qrcode"/>
+    </a>
+    <a href="#common_head" class="toTop"></a>
+</div>
+<div id="common_foot">
+    <p>
+        Copyright © 2011-2019 网上商城 版权所有 保留一切权利 粤CM-20201119 | 粤ICP备20201119号-1
+        <br />
+        粤公网安备  20201119号
+    </p>
+</div>
+</body>
+
+</html>

@@ -14,12 +14,14 @@
         <module name="cart" />
         <module name="search" />
         <module name="image" />
+        <module name="instant-buy" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="cart" target="1.8" />
       <module name="common" target="1.8" />
       <module name="image" target="1.8" />
+      <module name="instant-buy" target="1.8" />
       <module name="order" target="1.8" />
       <module name="product" target="1.8" />
       <module name="search" target="1.8" />
@@ -33,6 +35,7 @@
       <module name="cart" options="-parameters" />
       <module name="common" options="-parameters" />
       <module name="image" options="-parameters" />
+      <module name="instant-buy" options="-parameters" />
       <module name="order" options="-parameters" />
       <module name="product" options="-parameters" />
       <module name="search" options="-parameters" />

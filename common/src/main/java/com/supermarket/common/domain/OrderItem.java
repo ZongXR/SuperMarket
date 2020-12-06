@@ -1,6 +1,8 @@
 package com.supermarket.common.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -8,6 +10,8 @@ import lombok.Setter;
  */
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderItem {
 	private Long id;
 	private String orderId;
@@ -16,17 +20,4 @@ public class OrderItem {
 	private String productImage;
 	private String productName;
 	private Double productPrice;
-
-	public OrderItem(Long id, String orderId, String productId, Integer num, String productImage, String productName, Double productPrice) {
-		this.id = id;
-		this.orderId = orderId;
-		this.productId = productId;
-		this.num = num;
-		this.productImage = productImage;
-		this.productName = productName;
-		this.productPrice = productPrice;
-	}
-
-	public OrderItem() {
-	}
 }

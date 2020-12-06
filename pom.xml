@@ -21,6 +21,7 @@
         <module>cart</module>
         <module>order</module>
         <module>search</module>
+        <module>instant-buy</module>
     </modules>
     <!--  自定义属性  -->
 
