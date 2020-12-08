@@ -1,10 +1,12 @@
 package com.supermarket.user.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.supermarket.common.domain.User;
 import com.supermarket.common.utils.CookieUtils;
 import com.supermarket.common.vo.SysResult;
 import com.supermarket.user.exception.MsgException;
 import com.supermarket.user.service.UserService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -189,6 +191,24 @@ public class UserController {
         }catch (Exception e){
             e.printStackTrace();
             return SysResult.build(500, e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 查询用户的权限
+     * @param ticket 登录凭据
+     * @return 空表示没查到，数字表示权限
+     */
+    @RequestMapping("/query/userType")
+    @ResponseBody
+    public Integer queryUserType(
+            @RequestParam("ticket") String ticket
+    ){
+        try {
+            return this.userService.queryUserType(ticket);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

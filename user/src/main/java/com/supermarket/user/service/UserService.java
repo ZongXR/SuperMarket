@@ -51,4 +51,11 @@ public interface UserService {
      * @return json
      */
     public String loginUser(User user) throws JsonProcessingException;
+
+    /**
+     * 查询用户的权限等级
+     * @param ticket 用户登录凭据
+     * @return 权限等级
+     */
+    public Integer queryUserType(String ticket) throws JsonProcessingException;
 }

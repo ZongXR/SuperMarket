@@ -10,6 +10,7 @@
 <img src="./img/search.gif" alt="检索" /><br />
 <img src="./img/manage_product.gif" alt="管理商品" /><br />
 <img src="./img/add_product.gif" alt="新增商品" /><br />
+<img src="./img/instantbuy.gif" alt="秒杀" /><br />
 <h2>声明</h2>
 <ul>
     <li>本项目静态资源由网络收集得来，并加以大范围修改</li>
@@ -19,6 +20,7 @@
 <p>基于SpringCloud框架开发的商城系统，代码严格遵循MVC分层思想，可部署到服务器上，设计精良，不断完善</p>
 <h2>包结构说明</h2>
 <ul>
+<li>com.supermarket.*.filter对应于微服务的过滤器</li>
 <li>com.supermarket.*.listener对应于微服务的监听器</li>
 <li>com.supermarket.*.controller对应于微服务的controller层</li>
 <li>com.supermarket.*.aspect对应于微服务的切面类</li>
@@ -56,6 +58,7 @@
 <h3>zuul网关(com.supermarket.gateway)</h3>
 <ul>
     <li>SpringCloud的zuul网关模块</li>
+    <li>对敏感API调用进行后端鉴权</li>
 </ul>
 <h3>图片微服务(com.supermarket.image)</h3>
 <ul>
@@ -339,6 +342,16 @@
         </td>
         <td>2020年12月6日</td>
     </tr>
+    <tr>
+        <td>0.5</td>
+        <td>
+            <ul>
+                <li>完善秒杀微服务：修复若干bug</li>
+                <li>完善zuul网关：对敏感API调用进行后端鉴权</li>
+            </ul>
+        </td>
+        <td>2020年12月9日</td>
+    </tr>
 </table>
 
 <h2>配置情况</h2>
@@ -351,6 +364,7 @@
     <li><a href="https://github.com/MyCATApache/Mycat-download/tree/master/1.5-RELEASE" target="_blank">MyCat: 1.5.1</a></li>
     <li><a href="https://www.elastic.co/cn/downloads/past-releases/elasticsearch-6-8-6" target="_blank">ElasticSearch: 6.8.6</a></li>
     <li><a href="https://github.com/medcl/elasticsearch-analysis-ik/releases/tag/v6.8.6" target="_blank">IK分词器: 6.8.6</a></li>
+    <li><a href="https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.7.7" target="_blank">RabbitMQ: 3.7.7</a></li>
     <li>开发环境：<a href="https://www.jetbrains.com/idea/download/other.html" target="_blank">IntelliJ Idea 2020.1.4</a></li>
     <li>框架：<a href="https://github.com/spring-projects/spring-boot/releases/tag/v2.2.5.RELEASE" target="_blank">Springboot 2.2.5.RELEASE</a>, <a href="https://spring.io/blog/2020/03/05/spring-cloud-hoxton-service-release-3-sr3-is-available" target="_blank">SpringCloud Hoxton.SR3</a></li>
     <li>

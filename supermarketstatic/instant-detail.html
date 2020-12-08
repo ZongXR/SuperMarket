@@ -7,6 +7,8 @@
     <noscript>抱歉，你的浏览器不支持 JavaScript!</noscript>
     <script src="./js/jquery.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/logout.js"></script>
     <link rel="icon" type="image/x-icon" href="img/head/favicon.ico" />
     <meta charset="UTF-8">
     <style>
@@ -22,31 +24,22 @@
     <link href="./css/instantbuy.css" rel="stylesheet">
     <script type="text/javascript">
         var itemId="";
-        var userName="";
 
         /**
          * 文档就绪事件
          */
         $(function() {
-            let localUrl = window.location.href;
-            let args = localUrl.substr(localUrl.lastIndexOf("?") + 1);
-            if(!args.match("^itemId=.*$")){
-                alert("参数有误")
-                return;
-            }
-            queryDetail(args);
-
-
             let userId = "";
             let _ticket = $.cookie("EM_TICKET");
             let userPassword = $.cookie("PASSWORD");
-            userName = $.cookie("USERNAME");
+            let userName = $.cookie("USERNAME");
             if (!_ticket) {
                 // 如果没有ticket，说明无法获得登录状态，尝试用cookie的密码自动登录
-                if (!userPassword || !userName)
+                if (!userPassword || !userName) {
                     // 二者缺一无法自动登录
+                    window.location.href = "./login.html";
                     return;
-                else{
+                }else{
                     autoLogin(userName, userPassword);
                     return;
                 }
@@ -66,6 +59,14 @@
                         userId = _data.userId;
                         $("#loginbar").html(html);
                         userName = _data.userName;
+
+                        let localUrl = window.location.href;
+                        let args = localUrl.substr(localUrl.lastIndexOf("?") + 1);
+                        if(!args.match("^itemId=.*$")){
+                            alert("参数有误")
+                            return;
+                        }
+                        queryDetail(args + "&userName=" + userName);
                     }else if (data.status === 201){
                         // 在redis中没找到用户
                         delCookie("EM_TICKET");
@@ -103,9 +104,15 @@
                             "，欢迎来到Supermarket！<a href='javascript:void(0)' class='link-logout' onclick='logout()'>[退出]</a>";
                         if (_data.userType >= 3)
                             html = html + "&nbsp;&nbsp;|&nbsp;&nbsp;<a href='http://www.Supermarket.com/manage.html' class='link-logout'>[后台]</a>";
-                        userId = _data.userId;
                         $("#loginbar").html(html);
-                        window.userName = _data.userName
+
+                        let localUrl = window.location.href;
+                        let args = localUrl.substr(localUrl.lastIndexOf("?") + 1);
+                        if(!args.match("^itemId=.*$")){
+                            alert("参数有误")
+                            return;
+                        }
+                        queryDetail(args + "&userName=" + userName);
                     }else if (data.status === 500){
                         alert(data.msg);
                     }
@@ -121,24 +128,57 @@
          * 开始秒杀
          */
         function startInstantbuy(){
+            let _ticket = $.cookie("EM_TICKET");
+            if (!_ticket) {
+                window.location.href = "./login.html";
+                return;
+            }
             $.ajax({
-                url:"http://www.supermarket.com/instantbuy/"+itemId + "/" + userName,
-                dataType:"json",
-                type:"GET",
-                success:function(data){
-                    if(data.status===200){
-                        alert("秒杀成功");
-                    }else if(data.status===202){
-                        // 尚未登陆
-                        window.location.href="./login.html";
-                    }else{
+                url: "http://www.Supermarket.com/user/query/" + _ticket,
+                dataType: "json",
+                type: "GET",
+                success: function (data) {
+                    if (data.status === 200) {
+                        // 在redis中找到了用户
+                        let _data = JSON.parse(data.data);
+                        let userName = _data.userName;
+
+                        $.ajax({
+                            url:"http://www.supermarket.com/instantbuy/"+itemId + "/" + userName,
+                            dataType:"json",
+                            type:"GET",
+                            success:function(data){
+                                if(data.status===200){
+                                    alert("秒杀成功");
+                                }else if(data.status===201){
+                                    // 尚未登陆
+                                    alert(data.msg);
+                                }else{
+                                    alert(data.msg);
+                                }
+                            },
+                            error:function(){
+                                alert("请求失败");
+                            }
+                        });
+
+                    }else if (data.status === 201){
+                        // 在redis中没找到用户
+                        window.location.href = "./login.html";
+                        return;
+                    }else if (data.status === 500){
                         alert(data.msg);
                     }
                 },
-                error:function(){
-                    alert("请求失败");
+                error: function () {
+                    alert('请求失败');
                 }
             });
+
+
+
+
+
         }
 
         /**
@@ -194,24 +234,6 @@
                 $('#instantbuy-div').addClass('showBtn');
             }
         }
-
-        function success(sekillId){
-            $.ajax({
-                url: "http://www.supermarket.com/instantbuys/"+instantbuyId+"/userPhone",
-                type: 'GET',
-                dataType: 'json',
-                success: function(result) {
-                    //console.log(result);
-                    let i = 0;
-                    let str = "";
-                    for(i=0;i<result.length;i++){
-                        str += "非常感谢您参与本次秒杀活动，恭喜手机号为"+result[i]+"的幸运用户${instantbuy.sellPoint}<br/>";
-                    }
-                    document.getElementById("showSuccess").innerHTML=str;
-                }
-            });
-        }
-        // window.setInterval("success(instantbuyId)",1000);
 
         function search(a) {
             let query = document.getElementById(a).value;

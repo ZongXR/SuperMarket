@@ -2,7 +2,8 @@
 <!DOCTYPE mycat:server SYSTEM "server.dtd">
 <mycat:server xmlns:mycat="http://org.opencloudb/">
 	<system>
-	<property name="defaultSqlParser">druidparser</property>
+		<property name="defaultSqlParser">druidparser</property>
+		<property name="sequnceHandlerType">0</property>
 	</system>
 	<user name="root">
 		<property name="password">root</property>

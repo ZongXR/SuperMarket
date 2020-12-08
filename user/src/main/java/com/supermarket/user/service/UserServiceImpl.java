@@ -144,4 +144,14 @@ public class UserServiceImpl implements UserService {
         this.template.expire(ticket, 30, TimeUnit.MINUTES);
         return ticket + this.template.opsForHash().get(ticket, "timestamp");
     }
+
+    @Override
+    public Integer queryUserType(String ticket) throws JsonProcessingException {
+        ticket = ticket.substring(0, ticket.length() - 13);
+        String data = (String) this.template.opsForHash().get(ticket, "data");
+        if (data == null)
+            return null;
+        User user = this.mapper.readValue(data, User.class);
+        return user.getUserType();
+    }
 }

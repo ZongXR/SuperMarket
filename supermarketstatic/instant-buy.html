@@ -9,6 +9,8 @@
     <noscript>抱歉，你的浏览器不支持 JavaScript!</noscript>
     <script src="./js/jquery.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/logout.js"></script>
     <link href="css/instantbuy.css" rel="stylesheet">
     <meta charset="UTF-8">
     <script type="text/javascript">
@@ -59,48 +61,6 @@
          * 文档就绪事件
          */
         $(function () {
-            let userId = "";
-            let _ticket = $.cookie("EM_TICKET");
-            let userPassword = $.cookie("PASSWORD");
-            let userName = $.cookie("USERNAME");
-            if (!_ticket) {
-                // 如果没有ticket，说明无法获得登录状态，尝试用cookie的密码自动登录
-                if (!userPassword || !userName)
-                    // 二者缺一无法自动登录
-                    return;
-                else{
-                    autoLogin(userName, userPassword);
-                    return;
-                }
-            }
-            $.ajax({
-                url: "http://www.Supermarket.com/user/query/" + _ticket,
-                dataType: "json",
-                type: "GET",
-                success: function (data) {
-                    if (data.status === 200) {
-                        // 在redis中找到了用户
-                        let _data = JSON.parse(data.data);//jackson
-                        let html = _data.userName +
-                            "，欢迎来到Supermarket！<a href='javascript:void(0)' class='link-logout' onclick='logout()'>[退出]</a>";
-                        if (_data.userType >= 3)
-                            html = html + "&nbsp;&nbsp;|&nbsp;&nbsp;<a href='http://www.Supermarket.com/manage.html' class='link-logout'>[后台]</a>";
-                        userId = _data.userId;
-                        $("#loginbar").html(html);
-                    }else if (data.status === 201){
-                        // 在redis中没找到用户
-                        delCookie("EM_TICKET");
-                        delCookie("USERNAME");
-                        delCookie("PASSWORD");
-                    }else if (data.status === 500){
-                        alert(data.msg);
-                    }
-                },
-                error: function () {
-                    alert('请求失败');
-                }
-            });
-
             $.ajax({
                 url:"http://www.supermarket.com/instantbuy/list",
                 dataType:"json",
@@ -148,6 +108,48 @@
                     }
                 }
             }) ;
+
+            let userId = "";
+            let _ticket = $.cookie("EM_TICKET");
+            let userPassword = $.cookie("PASSWORD");
+            let userName = $.cookie("USERNAME");
+            if (!_ticket) {
+                // 如果没有ticket，说明无法获得登录状态，尝试用cookie的密码自动登录
+                if (!userPassword || !userName)
+                    // 二者缺一无法自动登录
+                    return;
+                else{
+                    autoLogin(userName, userPassword);
+                    return;
+                }
+            }
+            $.ajax({
+                url: "http://www.Supermarket.com/user/query/" + _ticket,
+                dataType: "json",
+                type: "GET",
+                success: function (data) {
+                    if (data.status === 200) {
+                        // 在redis中找到了用户
+                        let _data = JSON.parse(data.data);//jackson
+                        let html = _data.userName +
+                            "，欢迎来到Supermarket！<a href='javascript:void(0)' class='link-logout' onclick='logout()'>[退出]</a>";
+                        if (_data.userType >= 3)
+                            html = html + "&nbsp;&nbsp;|&nbsp;&nbsp;<a href='http://www.Supermarket.com/manage.html' class='link-logout'>[后台]</a>";
+                        userId = _data.userId;
+                        $("#loginbar").html(html);
+                    }else if (data.status === 201){
+                        // 在redis中没找到用户
+                        delCookie("EM_TICKET");
+                        delCookie("USERNAME");
+                        delCookie("PASSWORD");
+                    }else if (data.status === 500){
+                        alert(data.msg);
+                    }
+                },
+                error: function () {
+                    alert('请求失败');
+                }
+            });
         });
 
         function search(a) {

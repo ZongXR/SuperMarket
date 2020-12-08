@@ -5,9 +5,13 @@ import com.supermarket.instantbuy.dao.InstantBuyDao;
 import com.supermarket.instantbuy.exception.MsgException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -35,12 +39,21 @@ public class InstantBuyServiceImpl implements InstantBuyService {
 
     @Override
     public void startBuy(String itemId, String userName) {
-        Integer number = (Integer) this.redisTemplate.opsForHash().get("INSTANT_" + itemId, "number");
-        if (number == null) {
+        String num = (String) this.redisTemplate.opsForHash().get("INSTANT_" + itemId, "number");
+        if (num == null){
             throw new MsgException("秒杀商品不存在");
         }
-        Date startTime = (Date) this.redisTemplate.opsForHash().get("INSTANT_" + itemId, "start_time");
-        Date endTime = (Date) this.redisTemplate.opsForHash().get("INSTANT_" + itemId, "end_time");
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        int number = Integer.parseInt(num);
+        Date startTime = null;
+        Date endTime = null;
+        try {
+            startTime = formatter.parse((String) this.redisTemplate.opsForHash().get("INSTANT_" + itemId, "start_time"));
+            endTime = formatter.parse((String) this.redisTemplate.opsForHash().get("INSTANT_" + itemId, "end_time"));
+        } catch (ParseException e){
+            e.printStackTrace();
+            throw new MsgException("日期格式异常");
+        }
         Date nowTime = new Date();
         if (nowTime.compareTo(startTime) < 0)
             throw new MsgException("秒杀还未开始");
@@ -50,14 +63,15 @@ public class InstantBuyServiceImpl implements InstantBuyService {
         Boolean exists = this.redisTemplate.hasKey(itemId + userName);
         if (exists == null || exists)
             throw new MsgException("您已经秒杀过该商品");
-        // 检查剩余数量
+        // 检查剩余数量，如果仅用redis的number判断，有线程安全问题，必须结合mysql
+        // TODO 这里是不是有线程安全隐患？
         if (number > 0) {
             // TODO 剩余商品数量大于0
-            this.redisTemplate.opsForValue().decrement(itemId);
+            this.redisTemplate.opsForHash().put("INSTANT_" + itemId, "number", String.valueOf(number - 1));
             String result = (String) this.rabbitTemplate.convertSendAndReceive("instantBuyExchange", "instantBuy", itemId + userName);
             if (result != null && result.equals(itemId + userName + "_SUCCESS")) {
                 // 消费成功
-                this.redisTemplate.opsForValue().set(itemId + userName, "1", 1, TimeUnit.HOURS);
+                this.redisTemplate.opsForValue().set(itemId + userName, "SUCCESS", 1, TimeUnit.HOURS);
                 return;
             }else{
                 // 消费失败

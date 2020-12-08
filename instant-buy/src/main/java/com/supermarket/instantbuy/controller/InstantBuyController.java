@@ -58,6 +58,8 @@ public class InstantBuyController {
             @PathVariable("userName") String userName
     ) {
         try {
+            if (userName == null)
+                throw new MsgException("用户尚未登录");
             this.instantBuyService.startBuy(itemId, userName);
             return SysResult.ok();
         } catch (MsgException e) {

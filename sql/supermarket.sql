@@ -177,7 +177,10 @@ VALUES
 
 
 -- -------------------------------插入用户数据----------------------
-insert  into `t_user`(`user_id`,`user_name`,`user_password`,`user_nickname`,`user_email`,`user_type`) values ('f577f9f9-159e-4aaf-9332-fd7b294bc208','admin','123456','123','123@sdo.com',0);
+insert  into `t_user`
+    (`user_id`,`user_name`,`user_password`,`user_nickname`,`user_email`,`user_type`)
+values
+    ('f577f9f9-159e-4aaf-9332-fd7b294bc208','admin','123456','123','123@sdo.com',4);
 update `t_user` set `user_password` = MD5(`user_password`);
 
 -- ------------------------------插入购物车数据----------------------

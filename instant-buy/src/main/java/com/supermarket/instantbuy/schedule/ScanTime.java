@@ -3,10 +3,13 @@ package com.supermarket.instantbuy.schedule;
 import com.supermarket.common.domain.InstantBuyItem;
 import com.supermarket.instantbuy.dao.InstantBuyDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -34,13 +37,10 @@ public class ScanTime {
                 this.redisTemplate.delete("INSTANT_" + itemId);
                 continue;
             }
-            Boolean exists = this.redisTemplate.hasKey("INSTANT_" + itemId);
-            if (exists == null || exists)
-                // 如果已经在redis中，跳过
-                continue;
-            this.redisTemplate.opsForHash().put("INSTANT_" + itemId, "number", item.getNumber());
-            this.redisTemplate.opsForHash().put("INSTANT_" + itemId, "start_time", startTime);
-            this.redisTemplate.opsForHash().put("INSTANT_" + itemId, "end_time", endTime);
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            this.redisTemplate.opsForHash().put("INSTANT_" + itemId, "number", item.getNumber().toString());
+            this.redisTemplate.opsForHash().put("INSTANT_" + itemId, "start_time", formatter.format(startTime));
+            this.redisTemplate.opsForHash().put("INSTANT_" + itemId, "end_time", formatter.format(endTime));
         }
     }
 }

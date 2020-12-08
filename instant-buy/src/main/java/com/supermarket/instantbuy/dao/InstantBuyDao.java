@@ -32,7 +32,7 @@ public interface InstantBuyDao {
      * 商品数量减一
      * @param itemId 商品id
      */
-    public void decreaseItemNum(@Param("itemId") String itemId);
+    public void decreaseItemNum(@Param("itemId") String itemId, @Param("date") Date date);
 
     /**
      * 插入秒杀成功记录
