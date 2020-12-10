@@ -8,7 +8,12 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.CodeSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -21,13 +26,13 @@ public class ProductIndex {
     private RestTemplate restTemplate = null;
 
     /**
-     * 增加或更新商品后需要同步更新索引
+     * 增加商品后需要同步更新索引
      * @param jp 连接点
      * @param result 返回值
      * @throws JsonProcessingException 抛出
      */
-    @AfterReturning(value = "execution(* com.supermarket.product.service.ProductService*.*Product(..))", returning = "result")
-    public void afterUpdateProduct(JoinPoint jp, Object result) throws JsonProcessingException {
+    @AfterReturning(value = "execution(* com.supermarket.product.service.ProductService*.addProduct(..))", returning = "result")
+    public void afterAddProduct(JoinPoint jp, Object result) throws JsonProcessingException {
         // 获取方法参数
         Map<String, Object> map = new HashMap<String, Object>();
         Object[] values = jp.getArgs();
@@ -37,11 +42,34 @@ public class ProductIndex {
         }
         Product product = (Product) map.get("product");
         // 切
-        SysResult addResult = this.restTemplate.getForObject(
-                "http://search/manage/add?product={1}",
-                SysResult.class,
-                product
+        SysResult addResult = this.restTemplate.postForObject(
+                "http://search/manage/add",
+                product,
+                SysResult.class
         );
     }
 
+    /**
+     * 更新商品后需要同步更新索引，先删后增
+     * @param jp 连接点
+     * @param result 返回值
+     * @throws JsonProcessingException 抛出
+     */
+    @AfterReturning(value = "execution(* com.supermarket.product.service.ProductService*.updateProduct(..))", returning = "result")
+    public void afterUpdateProduct(JoinPoint jp, Object result) throws JsonProcessingException {
+        // 获取方法参数
+        Map<String, Object> map = new HashMap<String, Object>();
+        Object[] values = jp.getArgs();
+        String[] names = ((CodeSignature)jp.getSignature()).getParameterNames();
+        for (int i = 0; i < names.length; i++) {
+            map.put(names[i], values[i]);
+        }
+        Product product = (Product) map.get("product");
+        SysResult updateResult = this.restTemplate.postForObject(
+                "http://search/manage/delete",
+                product,
+                SysResult.class
+        );
+        this.afterAddProduct(jp, result);
+    }
 }

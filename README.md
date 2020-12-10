@@ -86,9 +86,9 @@
 <h3>检索微服务(com.supermarket.search)</h3>
 <ul>
     <li>分页检索</li>
-    <li>增加文档</li>
-    <li>删除文档</li>
-    <li>修改文档</li>
+    <li>新增商品</li>
+    <li>删除商品</li>
+    <li>建立索引</li>
 </ul>
 <h3>秒杀微服务(com.supermarket.instantbuy)</h3>
 <ul>
@@ -100,9 +100,10 @@
 点击链接加入群聊【Supermarket项目交流群】：<a href="https://jq.qq.com/?_wv=1027&k=wlpUy5jo">https://jq.qq.com/?_wv=1027&k=wlpUy5jo</a><br /> 
 <a href="https://jq.qq.com/?_wv=1027&k=wlpUy5jo"><img src="./img/交流群.png" alt="交流群二维码"/></a>
 <h2>部署教程</h2>
+<video src="http://8.129.225.215/video/supermarket部署视频.mp4" controls="controls" width="500px;height:500px;"></video>
 <ul>
     <li><a href="https://blog.csdn.net/sjdjjd6466446/article/details/110005937" target="_blank">0.4.x版本博客教程</a>(感谢<a href="https://github.com/BlackPeachLawn" target="_blank">BlackPeachLawn</a>)</li>
-    <li><a href="./部署教程/supermarket部署视频.mp4" target="_blank">0.4.x版本视频教程</a>(感谢<a href="https://github.com/20427492" target="_blank">20427492</a>)</li>
+    <li><a href="http://8.129.225.215/" target="_blank">0.4.x版本视频教程</a>(感谢<a href="https://github.com/20427492" target="_blank">20427492</a>)</li>
     <li><a href="./部署教程/ssm10月1号版本使用.txt" target="_blank">0.3.x版本文档教程</a>(感谢<a href="https://github.com/20427492" target="_blank">20427492</a>)</li>
 </ul>
 <h2>版本迭代</h2>
@@ -365,6 +366,17 @@
             </ul>
         </td>
         <td>2020年12月10日</td>
+    </tr>
+    <tr>
+        <td>0.5.2</td>
+        <td>
+            <ul>
+                <li>完善检索微服务：修复发起秒杀功能中的线程安全问题</li>
+                <li>完善zuul网关：过滤器实现更细粒度鉴权</li>
+                <li>完善检索微服务：修复新增和编辑商品时无法同步到elasticsearch的Bug</li>
+            </ul>
+        </td>
+        <td>2020年12月11日</td>
     </tr>
 </table>
 

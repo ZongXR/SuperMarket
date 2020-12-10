@@ -6,6 +6,7 @@ import com.supermarket.search.exception.MsgException;
 import com.supermarket.search.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,14 +44,14 @@ public class SearchController {
     }
 
     /**
-     * 新增索引
+     * 新增商品
      * @param product 商品
      * @return vo
      */
     @RequestMapping("/manage/add")
     @ResponseBody
     public SysResult addProduct(
-            @RequestParam("product") Product product
+            @RequestBody Product product
     ){
         try{
             this.searchService.addProduct(product);
@@ -63,10 +64,15 @@ public class SearchController {
         }
     }
 
+    /**
+     * 删除商品
+     * @param product 商品
+     * @return vo
+     */
     @RequestMapping("/manage/delete")
     @ResponseBody
     public SysResult deleteProduct(
-            @RequestParam("product") Product product
+            @RequestBody Product product
     ){
         try{
             this.searchService.deleteProduct(product);

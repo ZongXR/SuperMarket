@@ -21,10 +21,10 @@ public class PermissionCheck extends ZuulFilter {
     private RestTemplate restTemplate = null;
 
     /**
-     * 需要鉴权的路径
+     * 需要鉴权的路径及需要的权限等级
      */
-    @Value("#{'${custom.uri.check}'.split(',')}")
-    private List<String> uriCheck = null;
+    @Value("#{${custom.uri.check}}")
+    private Map<String, Integer> uriCheck = null;
 
     /**
      * 直接禁止的路径
@@ -52,7 +52,7 @@ public class PermissionCheck extends ZuulFilter {
         HttpServletRequest request = currentContext.getRequest();
         String uri=request.getRequestURI();
         uri = WebUtils.removeExtraSlashOfUrl(uri);
-        return this.uriCheck.contains(uri) || this.uriForbidden.contains(uri);
+        return this.uriCheck.containsKey(uri) || this.uriForbidden.contains(uri);
     }
 
     /**
@@ -75,11 +75,11 @@ public class PermissionCheck extends ZuulFilter {
             //携带一个响应数据
             currentContext.setResponseBody("越权访问");
             return null;
-        }else if (this.uriCheck.contains(uri)){
+        }else if (this.uriCheck.containsKey(uri)){
             // TODO 需要鉴权
             String ticket = CookieUtils.getCookieValue(request, "EM_TICKET", true);
             Integer userType = this.restTemplate.getForObject("http://user/query/userType?ticket=" + ticket, Integer.class);
-            if (userType == null || userType < 3){
+            if (userType == null || userType < this.uriCheck.get(uri)){
                 // 越权访问
                 response.setContentType("text/html;charset=utf-8");
                 currentContext.setSendZuulResponse(false);
