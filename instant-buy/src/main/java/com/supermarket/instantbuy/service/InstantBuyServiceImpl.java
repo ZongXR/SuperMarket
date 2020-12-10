@@ -39,12 +39,19 @@ public class InstantBuyServiceImpl implements InstantBuyService {
 
     @Override
     public void startBuy(String itemId, String userName) {
-        String num = (String) this.redisTemplate.opsForHash().get("INSTANT_" + itemId, "number");
-        if (num == null){
+        Boolean exists = this.redisTemplate.hasKey("INSTANT_" + itemId);
+        if (exists == null || !exists) {
             throw new MsgException("秒杀商品不存在");
         }
+        // number 表示减一之后的数字
+        long number = this.redisTemplate.opsForHash().increment("INSTANT_" + itemId, "number", -1);
+        if (number < 0) {
+            if (number == Long.MIN_VALUE)
+                // 防止溢出
+                this.redisTemplate.delete("INSTANT_" + itemId);
+            throw new MsgException("商品已被秒杀完");
+        }
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        int number = Integer.parseInt(num);
         Date startTime = null;
         Date endTime = null;
         try {
@@ -60,26 +67,17 @@ public class InstantBuyServiceImpl implements InstantBuyService {
         if (nowTime.compareTo(endTime) > 0)
             throw new MsgException("秒杀已经结束");
         // 同一用户不能频繁秒杀同一商品
-        Boolean exists = this.redisTemplate.hasKey(itemId + userName);
-        if (exists == null || exists)
+        Boolean itemUser = this.redisTemplate.hasKey(itemId + userName);
+        if (itemUser == null || itemUser)
             throw new MsgException("您已经秒杀过该商品");
-        // 检查剩余数量，如果仅用redis的number判断，有线程安全问题，必须结合mysql
-        // TODO 这里是不是有线程安全隐患？
-        if (number > 0) {
-            // TODO 剩余商品数量大于0
-            this.redisTemplate.opsForHash().put("INSTANT_" + itemId, "number", String.valueOf(number - 1));
-            String result = (String) this.rabbitTemplate.convertSendAndReceive("instantBuyExchange", "instantBuy", itemId + userName);
-            if (result != null && result.equals(itemId + userName + "_SUCCESS")) {
-                // 消费成功
-                this.redisTemplate.opsForValue().set(itemId + userName, "SUCCESS", 1, TimeUnit.HOURS);
-                return;
-            }else{
-                // 消费失败
-                throw new MsgException("秒杀失败");
-            }
-        } else {
-            // TODO 剩余商品数量不足
-            throw new MsgException("秒杀完了");
+        // TODO 剩余商品数量大于0
+        String result = (String) this.rabbitTemplate.convertSendAndReceive("instantBuyExchange", "instantBuy", itemId + userName);
+        if (result != null && result.equals(itemId + userName + "_SUCCESS")) {
+            // 消费成功
+            this.redisTemplate.opsForValue().set(itemId + userName, "SUCCESS", 1, TimeUnit.HOURS);
+        }else{
+            // 消费失败
+            throw new MsgException("秒杀失败");
         }
     }
 }

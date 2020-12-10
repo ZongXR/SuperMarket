@@ -32,6 +32,8 @@
 <li>com.supermarket.*.utils对应于微服务的工具类</li>
 <li>com.supermarket.*.vo对应于微服务的ViewObject</li>
 </ul>
+<h2>系统架构</h2>
+<img src="./img/架构图.png" alt="架构图" />
 <h2>功能说明</h2>
 <h3>用户微服务(com.supermarket.user)</h3>
 <ul>
@@ -41,6 +43,7 @@
     <li>用户登出</li>
     <li>用户名可用性校验</li>
     <li>用户登录状态获取</li>
+    <li>查询用户权限等级</li>
 </ul>
 <h3>商品微服务(com.supermarket.product)</h3>
 <ul>
@@ -348,9 +351,20 @@
             <ul>
                 <li>完善秒杀微服务：修复若干bug</li>
                 <li>完善zuul网关：对敏感API调用进行后端鉴权</li>
+                <li>完善用户微服务：新增权限查询功能</li>
             </ul>
         </td>
         <td>2020年12月9日</td>
+    </tr>
+    <tr>
+        <td>0.5.1</td>
+        <td>
+            <ul>
+                <li>完善秒杀微服务：修复发起秒杀功能中的线程安全问题</li>
+                <li>新增全系统架构图</li>
+            </ul>
+        </td>
+        <td>2020年12月10日</td>
     </tr>
 </table>
 
@@ -392,6 +406,7 @@
     <li>MySQL主从高可用时，如果因为错误数据导致挂接失败，需要先取消挂接(stop slave)，手动删除错误数据，再重新挂接(start slave)</li>
     <li>MyCat1.5.1版本还不支持复杂SQL，比如update...select..., insert ...select...等</li>
     <li>insert的时候加上列名是一个好习惯，因为MyCat1.5.1不支持省略列名的写法</li>
+    <li>直接使用RedisTemplate模板类，键和值会出现类似\xac\xed\x00\x05t\x00的东西，此时要么不去手动查看redis输出，要么换用StringRedisTemplate</li>
 </ul>
 </body>
 </html>

@@ -25,7 +25,7 @@ public class Consumer {
      * 监控消息队列
      * @param msg 消息
      */
-    @Transactional
+    @Transactional(rollbackFor = Throwable.class)
     @RabbitListener(queues = "instantBuy")
     @SendTo("instantBuy")
     public String consumeInstantBuy(String msg){
