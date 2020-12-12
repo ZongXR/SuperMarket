@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: io.github.openfeign:feign-hystrix:10.7.4">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/io/github/openfeign/feign-hystrix/10.7.4/feign-hystrix-10.7.4.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/io/github/openfeign/feign-hystrix/10.7.4/feign-hystrix-10.7.4-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/io/github/openfeign/feign-hystrix/10.7.4/feign-hystrix-10.7.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

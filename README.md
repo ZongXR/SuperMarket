@@ -371,12 +371,24 @@
         <td>0.5.2</td>
         <td>
             <ul>
-                <li>完善检索微服务：修复发起秒杀功能中的线程安全问题</li>
+                <li>完善秒杀微服务：修复发起秒杀功能中的线程安全问题</li>
                 <li>完善zuul网关：过滤器实现更细粒度鉴权</li>
                 <li>完善检索微服务：修复新增和编辑商品时无法同步到elasticsearch的Bug</li>
             </ul>
         </td>
         <td>2020年12月11日</td>
+    </tr>
+    <tr>
+        <td>0.5.3</td>
+        <td>
+            <ul>
+                <li>微服务添加熔断器，避免单个故障导致集群崩溃</li>
+                <li>使用Feign替代Ribbon进行微服务间调用</li>
+                <li>完善检索微服务：修复微服务启动时创建索引失败的bug</li>
+                <li>新增log4j2日志框架支持</li>
+            </ul>
+        </td>
+        <td>2020年12月12日</td>
     </tr>
 </table>
 
@@ -419,6 +431,7 @@
     <li>MyCat1.5.1版本还不支持复杂SQL，比如update...select..., insert ...select...等</li>
     <li>insert的时候加上列名是一个好习惯，因为MyCat1.5.1不支持省略列名的写法</li>
     <li>直接使用RedisTemplate模板类，键和值会出现类似\xac\xed\x00\x05t\x00的东西，此时要么不去手动查看redis输出，要么换用StringRedisTemplate</li>
+    <li>用nginx也能做到外部调用内部api的拦截，只需要将提供给前端的api路径和提供给后端的api路径区分开。比如提供给前端的api路径是/manage/query，提供给后端的api是/backend/query，因为nginx拼接了"/manage"，所以自然找不到/backend/query</li>
 </ul>
 </body>
 </html>

@@ -3,19 +3,12 @@ package com.supermarket.search.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.supermarket.common.domain.Product;
 import com.supermarket.search.dao.ProductDao;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.elasticsearch.index.query.QueryBuilders.multiMatchQuery;
@@ -30,7 +23,7 @@ public class SearchServiceImpl implements SearchService{
     private ProductDao productDao = null;
 
     @Autowired
-    private RestTemplate restTemplate = null;
+    private ProductService productService = null;
 
     @Autowired
     private ObjectMapper mapper = null;
@@ -46,21 +39,15 @@ public class SearchServiceImpl implements SearchService{
 
     @Override
     public void createIndex(Class<? extends Object> type) {
-        if(this.elasticsearchTemplate.typeExists("supermarket", type.getSimpleName()))
-            return;
         // 创建索引
         this.elasticsearchTemplate.createIndex(type);
         // 创建Mapping
         this.elasticsearchTemplate.putMapping(type);
         // 添加文档
-        Product[] products = this.restTemplate.getForObject(
-                "http://product/manage/query",
-                Product[].class
-        );
+        List<Product> products = this.productService.queryProducts();
         if (products == null)
             return;
-        List<Product> productList = Arrays.asList(products);
-        this.addProducts(productList);
+        this.addProducts(products);
     }
 
     @Override

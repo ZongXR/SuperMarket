@@ -16,3 +16,4 @@ hs_err_pid*
 /out/
 /接口文件/
 /*/target/
+/logs/

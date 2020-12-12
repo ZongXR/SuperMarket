@@ -4,6 +4,7 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 import com.supermarket.common.utils.CookieUtils;
+import com.supermarket.gateway.service.UserService;
 import com.supermarket.gateway.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,8 +18,9 @@ import java.util.Map;
 
 @Component
 public class PermissionCheck extends ZuulFilter {
+
     @Autowired
-    private RestTemplate restTemplate = null;
+    private UserService userService = null;
 
     /**
      * 需要鉴权的路径及需要的权限等级
@@ -78,7 +80,7 @@ public class PermissionCheck extends ZuulFilter {
         }else if (this.uriCheck.containsKey(uri)){
             // TODO 需要鉴权
             String ticket = CookieUtils.getCookieValue(request, "EM_TICKET", true);
-            Integer userType = this.restTemplate.getForObject("http://user/query/userType?ticket=" + ticket, Integer.class);
+            Integer userType = this.userService.queryUserType(ticket);
             if (userType == null || userType < this.uriCheck.get(uri)){
                 // 越权访问
                 response.setContentType("text/html;charset=utf-8");

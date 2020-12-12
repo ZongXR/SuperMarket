@@ -8,9 +8,6 @@ import com.supermarket.order.dao.OrderDao;
 import com.supermarket.order.exception.MsgException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
@@ -20,7 +17,7 @@ public class OrderServiceImpl implements OrderService{
     private OrderDao orderDao = null;
 
     @Autowired
-    private RestTemplate restTemplate = null;
+    private CartService cartService = null;
 
     @Autowired
     private ObjectMapper mapper = null;
@@ -37,15 +34,10 @@ public class OrderServiceImpl implements OrderService{
             productIds.add(item.getProductId());
             productNums.add(item.getNum());
         }
-        MultiValueMap<String, String> request = new LinkedMultiValueMap<>();
-        request.add("productIds", this.mapper.writeValueAsString(productIds));
-        request.add("productNums", this.mapper.writeValueAsString(productNums));
-        request.add("userId", order.getUserId());
-        // TODO 后端价格校验
-        SysResult result = this.restTemplate.postForObject(
-                "http://cart/get/money",
-                request,
-                SysResult.class
+        SysResult result = this.cartService.getMoney(
+                this.mapper.writeValueAsString(productIds),
+                this.mapper.writeValueAsString(productNums),
+                order.getUserId()
         );
         if (result == null){
             throw new MsgException("查询出错");

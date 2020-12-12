@@ -3,6 +3,7 @@ package com.supermarket.product.aspect;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.supermarket.common.domain.Product;
 import com.supermarket.common.vo.SysResult;
+import com.supermarket.product.service.SearchService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -22,8 +23,9 @@ import java.util.Map;
 @Component
 @Aspect
 public class ProductIndex {
+
     @Autowired
-    private RestTemplate restTemplate = null;
+    private SearchService searchService = null;
 
     /**
      * 增加商品后需要同步更新索引
@@ -42,11 +44,7 @@ public class ProductIndex {
         }
         Product product = (Product) map.get("product");
         // 切
-        SysResult addResult = this.restTemplate.postForObject(
-                "http://search/manage/add",
-                product,
-                SysResult.class
-        );
+        SysResult addResult = this.searchService.addProduct(product);
     }
 
     /**
@@ -65,11 +63,7 @@ public class ProductIndex {
             map.put(names[i], values[i]);
         }
         Product product = (Product) map.get("product");
-        SysResult updateResult = this.restTemplate.postForObject(
-                "http://search/manage/delete",
-                product,
-                SysResult.class
-        );
+        SysResult deleteResult = this.searchService.deleteProduct(product);
         this.afterAddProduct(jp, result);
     }
 }
