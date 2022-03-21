@@ -14,6 +14,10 @@
 hs_err_pid*
 
 /out/
-/接口文件/
+/接口文档/
 /*/target/
 /logs/
+/部署教程/
+**.iml
+/.idea
+/**/target
