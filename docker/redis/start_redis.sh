@@ -21,8 +21,9 @@ done
 # start up redis nodes
 for port in $(seq 1 6);
 do
-docker run -d -p $((6379+port-1)):6379 --name redis-${port} --net net-redis --ip 192.168.0.1${port} --restart always -v /home/redis/node-${port}/data:/data -v /home/redis/node-${port}/conf/redis.conf:/etc/redis.conf zongxr/redis:3.2.11 redis-server /etc/redis.conf
+docker run -d --name redis-${port} --restart always --net net-redis -p $((6379+port-1)):6379 --ip 192.168.0.1${port} -v /home/redis/node-${port}/data:/data -v /home/redis/node-${port}/conf/redis.conf:/etc/redis.conf zongxr/redis:3.2.11 redis-server /etc/redis.conf
 done
+sleep 10s
 
 # create redis cluster
 docker exec -it redis-1 /usr/local/bin/redis-trib.rb create --replicas 1 192.168.0.11:6379 192.168.0.12:6379 192.168.0.13:6379 192.168.0.14:6379 192.168.0.15:6379 192.168.0.16:6379
