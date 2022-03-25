@@ -34,6 +34,8 @@ docker exec dn2_host1 mysql -uroot -proot -e "show slave status;start slave;"
 docker exec dn2_host2 mysql -uroot -proot -e "show slave status;start slave;"
 
 # start up mycat
+mkdir -p /home/mysql/mycat/conf
+cp ../mycat/conf /home/mysql/mycat
 docker run --name mycat --restart always --net net-mysql -p 8066:8066 -p 9066:9066 -v /home/mysql/mycat/conf:/opt/mycat/conf -d zongxr/mycat:1.15.1
 sleep 5s
 
