@@ -1,5 +1,5 @@
 # create elasticsearch subnet
-docker network create --driver bridge --subnet 192.168.0.0/16 --gateway 192.168.0.1 net-es
+docker network create --driver bridge --subnet 192.166.0.0/16 --gateway 192.166.0.1 net-es
 
 # set the vm memory
 echo "vm.max_map_count=262144" >> /etc/sysctl.conf
