@@ -10,3 +10,8 @@ docker network connect net-redis supermarket-product-1
 # 启动购物车微服务
 docker run -d --name supermarket-cart-1 --restart always --net net-app -p 10005:10005 zongxr/supermarket-cart:1.0-SNAPSHOT
 docker network connect net-mysql supermarket-cart-1
+
+# 启动订单微服务
+docker run -d --name supermarket-order-1 --restart always --net net-app -p 10006:10006 zongxr/supermarket-order:1.0-SNAPSHOT
+docker network connect net-mysql supermarket-order-1
+
