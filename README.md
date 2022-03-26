@@ -13,8 +13,8 @@
 <img src="./img/instantbuy.gif" alt="秒杀" /><br />
 <h2>声明</h2>
 <ul>
-    <li>本项目静态资源由网络收集得来，并加以大范围修改</li>
     <li>未经许可不得将本项目商用，如需商用请联系作者<a href="mailto:zxr@tju.edu.cn">zxr@tju.edu.cn</a></li>
+    <li>欢迎各位看官向本项目提交代码，对提交的分支我将进行合并。提交时请务必保证能编译能运行</li>
 </ul>
 <h2>关键技术</h2>
 <p>基于SpringCloud框架开发的商城系统，代码严格遵循MVC分层思想，可部署到服务器上，设计精良，不断完善</p>
@@ -96,16 +96,74 @@
     <li>单个秒杀商品查询</li>
     <li>发起秒杀</li>
 </ul>
+
+<h2>新版本部署教程</h2>
+<ol>
+    <li>环境准备<ol>
+            <li>开发环境准备:首先你需要有一台电脑、以及一个虚拟机(或服务器)。内存要大，不然跑不起来。假设你的虚拟机的ip地址是192.168.137.147在你的电脑中把hosts追加两行。<br />
+                           <code>192.168.137.147 www.supermarket.com</code><br />
+                           <code>192.168.137.147 image.supermarket.com</code><br />
+                           然后添加环境变量<br />
+                           <code>DOCKER_HOST=tcp://192.168.137.147:2375</code></li>
+            <li>部署环境准备:虚拟机装上centos7,再装上docker，然后依次拉取镜像<br />
+                           <code>docker pull zongxr/redis:3.2.11</code><br />
+                           <code>docker pull zongxr/mycat:1.15.1</code><br />
+                           <code>docker pull zongxr/mysql:5.7.37</code><br />
+                           <code>docker pull zongxr/elasticsearch:6.8.6</code><br />
+                           <code>docker pull zongxr/supermarket-cart:1.0-SNAPSHOT</code><br />
+                           <code>docker pull zongxr/supermarket-user:1.0-SNAPSHOT</code><br />
+                           <code>docker pull zongxr/supermarket-gateway:1.0-SNAPSHOT</code><br />
+                           <code>docker pull zongxr/supermarket-eureka:1.0-SNAPSHOT</code><br />
+                           <code>docker pull zongxr/supermarket-image:1.0-SNAPSHOT</code><br />
+                           <code>docker pull zongxr/supermarket-search:1.0-SNAPSHOT</code><br />
+                           <code>docker pull zongxr/supermarket-instantbuy:1.0-SNAPSHOT</code><br />
+                           <code>docker pull zongxr/supermarket-product:1.0-SNAPSHOT</code><br />
+                           <code>docker pull zongxr/supermarket-order:1.0-SNAPSHOT</code><br />
+                           然后把start_up目录拷贝到/home目录下</li>
+    </ol></li>
+    <li>部署数据库<ol>
+            <li>参照<a href="./start_up/mysql/start_mysql.sh" target="_blank">数据库启动脚本</a>逐行执行，或直接运行该脚本。</li>
+            <li>由于官方的mysql镜像没有默认开启主从配置，也没设定UTF-8字符集，因此使用本项目专有镜像zongxr/mysql:5.7.37，可自动开启bin-log，并设定UTF-8字符集</li>
+            <li>该脚本制作了双向主从高可用的数据分片，节点分别为dn1_host1, dn1_host2, dn2_host1, dn2_host2。并且通过mycat实现了读写分离以及分库分表，最后灌入数据。如果上一步执行成功了，你将能够通过以下的JDBC连接上数据库
+                <code>jdbc:mysql://192.168.137.147:3306/supermarket</code>连接dn1_host1<br />
+                <code>jdbc:mysql://192.168.137.147:3307/supermarket</code>连接dn1_host2<br />
+                <code>jdbc:mysql://192.168.137.147:3308/supermarket</code>连接dn2_host1<br />
+                <code>jdbc:mysql://192.168.137.147:3309/supermarket</code>连接dn2_host2<br />
+                <code>jdbc:mysql://192.168.137.147:8066/supermarket</code>连接mycat<br />
+                </li>
+    </ol></li>
+    <li>部署redis集群<ol>
+            <li>参照<a href="./start_up/redis/start_redis.sh" target="_blank">redis启动脚本</a>逐行执行，或者直接运行该脚本</li>
+            <li>该脚本搭建了一个6节点的redis集群，从redis-1到redis-6。由于3.2.11版本的redis官方镜像没有预置ruby环境，而创建集群需要使用ruby环境。因此使用该项目的专用redis镜像zongxr/redis:3.2.11，该镜像已经集成了ruby环境可直接使用。</li>
+            <li>如果上一步redis集群部署成功了，那么可以通过6379端口连接该集群</li>
+    </ol></li>
+    <li>部署elasticsearch集群<ol>
+            <li>参照<a href="./start_up/elasticsearch/start_es.sh" target="_blank">elasticsearch启动脚本</a>逐行执行，或直接运行该脚本</li>
+            <li>该脚本搭建了3节点的elasticsearch集群，分别是es-1, es-2, es-3。如果部署成功了，可以使用<a href="https://chrome.google.com/webstore/detail/elasticsearch-head/ffmkiejjmecolpfloofpjologoblkegm?hl=zh-CN" target="_blank">head插件</a>连接<a href="http://192.168.137.147:9200/" target="_blank">http://192.168.137.147:9200/</a>地址，集群状态应为green</li>
+            <li>官方默认的elasticsearch镜像不带JDBC连接功能，该项目通过技术手段集成了JDBC连接功能，可以像操作关系型数据库一样写SQL去操作elasticsearch。使用的driver是<code>org.elasticsearch.xpack.sql.jdbc.EsDriver</code><br />
+            <code>jdbc:es://192.168.137.147:9201</code>连接es-1<br />
+            <code>jdbc:es://192.168.137.147:9202</code>连接es-2<br />
+            <code>jdbc:es://192.168.137.147:9200</code>连接es-3<br />            
+            </li>
+    </ol></li>
+    <li>部署微服务<ol>
+            <li>参照<a href="./start_up/app/start_app.sh" target="_blank">微服务启动脚本</a>逐行执行，或直接运行该脚本</li>
+            <li>每个微服务做了一个镜像，名为zongxr/supermarket-xxx:tag。如果所有微服务都启动成功了，那么将能够在<a href="http://192.168.137.147:10000/" target="_blank">注册中心</a>看到所有注册的微服务</li>
+            <li>instant-buy微服务用到了消息队列rabbitmq。如果消息队列启动成功，将能够在<a href="http://192.168.137.147:15672" target="_blank">Web UI</a>管理界面看到传输的消息，用户名密码均为guest</li>
+    </ol></li>
+    <li>至此，所有服务都已经启动完成了。访问<a href="http://www.supermarket.com" target="_blank">www.supermarket.com</a>进行访问即可。</li>
+</ol>
+<h2>旧版本部署教程</h2>
+<ul>
+    <li><a href="https://blog.csdn.net/sjdjjd6466446/article/details/110005937" target="_blank">0.4.x版本博客教程</a>(感谢<a href="https://github.com/BlackPeachLawn" target="_blank">BlackPeachLawn</a>)</li>
+    <li><a href="./部署教程/supermarket部署视频.txt" target="_blank">0.4.x版本视频教程</a>(感谢<a href="https://github.com/20427492" target="_blank">20427492</a>)</li>
+    <li><a href="./部署教程/ssm10月1号版本使用.txt" target="_blank">0.3.x版本文档教程</a>(感谢<a href="https://github.com/20427492" target="_blank">20427492</a>)</li>
+</ul>
+
 <h2>交流群</h2>
 点击链接加入群聊【Supermarket项目交流群】：<a href="https://jq.qq.com/?_wv=1027&k=wlpUy5jo">https://jq.qq.com/?_wv=1027&k=wlpUy5jo</a><br /> 
 <a href="https://jq.qq.com/?_wv=1027&k=wlpUy5jo"><img src="./img/交流群.png" alt="交流群二维码"/></a>
-<h2>部署教程</h2>
-<video src="http://8.129.225.215/video/supermarket部署视频.mp4" controls="controls" width="500px;height:500px;"></video>
-<ul>
-    <li><a href="https://blog.csdn.net/sjdjjd6466446/article/details/110005937" target="_blank">0.4.x版本博客教程</a>(感谢<a href="https://github.com/BlackPeachLawn" target="_blank">BlackPeachLawn</a>)</li>
-    <li><a href="http://8.129.225.215/" target="_blank">0.4.x版本视频教程</a>(感谢<a href="https://github.com/20427492" target="_blank">20427492</a>)</li>
-    <li><a href="./部署教程/ssm10月1号版本使用.txt" target="_blank">0.3.x版本文档教程</a>(感谢<a href="https://github.com/20427492" target="_blank">20427492</a>)</li>
-</ul>
+
 <h2>版本迭代</h2>
 <table>
     <tr>
@@ -390,6 +448,16 @@
         </td>
         <td>2020年12月12日</td>
     </tr>
+    <tr>
+        <td>1.0.0</td>
+        <td>
+            <ul>
+                <li>所有服务及组件迁移至docker，使用容器进行部署</li>
+                <li>修复若干BUG</li>
+            </ul>
+        </td>
+        <td>2022年3月26日</td>
+    </tr>
 </table>
 
 <h2>配置情况</h2>
@@ -397,7 +465,7 @@
     <li>JDK版本：<a href="http://openjdk.java.net/projects/jdk/11/" target="_blank">OpenJDK11</a></li>
     <li><a href="http://nginx.org/en/download.html" target="_blank">nginx：1.19.1</a></li>
     <li><a href="https://maven.apache.org/download.cgi" target="_blank">maven: 3.6.3</a></li>
-    <li><a href="https://downloads.mysql.com/archives/community/" target="_blank">MySql: 5.5.27</a></li>
+    <li><a href="https://downloads.mysql.com/archives/community/" target="_blank">MySql: 5.7.37</a></li>
     <li><a href="http://download.redis.io/releases/" target="_blank">Redis: 3.2.11</a></li>
     <li><a href="https://github.com/MyCATApache/Mycat-download/tree/master/1.5-RELEASE" target="_blank">MyCat: 1.5.1</a></li>
     <li><a href="https://www.elastic.co/cn/downloads/past-releases/elasticsearch-6-8-6" target="_blank">ElasticSearch: 6.8.6</a></li>
@@ -411,6 +479,7 @@
         127.0.0.1 image.supermarket.com
     </li>
 </ul>
+
 <h2>遇到的bug锦集(作为记录，博君一笑)</h2>
 <ul>
     <li>HttpServletRequest的装饰者类HttpServletRequestDecorator中的getParameterMap重写方法中，不能在原地进行参数字符集修改，否则如果调用两次及以上该方法时会编码多次，造成乱码</li>
