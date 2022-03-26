@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "custom.imglocal",
+      "type": "java.lang.String",
+      "description": "Description for custom.imglocal."
+    },
+    {
+      "name": "custom.imgweb",
+      "type": "java.lang.String",
+      "description": "Description for custom.imgweb."
+    }
+  ] }

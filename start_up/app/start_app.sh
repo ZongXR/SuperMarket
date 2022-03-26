@@ -22,3 +22,7 @@ docker network connect net-redis supermarket-user-1
 
 # 启动网关
 docker run -d --name supermarket-gateway-1 --restart always --net net-app -p 10001:10001 zongxr/supermarket-gateway:1.0-SNAPSHOT
+
+# 启动图片微服务
+docker run -d --name supermarket-image-1 --restart always -v /opt/supermarketimg:/opt/supermarketimg --net net-app -p 10003:10003 zongxr/supermarket-image:1.0-SNAPSHOT
+docker network connect net-redis supermarket-image-1
