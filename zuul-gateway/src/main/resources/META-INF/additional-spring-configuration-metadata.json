@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "custom.uri.check",
+      "type": "java.lang.String",
+      "description": "Description for custom.uri.check."
+    },
+    {
+      "name": "custom.uri.forbidden",
+      "type": "java.lang.String",
+      "description": "Description for custom.uri.forbidden."
+    }
+  ] }

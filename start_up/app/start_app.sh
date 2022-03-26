@@ -19,3 +19,6 @@ docker network connect net-mysql supermarket-order-1
 docker run -d --name supermarket-user-1 --restart always --net net-app -p 10004:10004 zongxr/supermarket-user:1.0-SNAPSHOT
 docker network connect net-mysql supermarket-user-1
 docker network connect net-redis supermarket-user-1
+
+# 启动网关
+docker run -d --name supermarket-gateway-1 --restart always --net net-app -p 10001:10001 zongxr/supermarket-gateway:1.0-SNAPSHOT
