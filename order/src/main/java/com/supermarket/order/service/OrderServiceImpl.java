@@ -60,6 +60,8 @@ public class OrderServiceImpl implements OrderService{
     public List<Order> queryOrder(String userId) {
         // TODO 先用userId查orderId，再用orderId查商品
         List<Order> orders = this.orderDao.selectOrder(new Order(null, null, null, null, null, userId));
+        if (orders == null)
+            return new ArrayList<Order>();
         for (Order order : orders) {
             List<OrderItem> orderItems = this.orderDao.selectOrderItems(new OrderItem(
                     null, order.getOrderId(), null, null, null, null, null
