@@ -1,6 +1,7 @@
 # start up mysql
 docker network create --driver bridge --subnet 192.167.0.0/16 --gateway 192.167.0.1 net-mysql
 docker run --name dn1_host1 --restart always --net net-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -v /home/mysql/dn1_host1:/var/lib/mysql -d zongxr/mysql:5.7.37
+# each mysql node sleep 1s for the reason that we set second timestamp to server-id
 sleep 1s
 docker run --name dn1_host2 --restart always --net net-mysql -p 3307:3306 -e MYSQL_ROOT_PASSWORD=root -v /home/mysql/dn1_host2:/var/lib/mysql -d zongxr/mysql:5.7.37
 sleep 1s

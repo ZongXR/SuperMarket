@@ -38,3 +38,8 @@ docker run -d --name supermarket-instantbuy-1 --restart always --net net-app -p 
 docker network connect net-mysql supermarket-instantbuy-1
 docker network connect net-redis supermarket-instantbuy-1
 
+# 启动 nginx
+cp ./nginx.conf /home/nginx
+cp ../supermarketimg /opt
+cp ../supermarketstatic /opt
+docker run -d --name nginx --restart always -v /home/nginx/nginx.conf:/etc/nginx/nginx.conf -v /opt:/opt --net net-app -p 80:80 nginx:1.19.1
