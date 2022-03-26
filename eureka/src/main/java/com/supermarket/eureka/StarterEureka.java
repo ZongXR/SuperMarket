@@ -1,4 +1,4 @@
-package com.supermarket.common;
+package com.supermarket.eureka;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

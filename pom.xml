@@ -22,6 +22,7 @@
         <module>order</module>
         <module>search</module>
         <module>instant-buy</module>
+        <module>eureka</module>
     </modules>
     <!--  自定义属性  -->
     <properties>
@@ -81,15 +82,17 @@
     <!--Springboot的maven插件-->
     <build>
         <finalName>${project.artifactId}</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <includeSystemScope>true</includeSystemScope>
-                </configuration>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <includeSystemScope>true</includeSystemScope>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
     <repositories>
         <repository>
