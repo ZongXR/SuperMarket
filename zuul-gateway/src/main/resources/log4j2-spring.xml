@@ -71,7 +71,7 @@
         </RollingFile>
     </appenders>
     <loggers>
-        <root level="ALL">
+        <root level="INFO">
             <appender-ref ref="Console" />
             <appender-ref ref="RollingFileInfo" />
             <appender-ref ref="RollingFileWarn" />
