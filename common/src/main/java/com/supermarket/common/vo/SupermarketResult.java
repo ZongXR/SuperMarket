@@ -4,18 +4,25 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
+@ApiModel(description = "响应对象")
 public class SupermarketResult {
 
     // 定义jackson对象
     private static final ObjectMapper MAPPER = new ObjectMapper();
+
     //查询数据总数量
+    @ApiModelProperty("查询的条目数")
     private Integer total;
+
     //分页查询的list结果
+    @ApiModelProperty("查询出的列表")
     private List<?> rows;
 
     public SupermarketResult() {

@@ -4,16 +4,18 @@ import com.supermarket.common.domain.Product;
 import com.supermarket.common.vo.SysResult;
 import com.supermarket.search.exception.MsgException;
 import com.supermarket.search.service.SearchService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@Api(tags = "搜索微服务")
 //@RequestMapping("/search")
 public class SearchController {
     @Autowired
@@ -26,7 +28,13 @@ public class SearchController {
      * @param rows 查询条数
      * @return 商品列表
      */
-    @RequestMapping("/manage/query")
+    @ApiOperation("商品的模糊查询")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "query", value = "查询条件"),
+            @ApiImplicitParam(name = "page", value = "第几页"),
+            @ApiImplicitParam(name = "rows", value = "查询多少条数据")
+    })
+    @RequestMapping(value = "/manage/query", method = RequestMethod.GET)
     @ResponseBody
     public List<Product> searchProducts(
             @RequestParam("query") String query,
@@ -48,6 +56,8 @@ public class SearchController {
      * @param product 商品
      * @return vo
      */
+    @ApiOperation("增加商品")
+    @ApiImplicitParam(name = "product", value = "商品的bean")
     @RequestMapping("/manage/add")
     @ResponseBody
     public SysResult addProduct(
@@ -69,6 +79,8 @@ public class SearchController {
      * @param product 商品
      * @return vo
      */
+    @ApiOperation("删除商品")
+    @ApiImplicitParam(name = "product", value = "商品的bean")
     @RequestMapping("/manage/delete")
     @ResponseBody
     public SysResult deleteProduct(

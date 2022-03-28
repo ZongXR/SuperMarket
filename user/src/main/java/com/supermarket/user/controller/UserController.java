@@ -6,6 +6,10 @@ import com.supermarket.common.utils.CookieUtils;
 import com.supermarket.common.vo.SysResult;
 import com.supermarket.user.exception.MsgException;
 import com.supermarket.user.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @Controller
+@Api(tags = "用户微服务")
 //@RequestMapping("/user")
 public class UserController {
     @Autowired
@@ -28,7 +33,9 @@ public class UserController {
      * @param userName 用户名
      * @return 200可用，201不可用，500异常
      */
-    @RequestMapping("/manage/checkUserName")
+    @ApiOperation("检查用户名是否可用")
+    @ApiImplicitParam(name = "userName", value = "用户名")
+    @RequestMapping(value = "/manage/checkUserName", method = RequestMethod.POST)
     @ResponseBody
     public SysResult checkUserName(
             @RequestParam("userName") String userName
@@ -53,7 +60,15 @@ public class UserController {
      * @param errors bean校验出的错
      * @return 200成功，201后台校验错误，500异常
      */
-    @RequestMapping("/manage/save")
+    @ApiOperation("注册用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "user", value = "用户bean"),
+            @ApiImplicitParam(name = "userPassword2", value = "重复密码"),
+            @ApiImplicitParam(name = "valistr", value = "验证码"),
+            @ApiImplicitParam(name = "token", value = "浏览器的token"),
+            @ApiImplicitParam(name = "errors", value = "校验错误")
+    })
+    @RequestMapping(value = "/manage/save", method = RequestMethod.POST)
     @ResponseBody
     public SysResult registUser(
             @Valid User user,
@@ -81,7 +96,15 @@ public class UserController {
      * @param user 参数封装的bean
      * @return 成功200，用户不存在201，异常500
      */
-    @RequestMapping("/manage/login")
+    @ApiOperation("用户登录")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "user", value = "用户bean"),
+            @ApiImplicitParam(name = "valistr", value = "验证码"),
+            @ApiImplicitParam(name = "token", value = "浏览器的token"),
+            @ApiImplicitParam(name = "remname", value = "是否记住用户名"),
+            @ApiImplicitParam(name = "autologin", value = "是否自动登录")
+    })
+    @RequestMapping(value = "/manage/login", method = RequestMethod.POST)
     @ResponseBody
     public SysResult loginUser(
             User user,
@@ -120,6 +143,8 @@ public class UserController {
      * @param response 响应
      * @return vo
      */
+    @ApiOperation("自动登录")
+    @ApiImplicitParam(name = "user", value = "用户的bean")
     @RequestMapping("/manage/autologin")
     @ResponseBody
     public SysResult autoLogin(
@@ -148,7 +173,9 @@ public class UserController {
      * @param ticket redis的key
      * @return 200已登录，201未登录，500异常
      */
-    @RequestMapping("/manage/query/{ticket}")
+    @ApiOperation("获取用户登录状态")
+    @ApiImplicitParam(name = "ticket", value = "redis的key")
+    @RequestMapping(value = "/manage/query/{ticket}", method = RequestMethod.GET)
     @ResponseBody
     public SysResult loginState(
             @PathVariable String ticket,
@@ -175,7 +202,9 @@ public class UserController {
      * 用户登出
      * @return vo
      */
-    @RequestMapping("/manage/logout")
+    @ApiOperation("退出登录")
+    @ApiImplicitParam(name = "ticket", value = "登录的ticket")
+    @RequestMapping(value = "/manage/logout", method = RequestMethod.GET)
     @ResponseBody
     public SysResult logoutUser(
             @CookieValue("EM_TICKET") String ticket,
@@ -199,6 +228,8 @@ public class UserController {
      * @param ticket 登录凭据
      * @return 空表示没查到，数字表示权限
      */
+    @ApiOperation("查询用户权限种类")
+    @ApiImplicitParam(name = "ticket", value = "登录的ticket")
     @RequestMapping("/query/userType")
     @ResponseBody
     public Integer queryUserType(

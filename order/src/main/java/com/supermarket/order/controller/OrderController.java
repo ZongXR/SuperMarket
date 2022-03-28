@@ -4,17 +4,23 @@ import com.supermarket.common.domain.Order;
 import com.supermarket.common.vo.SysResult;
 import com.supermarket.order.exception.MsgException;
 import com.supermarket.order.service.OrderService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
 @Controller
+@Api(tags = "订单微服务")
 //@RequestMapping("/order")
 public class OrderController {
+
     @Autowired
     private OrderService orderService = null;
 
@@ -23,7 +29,9 @@ public class OrderController {
      * @param order bean缺少orderId
      * @return vo
      */
-    @RequestMapping("/manage/save")
+    @ApiOperation("新增订单")
+    @ApiImplicitParam(name = "order", value = "订单的bean")
+    @RequestMapping(value = "/manage/save", method = RequestMethod.POST)
     @ResponseBody
     public SysResult addOrder(
             Order order
@@ -44,7 +52,9 @@ public class OrderController {
      * @param userId 用户id
      * @return 订单列表
      */
-    @RequestMapping("/manage/query/{userId}")
+    @ApiOperation("订单查询")
+    @ApiImplicitParam(name = "userId", value = "用户id")
+    @RequestMapping(value = "/manage/query/{userId}", method = RequestMethod.GET)
     @ResponseBody
     public List<Order> orderQuery(
             @PathVariable("userId") String userId
@@ -57,7 +67,9 @@ public class OrderController {
      * @param orderId 用户id
      * @return vo
      */
-    @RequestMapping("/manage/delete/{orderId}")
+    @ApiOperation("删除订单")
+    @ApiImplicitParam(name = "orderId", value = "订单id")
+    @RequestMapping(value = "/manage/delete/{orderId}", method = RequestMethod.GET)
     @ResponseBody
     public SysResult deleteOrder(
             @PathVariable("orderId") String orderId

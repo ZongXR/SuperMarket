@@ -1,16 +1,25 @@
 package com.supermarket.common.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
+@ApiModel("响应的ViewObject")
 public class SysResult {
+
     //表示状态码的数字
+    @ApiModelProperty("状态码")
     private Integer status;
+
     //携带详细信息的字符串
+    @ApiModelProperty("响应的消息")
     private String msg;
+
     //携带的各种数据
+    @ApiModelProperty("响应的数据")
     private Object data;
 
     /**

@@ -5,18 +5,21 @@ import com.supermarket.cart.service.CartService;
 import com.supermarket.common.domain.Cart;
 import com.supermarket.common.domain.OrderItem;
 import com.supermarket.common.vo.SysResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@Api(tags = "购物车微服务")
 //@RequestMapping("/cart")
 public class CartController {
+
     @Autowired
     private CartService cartService = null;
 
@@ -25,7 +28,9 @@ public class CartController {
      * @param userId 用户编号
      * @return 购物车中的商品
      */
-    @RequestMapping("/manage/query")
+    @ApiOperation("购物车中的商品查询")
+    @ApiImplicitParam(name = "userId", value = "用户id")
+    @RequestMapping(value = "/manage/query", method = RequestMethod.GET)
     @ResponseBody
     public List<Cart> queryCart(
             @RequestParam("userId") String userId
@@ -38,7 +43,9 @@ public class CartController {
      * @param cart 购物车
      * @return vo
      */
-    @RequestMapping("/manage/save")
+    @ApiOperation("加入购物车")
+    @ApiImplicitParam(name = "cart", value = "购物车的bean")
+    @RequestMapping(value = "/manage/save", method = RequestMethod.POST)
     @ResponseBody
     public SysResult addCart(
             Cart cart
@@ -59,7 +66,9 @@ public class CartController {
      * @param cart 新的购物车数据
      * @return vo
      */
-    @RequestMapping("/manage/update")
+    @ApiOperation("更新购物车")
+    @ApiImplicitParam(name = "cart", value = "购物车的bean")
+    @RequestMapping(value = "/manage/update", method = RequestMethod.GET)
     @ResponseBody
     public SysResult updateCart(
             Cart cart
@@ -80,7 +89,9 @@ public class CartController {
      * @param cart 购物车数据
      * @return vo
      */
-    @RequestMapping("/manage/delete")
+    @ApiOperation("删除购物车")
+    @ApiImplicitParam(name = "cart", value = "购物车的bean")
+    @RequestMapping(value = "/manage/delete", method = RequestMethod.GET)
     @ResponseBody
     public SysResult deleteCart(
             Cart cart
@@ -102,6 +113,12 @@ public class CartController {
      * @param userId 用户id
      * @return 总价格
      */
+    @ApiOperation("查询指定商品的价格")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "productIds", value = "商品的价格"),
+            @ApiImplicitParam(name = "productNums", value = "商品的数量"),
+            @ApiImplicitParam(name = "userId", value = "用户id")
+    })
     @RequestMapping("/get/money")
     @ResponseBody
     public SysResult getMoney(
