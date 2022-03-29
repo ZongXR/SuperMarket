@@ -38,7 +38,7 @@ public class ProductController {
             @ApiImplicitParam(name = "page", value = "查询第几页，从1开始"),
             @ApiImplicitParam(name = "rows", value = "查询几条记录")
     })
-    @RequestMapping(value = "/manage/pageManage")
+    @RequestMapping(value = "/manage/pageManage", method = RequestMethod.POST)
     @ResponseBody
     public SupermarketResult pageManage(
             @RequestParam(value = "page", defaultValue = "1") Integer page,
@@ -54,7 +54,7 @@ public class ProductController {
      */
     @ApiOperation("单个商品查询")
     @ApiImplicitParam(name = "productId", value = "商品id")
-    @RequestMapping(value = "/manage/item/{productId}")
+    @RequestMapping(value = "/manage/item/{productId}", method = RequestMethod.POST)
     @ResponseBody
     public Product queryProduct(
             @PathVariable("productId") String productId
@@ -74,13 +74,12 @@ public class ProductController {
      */
     @ApiOperation("新增一个商品")
     @ApiImplicitParam(name = "product", value = "新增商品的bean")
-    @RequestMapping("/manage/save")
+    @RequestMapping(value = "/manage/save", method = RequestMethod.POST)
     @ResponseBody
     public SysResult addProduct(
-            Product product
+            @RequestBody Product product
     ) {
         try {
-            // TODO 业务逻辑
             this.productService.addProduct(product);
             return SysResult.ok();
         } catch (Exception e) {
@@ -96,13 +95,12 @@ public class ProductController {
      */
     @ApiOperation("修改一个商品")
     @ApiImplicitParam(name = "product", value = "修改商品的bean")
-    @RequestMapping("/manage/update")
+    @RequestMapping(value = "/manage/update", method = RequestMethod.POST)
     @ResponseBody
     public SysResult updateProduct(
-            Product product
+            @RequestBody Product product
     ) {
         try {
-            // TODO 业务逻辑
             this.productService.updateProduct(product);
             return SysResult.ok();
         } catch (Exception e) {
@@ -116,7 +114,7 @@ public class ProductController {
      * @return 全部商品列表
      */
     @ApiOperation("查询全部商品，全表扫描，该接口慎用")
-    @RequestMapping("/manage/query")
+    @RequestMapping(value = "/manage/query", method = RequestMethod.GET)
     @ResponseBody
     public List<Product> queryProducts(){
         return this.productService.queryProducts();

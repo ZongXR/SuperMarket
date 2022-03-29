@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@ApiModel("响应的ViewObject")
+@ApiModel(description = "响应的ViewObject")
 public class SysResult {
 
     //表示状态码的数字

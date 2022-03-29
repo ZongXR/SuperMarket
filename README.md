@@ -148,7 +148,7 @@
     </ol></li>
     <li>部署微服务<ol>
             <li>参照<a href="./start_up/app/start_app.sh" target="_blank">微服务启动脚本</a>逐行执行，或直接运行该脚本</li>
-            <li>每个微服务做了一个镜像，名为zongxr/supermarket-xxx:tag。如果所有微服务都启动成功了，那么将能够在<a href="http://192.168.137.147:10000/" target="_blank">注册中心</a>看到所有注册的微服务</li>
+            <li>每个微服务做了一个镜像，名为zongxr/supermarket-xxx:tag。如果所有微服务都启动成功了，那么将能够在<a href="http://192.168.137.147:10000/" target="_blank">注册中心</a>看到所有注册的微服务，并且在<a href="http://192.168.137.147:10002/swagger-ui/" target="_blank">http://192.168.137.147:APP_PORT/swagger-ui/</a>网址能够看到该微服务对应的接口文档</li>
             <li>instant-buy微服务用到了消息队列rabbitmq。如果消息队列启动成功，将能够在<a href="http://192.168.137.147:15672" target="_blank">Web UI</a>管理界面看到传输的消息，用户名密码均为guest</li>
     </ol></li>
     <li>至此，所有服务都已经启动完成了。访问<a href="http://www.supermarket.com" target="_blank">www.supermarket.com</a>进行访问即可。</li>
