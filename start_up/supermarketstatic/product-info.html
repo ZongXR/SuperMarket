@@ -38,7 +38,8 @@
                 url: "http://www.supermarket.com/products/item/" + productId,
                 dataType: "json",
                 type: "POST",
-                success: function (data) {
+                success: function (result) {
+                    let data = result.data;
                     //图片
                     let imgUrl = data.productImgurl;
                     console.log(imgUrl);

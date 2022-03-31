@@ -77,9 +77,24 @@
         document.getElementById("photo").src="img/shangchuanBg.png";
     }
     function submitForm(){
-        $.post("/products/save",$("#itemAddForm").serialize(), function(data){
-            if(data.status === 200){
-                alert("新增商品成功");
+        $.ajax({
+            url:"/products/save",
+            type:'post',
+            data:JSON.stringify({
+                "productCategory": $("#item_category").val(),
+                "productDescription": $("#item_desc").val(),
+                "productImgurl": $("#imgInput").val(),
+                "productName": $("#item_name").val(),
+                "productNum": $("#item_count").val(),
+                "productPrice": $("#item_price").val()
+            }),//改动
+            contentType: 'application/json; charset=UTF-8',//改动
+            success:function(result) {
+                if (result.code === 200) {
+                    alert("新增商品成功");
+                    $("#itemAddForm")[0].reset();
+                    $("#photo").attr("src", "img/shangchuanBg.png");
+                }
             }
         });
     }

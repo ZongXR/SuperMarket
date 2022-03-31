@@ -2,9 +2,9 @@ package com.supermarket.product.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.supermarket.common.dto.PageDataDto;
 import com.supermarket.product.dao.ProductDao;
 import com.supermarket.common.domain.Product;
-import com.supermarket.common.vo.SupermarketResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -27,12 +27,12 @@ public class ProductServiceImpl implements ProductService{
     private ObjectMapper mapper = null;
 
     @Override
-    public SupermarketResult queryByPage(Integer page, Integer rows) {
+    public PageDataDto queryByPage(Integer page, Integer rows) {
         // 非框架类对象不建议从容器中拿
         Integer total = this.productDao.selectCount();
         int start = (page - 1) * rows;
         List<Product> products = this.productDao.queryProductsByPage(start, rows);
-        SupermarketResult result = new SupermarketResult();
+        PageDataDto result = new PageDataDto();
         result.setRows(products);
         result.setTotal(total);
         return result;

@@ -19,7 +19,7 @@
 
 <body>
 <table class="easyui-datagrid" id="itemList" title="商品列表"
-       data-options="singleSelect:false,collapsible:true,pagination:true,url:'http://www.supermarket.com/products/pageManage',method:'get',pageSize:20,toolbar:toolbar">
+       data-options="singleSelect:false,collapsible:true,pagination:true,url:'http://www.supermarket.com/products/pageManage',method:'get',pageSize:20,toolbar:toolbar,loadFilter:function(result){return result.data;}">
     <thead>
     <tr>
         <th data-options="field:'ck',checkbox:true"></th>

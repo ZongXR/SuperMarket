@@ -3,7 +3,7 @@ docker network create --driver bridge --subnet 192.165.0.0/16 --gateway 192.165.
 docker run -d --name supermarket-eureka-1 --restart always --net net-app -p 10000:10000 zongxr/supermarket-eureka:1.0-SNAPSHOT
 
 # 启动商品微服务
-docker run -d --name supermarket-product-1 --restart always --net net-app -p 10002:10002 zongxr/supermarket-product:1.0-SNAPSHOT
+docker run -d --name supermarket-product-1 --restart always --net net-app -p 10002:10002 zongxr/supermarket-product:1.1.0.0
 docker network connect net-mysql supermarket-product-1
 docker network connect net-redis supermarket-product-1
 
@@ -28,7 +28,7 @@ docker run -d --name supermarket-image-1 --restart always -v /opt/supermarketimg
 docker network connect net-redis supermarket-image-1
 
 # 启动检索微服务
-docker run -d --name supermarket-search-1 --restart always --net net-app -p 10007:10007 zongxr/supermarket-search:1.0-SNAPSHOT
+docker run -d --name supermarket-search-1 --restart always --net net-app -p 10007:10007 zongxr/supermarket-search:1.1.0.0
 docker network connect net-es supermarket-search-1
 
 # 启动instant-buy微服务

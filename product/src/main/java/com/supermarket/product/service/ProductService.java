@@ -2,7 +2,7 @@ package com.supermarket.product.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.supermarket.common.domain.Product;
-import com.supermarket.common.vo.SupermarketResult;
+import com.supermarket.common.dto.PageDataDto;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,9 +12,9 @@ public interface ProductService {
      * 分页查询
      * @param page 查询第几页
      * @param rows 查询几条
-     * @return SupermarketResult
+     * @return PageDataDto
      */
-    public SupermarketResult queryByPage(Integer page, Integer rows);
+    public PageDataDto queryByPage(Integer page, Integer rows);
 
     /**
      * 查询单个商品

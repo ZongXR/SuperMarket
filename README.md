@@ -458,6 +458,16 @@
         </td>
         <td>2022年3月26日</td>
     </tr>
+    <tr>
+        <td>1.0.1.0</td>
+        <td>
+            <ul>
+                <li>完善商品微服务接口文档</li>
+                <li>修复若干BUG</li>
+            </ul>
+        </td>
+        <td>2022年4月1日</td>
+    </tr>
 </table>
 
 <h2>配置情况</h2>
@@ -501,6 +511,18 @@
     <li>insert的时候加上列名是一个好习惯，因为MyCat1.5.1不支持省略列名的写法</li>
     <li>直接使用RedisTemplate模板类，键和值会出现类似\xac\xed\x00\x05t\x00的东西，此时要么不去手动查看redis输出，要么换用StringRedisTemplate</li>
     <li>用nginx也能做到外部调用内部api的拦截，只需要将提供给前端的api路径和提供给后端的api路径区分开。比如提供给前端的api路径是/manage/query，提供给后端的api是/backend/query，因为nginx拼接了"/manage"，所以自然找不到/backend/query</li>
+    <li><code>@RequestParam</code>用于接收单个query请求参数；<code>@ModelAttribute</code>用于接收Content-Type为application/x-www-form-urlencoded的多个query请求参数后封装成bean；<code>@RequestBody</code>用于接收Content-Type为application/json的封装成body的请求参数
+        <table>
+            <tr>
+                <th></th><th>单个基本请求参数</th><th>多个请求参数组成的一个bean</th>
+            </tr>
+            <tr>
+                <td>query</td><td><code>@RequestParam</code></td><td><code>@ModelAttribute</code></td>
+            </tr>
+            <tr>
+                <td>body</td><td>无</td><td><code>@RequestBody</code></td>
+            </tr>
+        </table></li>
 </ul>
 </body>
 </html>

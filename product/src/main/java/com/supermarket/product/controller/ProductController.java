@@ -1,19 +1,19 @@
 package com.supermarket.product.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.supermarket.common.domain.Product;
-import com.supermarket.common.vo.SysResult;
+import com.supermarket.common.vo.CommonResult;
 import com.supermarket.product.service.ProductService;
-import com.supermarket.common.vo.SupermarketResult;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import com.supermarket.common.dto.PageDataDto;
+import io.swagger.annotations.*;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -38,13 +38,14 @@ public class ProductController {
             @ApiImplicitParam(name = "page", value = "查询第几页，从1开始"),
             @ApiImplicitParam(name = "rows", value = "查询几条记录")
     })
-    @RequestMapping(value = "/manage/pageManage", method = RequestMethod.POST)
+    @RequestMapping(value = "/manage/pageManage", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public SupermarketResult pageManage(
+    public CommonResult<PageDataDto> pageManage(
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "rows", defaultValue = "30") Integer rows
     ) {
-        return this.productService.queryByPage(page, rows);
+        PageDataDto result = this.productService.queryByPage(page, rows);
+        return CommonResult.success(result);
     }
 
     /**
@@ -56,15 +57,11 @@ public class ProductController {
     @ApiImplicitParam(name = "productId", value = "商品id")
     @RequestMapping(value = "/manage/item/{productId}", method = RequestMethod.POST)
     @ResponseBody
-    public Product queryProduct(
+    public CommonResult<Product> queryProduct(
             @PathVariable("productId") String productId
-    ) {
-        try {
-            return this.productService.queryByProductId(productId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    ) throws IOException {
+            Product result = this.productService.queryByProductId(productId);
+            return CommonResult.success(result);
     }
 
     /**
@@ -76,16 +73,11 @@ public class ProductController {
     @ApiImplicitParam(name = "product", value = "新增商品的bean")
     @RequestMapping(value = "/manage/save", method = RequestMethod.POST)
     @ResponseBody
-    public SysResult addProduct(
+    public CommonResult<?> addProduct(
             @RequestBody Product product
     ) {
-        try {
-            this.productService.addProduct(product);
-            return SysResult.ok();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new SysResult(501, e.getMessage(), e);
-        }
+        this.productService.addProduct(product);
+        return CommonResult.success("新增商品成功");
     }
 
     /**
@@ -94,19 +86,13 @@ public class ProductController {
      * @return SysResult
      */
     @ApiOperation("修改一个商品")
-    @ApiImplicitParam(name = "product", value = "修改商品的bean")
     @RequestMapping(value = "/manage/update", method = RequestMethod.POST)
     @ResponseBody
-    public SysResult updateProduct(
-            @RequestBody Product product
-    ) {
-        try {
-            this.productService.updateProduct(product);
-            return SysResult.ok();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new SysResult(501, e.getMessage(), e);
-        }
+    public CommonResult<?> updateProduct(
+            @ApiParam(name = "product", value = "商品的bean") @ModelAttribute("product") Product product
+    ) throws JsonProcessingException {
+        this.productService.updateProduct(product);
+        return CommonResult.success("更新商品成功");
     }
 
     /**
@@ -116,7 +102,21 @@ public class ProductController {
     @ApiOperation("查询全部商品，全表扫描，该接口慎用")
     @RequestMapping(value = "/manage/query", method = RequestMethod.GET)
     @ResponseBody
-    public List<Product> queryProducts(){
-        return this.productService.queryProducts();
+    public CommonResult<List<Product>> queryProducts(){
+        List<Product> result = this.productService.queryProducts();
+        return CommonResult.success(result);
+    }
+
+    /**
+     * 统一的异常处理器
+     * @param e 异常
+     * @return 返回结果
+     */
+    @ExceptionHandler
+    public CommonResult<Object> handleException(
+            Exception e
+    ){
+        ProductController.LOGGER.error(ExceptionUtils.getStackTrace(e));
+        return CommonResult.failed(e.getMessage());
     }
 }

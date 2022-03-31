@@ -44,7 +44,7 @@ public class SearchServiceImpl implements SearchService{
         // 创建Mapping
         this.elasticsearchTemplate.putMapping(type);
         // 添加文档
-        List<Product> products = this.productService.queryProducts();
+        List<Product> products = this.productService.queryProducts().getData();
         if (products == null)
             return;
         this.addProducts(products);

@@ -1,4 +1,4 @@
-package com.supermarket.common.vo;
+package com.supermarket.common.dto;
 
 import java.util.List;
 
@@ -11,8 +11,8 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@ApiModel(description = "响应对象")
-public class SupermarketResult {
+@ApiModel(description = "分页查询结果")
+public class PageDataDto {
 
     // 定义jackson对象
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -25,27 +25,26 @@ public class SupermarketResult {
     @ApiModelProperty("查询出的列表")
     private List<?> rows;
 
-    public SupermarketResult() {
+    public PageDataDto() {
     }
 
-    public SupermarketResult(Integer total, List<?> rows) {
+    public PageDataDto(Integer total, List<?> rows) {
         this.total = total;
         this.rows = rows;
     }
 
-    public SupermarketResult(Long total, List<?> rows) {
+    public PageDataDto(Long total, List<?> rows) {
         this.total = total.intValue();
         this.rows = rows;
     }
 
     /**
      * Object是集合转化
-     *
      * @param jsonData json数据
-     * @param clazz    集合中的类型
-     * @return
+     * @param clazz    要转的类型
+     * @return 分页结果
      */
-    public static SupermarketResult formatToList(String jsonData, Class<?> clazz) {
+    public static PageDataDto formatToList(String jsonData, Class<?> clazz) {
         try {
             JsonNode jsonNode = MAPPER.readTree(jsonData);
             JsonNode data = jsonNode.get("rows");
@@ -54,7 +53,7 @@ public class SupermarketResult {
                 list = MAPPER.readValue(data.traverse(),
                         MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
             }
-            return new SupermarketResult(jsonNode.get("total").intValue(), list);
+            return new PageDataDto(jsonNode.get("total").intValue(), list);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

@@ -14,7 +14,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 /**
  * swagger配置
- * http://192.168.137.147:11002/swagger-ui/
+ * http://192.168.137.147:10002/swagger-ui/
  * 可访问接口文档
  */
 @Configuration

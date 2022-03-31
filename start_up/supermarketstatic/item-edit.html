@@ -76,14 +76,14 @@
             $.messager.alert('提示','表单还未填写完成!');
             return ;
         }
-        $.post("/products/update",$("#itemEditForm").serialize(), function(data){
-            if(data.status === 200){
+        $.post("/products/update",$("#itemEditForm").serialize(), function(result){
+            if(result.code === 200){
                 $.messager.alert('提示','修改商品成功!','info',function(){
                     $("#itemEditWindow").window('close');
                     $("#itemList").datagrid("reload");
                 });
             }else{
-                alert(data.msg);
+                alert(result.msg);
             }
         });
     }
