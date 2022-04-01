@@ -1,10 +1,12 @@
 package com.supermarket.product.service;
 
 import com.supermarket.common.domain.Product;
+import com.supermarket.common.vo.CommonResult;
 import com.supermarket.common.vo.SysResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @FeignClient(name = "search")
@@ -14,9 +16,9 @@ public interface SearchService {
      * @param product 商品
      * @return vo
      */
-    @RequestMapping("/manage/delete")
+    @RequestMapping(value = "/manage/delete", method = RequestMethod.POST)
     @ResponseBody
-    public SysResult deleteProduct(
+    public CommonResult<?> deleteProduct(
             @RequestBody Product product
     );
 
@@ -25,9 +27,9 @@ public interface SearchService {
      * @param product 商品
      * @return vo
      */
-    @RequestMapping("/manage/add")
+    @RequestMapping(value = "/manage/add", method = RequestMethod.POST)
     @ResponseBody
-    public SysResult addProduct(
+    public CommonResult<?> addProduct(
             @RequestBody Product product
     );
 }

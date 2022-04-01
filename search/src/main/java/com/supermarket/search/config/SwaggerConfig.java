@@ -1,4 +1,4 @@
-package com.supermarket.product.config;
+package com.supermarket.search.config;
 
 
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +14,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 /**
  * swagger配置
- * http://192.168.137.147:10002/swagger-ui/
+ * http://192.168.137.147:10007/swagger-ui/
  * 可访问接口文档
  */
 @Configuration
@@ -30,7 +30,7 @@ public class SwaggerConfig {
                 .apiInfo(this.apiInfo()) // 设置 API 信息
                 // 扫描 Controller 包路径，获得 API 接口
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.supermarket.product.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.supermarket.search.controller"))
                 .paths(PathSelectors.any())
                 // 构建出 Docket 对象
                 .build();
@@ -41,7 +41,7 @@ public class SwaggerConfig {
      */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("商品微服务应用接口文档")
+                .title("检索微服务应用接口文档")
                 .description("后台文档")
                 .version("1.1.0.0") // 版本号
                 .contact(new Contact("宗祥瑞", "https://github.com/GoogleLLP/SuperMarket", "zxr@tju.edu.cn")) // 联系人

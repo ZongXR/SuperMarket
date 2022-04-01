@@ -1,13 +1,15 @@
 package com.supermarket.search.controller;
 
 import com.supermarket.common.domain.Product;
-import com.supermarket.common.vo.SysResult;
-import com.supermarket.search.exception.MsgException;
+import com.supermarket.common.vo.CommonResult;
 import com.supermarket.search.service.SearchService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +17,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@Api(tags = "搜索微服务")
+@Api(tags = "检索微服务")
 //@RequestMapping("/search")
 public class SearchController {
+
+    private static final Logger LOGGER = LogManager.getLogger(SearchController.class);
+
     @Autowired
     private SearchService searchService = null;
 
@@ -36,19 +41,13 @@ public class SearchController {
     })
     @RequestMapping(value = "/manage/query", method = RequestMethod.GET)
     @ResponseBody
-    public List<Product> searchProducts(
+    public CommonResult<List<Product>> searchProducts(
             @RequestParam("query") String query,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "rows", defaultValue = "30") Integer rows
     ){
-        try{
-            return this.searchService.searchProducts(query, page, rows);
-        }catch (MsgException e){
-            return null;
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
+        List<Product> products = this.searchService.searchProducts(query, page, rows);
+        return CommonResult.success(products);
     }
 
     /**
@@ -58,20 +57,13 @@ public class SearchController {
      */
     @ApiOperation("增加商品")
     @ApiImplicitParam(name = "product", value = "商品的bean")
-    @RequestMapping("/manage/add")
+    @RequestMapping(value = "/manage/add", method = RequestMethod.POST)
     @ResponseBody
-    public SysResult addProduct(
+    public CommonResult<?> addProduct(
             @RequestBody Product product
     ){
-        try{
-            this.searchService.addProduct(product);
-            return SysResult.ok();
-        }catch(MsgException e){
-            return SysResult.build(201, e.getMessage(), e);
-        }catch (Exception e){
-            e.printStackTrace();
-            return SysResult.build(500, e.getMessage(), e);
-        }
+        this.searchService.addProduct(product);
+        return CommonResult.success("新增商品成功");
     }
 
     /**
@@ -81,21 +73,25 @@ public class SearchController {
      */
     @ApiOperation("删除商品")
     @ApiImplicitParam(name = "product", value = "商品的bean")
-    @RequestMapping("/manage/delete")
+    @RequestMapping(value = "/manage/delete", method = RequestMethod.POST)
     @ResponseBody
-    public SysResult deleteProduct(
+    public CommonResult<?> deleteProduct(
             @RequestBody Product product
     ){
-        try{
-            this.searchService.deleteProduct(product);
-            return SysResult.ok();
-        }catch (MsgException e){
-            return SysResult.build(201, e.getMessage(), e);
-        }catch (Exception e){
-            e.printStackTrace();
-            return SysResult.build(500, e.getMessage(), e);
-        }
+        this.searchService.deleteProduct(product);
+        return CommonResult.success("删除商品成功");
     }
 
-
+    /**
+     * 统一的异常处理器
+     * @param e 异常
+     * @return 返回结果
+     */
+    @ExceptionHandler
+    public CommonResult<Object> handleException(
+            Exception e
+    ){
+        SearchController.LOGGER.error(ExceptionUtils.getStackTrace(e));
+        return CommonResult.failed(e.getMessage());
+    }
 }

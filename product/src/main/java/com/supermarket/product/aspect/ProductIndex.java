@@ -2,6 +2,7 @@ package com.supermarket.product.aspect;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.supermarket.common.domain.Product;
+import com.supermarket.common.vo.CommonResult;
 import com.supermarket.common.vo.SysResult;
 import com.supermarket.product.service.SearchService;
 import org.aspectj.lang.JoinPoint;
@@ -44,7 +45,7 @@ public class ProductIndex {
         }
         Product product = (Product) map.get("product");
         // 切
-        SysResult addResult = this.searchService.addProduct(product);
+        CommonResult<?> addResult = this.searchService.addProduct(product);
     }
 
     /**
@@ -63,7 +64,7 @@ public class ProductIndex {
             map.put(names[i], values[i]);
         }
         Product product = (Product) map.get("product");
-        SysResult deleteResult = this.searchService.deleteProduct(product);
+        CommonResult<?> deleteResult = this.searchService.deleteProduct(product);
         this.afterAddProduct(jp, result);
     }
 }

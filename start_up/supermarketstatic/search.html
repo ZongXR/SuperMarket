@@ -130,7 +130,8 @@
                 url: url,
                 dataType:"json",
                 type:"GET",
-                success:function(data){
+                success:function(result){
+                    let data = result.data;
                     if(data.length>0){
                         $.each(data,function(index, product){
                             let product_html = "product-info.html?productId=" + product.productId;
