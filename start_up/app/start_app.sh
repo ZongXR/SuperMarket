@@ -1,3 +1,7 @@
+# 启动rabbitmq
+docker run -d --name rabbitmq --restart always --net net-app -p 5672:5672 -p 15672:15672 rabbitmq:3.7.7
+docker exec rabbitmq /usr/lib/rabbitmq/bin/rabbitmq-plugins enable rabbitmq_management
+
 # 启动注册中心
 docker network create --driver bridge --subnet 192.165.0.0/16 --gateway 192.165.0.1 net-app
 docker run -d --name supermarket-eureka-1 --restart always --net net-app -p 10000:10000 zongxr/supermarket-eureka:1.0-SNAPSHOT
@@ -32,9 +36,7 @@ docker run -d --name supermarket-search-1 --restart always --net net-app -p 1000
 docker network connect net-es supermarket-search-1
 
 # 启动instant-buy微服务
-docker run -d --name rabbitmq --restart always --net net-app -p 5672:5672 -p 15672:15672 rabbitmq:3.7.7
-docker exec rabbitmq /usr/lib/rabbitmq/bin/rabbitmq-plugins enable rabbitmq_management
-docker run -d --name supermarket-instantbuy-1 --restart always --net net-app -p 10008:10008 zongxr/supermarket-instantbuy:1.0-SNAPSHOT
+docker run -d --name supermarket-instantbuy-1 --restart always --net net-app -p 10008:10008 zongxr/supermarket-instantbuy:1.1.0.0
 docker network connect net-mysql supermarket-instantbuy-1
 docker network connect net-redis supermarket-instantbuy-1
 

@@ -113,6 +113,7 @@ public class ProductController {
      * @return 返回结果
      */
     @ExceptionHandler
+    @ResponseBody
     public CommonResult<Object> handleException(
             Exception e
     ){

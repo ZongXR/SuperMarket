@@ -147,14 +147,11 @@
                             url:"http://www.supermarket.com/instantbuy/"+itemId + "/" + userName,
                             dataType:"json",
                             type:"GET",
-                            success:function(data){
-                                if(data.status===200){
+                            success:function(result){
+                                if(result.status===200){
                                     alert("秒杀成功");
-                                }else if(data.status===201){
-                                    // 尚未登陆
-                                    alert(data.msg);
                                 }else{
-                                    alert(data.msg);
+                                    alert(result.message);
                                 }
                             },
                             error:function(){
@@ -174,11 +171,6 @@
                     alert('请求失败');
                 }
             });
-
-
-
-
-
         }
 
         /**
@@ -190,7 +182,8 @@
                 url:"http://www.supermarket.com/instantbuy/detail?"+args,
                 dataType:"json",
                 type:"GET",
-                success:function (data) {
+                success:function (result) {
+                    let data = result.data;
                     if(data!=null){
                         $("#instantbuy_content").append(
                             "<h1>"+data.name+"<small>（秒杀价"+data.buyPrice+"元）</small></h1>"

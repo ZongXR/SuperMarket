@@ -1,9 +1,8 @@
-package com.supermarket.instantbuy.schedule;
+package com.supermarket.instantbuy.task;
 
 import com.supermarket.common.domain.InstantBuyItem;
 import com.supermarket.instantbuy.dao.InstantBuyDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

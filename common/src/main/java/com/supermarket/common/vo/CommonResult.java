@@ -2,12 +2,16 @@ package com.supermarket.common.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 /**
  * 通用返回对象
  */
+@Setter
+@Getter
 @ApiModel(description = "vo对象")
 public class CommonResult<T> {
 
@@ -21,26 +25,20 @@ public class CommonResult<T> {
      * 提示信息
      */
     @ApiModelProperty("传送的信息")
-    private String msg;
+    private String message;
 
     /**
      * 数据封装
      */
     @ApiModelProperty("传送的数据")
     private T data;
-
-    /**
-     * 封装的一堆数据
-     */
-    @ApiModelProperty("封装的一堆数据")
-    private List<T> dataList;
-
+    
     protected CommonResult() {
     }
 
-    protected CommonResult(Integer status, String message, T data) {
+    public CommonResult(Integer status, String message, T data) {
         this.status = status;
-        this.msg = message;
+        this.message = message;
         this.data = data;
     }
 
@@ -131,29 +129,5 @@ public class CommonResult<T> {
      */
     public static <T> CommonResult<T> forbidden(T data) {
         return new CommonResult<T>(ResultCode.FORBIDDEN.getCode(), ResultCode.FORBIDDEN.getMessage(), data);
-    }
-
-    public long getCode() {
-        return this.status;
-    }
-
-    public void setCode(Integer status) {
-        this.status = status;
-    }
-
-    public String getMessage() {
-        return this.msg;
-    }
-
-    public void setMessage(String message) {
-        this.msg = message;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
     }
 }

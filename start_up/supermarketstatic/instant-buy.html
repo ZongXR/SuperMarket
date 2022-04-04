@@ -65,7 +65,8 @@
                 url:"http://www.supermarket.com/instantbuy/list",
                 dataType:"json",
                 type:"GET",
-                success:function (data) {
+                success:function (result) {
+                    let data = result.data;
                     if(data.length>0){
                         $.each(data,function (index,instantBuyItem) {
                             let itemId = instantBuyItem.itemId;

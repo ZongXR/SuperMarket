@@ -476,6 +476,17 @@
                 <li>修正检索微服务和商品微服务调用异常的BUG</li>
             </ul>
         </td>
+        <td>2022年4月1日</td>
+    </tr>
+    <tr>
+        <td>1.0.3.0</td>
+        <td>
+            <ul>
+                <li>完善抢购微服务接口</li>
+                <li>修复若干BUG</li>
+            </ul>
+        </td>
+        <td>2022年4月4日</td>
     </tr>
 </table>
 
@@ -532,6 +543,7 @@
                 <td>body</td><td>无</td><td><code>@RequestBody</code></td>
             </tr>
         </table></li>
+    <li><code>@ExceptionHandler</code>注解修饰的方法别忘了加<code>@ResponseBody</code>注解，否则捕获不到异常</li>
 </ul>
 </body>
 </html>
