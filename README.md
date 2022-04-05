@@ -488,6 +488,16 @@
         </td>
         <td>2022年4月4日</td>
     </tr>
+    <tr>
+        <td>1.0.4.0</td>
+        <td>
+            <ul>
+                <li>完善图片微服务</li>
+                <li>修复若干BUG</li>
+            </ul>
+        </td>
+        <td>2022年4月5日</td>
+    </tr>
 </table>
 
 <h2>配置情况</h2>
@@ -505,8 +515,8 @@
     <li>框架：<a href="https://github.com/spring-projects/spring-boot/releases/tag/v2.2.5.RELEASE" target="_blank">Springboot 2.2.5.RELEASE</a>, <a href="https://spring.io/blog/2020/03/05/spring-cloud-hoxton-service-release-3-sr3-is-available" target="_blank">SpringCloud Hoxton.SR3</a></li>
     <li>
         hosts配置: <br />
-        127.0.0.1 www.supermarket.com <br />
-        127.0.0.1 image.supermarket.com
+        192.168.137.147 www.supermarket.com <br />
+        192.168.137.147 image.supermarket.com
     </li>
 </ul>
 

@@ -62,8 +62,7 @@
     <span>选择商品图片：</span>
     <img id="photo" src="img/shangchuanBg.png" width="109px" height="109px" style="display: block;" alt="upload"/>
     <form id="form1" action="" method="post" enctype="multipart/form-data">
-        <input  type="file" name="imgOne" class="imgOne" id="imgOne"
-                onchange=""/>
+        <input type="file" name="imgOne" class="imgOne" id="imgOne" onchange=""/>
     </form>
     <div style="padding:5px">
         <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">提交</a>
@@ -141,15 +140,15 @@
         formData.append("pic", document.getElementById("imgOne").files[0]);
         $.ajax({
             type: "POST", // 数据提交类型
-            url: "http://www.supermarket.com/uploadImg", // 发送地址
+            url: "http://www.supermarket.com/images/uploadImg", // 发送地址
             data: formData, //发送数据
             async: true, // 是否异步
             processData: false, //processData 默认为false，当设置为true的时候,jquery ajax 提交的时候不会序列化 data，而是直接使用data
             contentType: false, //
-            success:function (data) {
-                if(data.error===0){
-                    document.getElementById("imgInput").value=data.url;
-                    document.getElementById("photo").src=data.url;
+            success:function (result) {
+                if(result.status === 200){
+                    document.getElementById("imgInput").value = result.message;
+                    document.getElementById("photo").src = result.message;
                 }
             }
         });

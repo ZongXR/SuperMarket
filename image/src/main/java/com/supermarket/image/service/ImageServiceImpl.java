@@ -3,6 +3,11 @@ package com.supermarket.image.service;
 import com.supermarket.common.utils.TimeUtils;
 import com.supermarket.common.utils.UploadUtils;
 import com.supermarket.common.utils.VerifyCode;
+import com.supermarket.image.utils.ValistrUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +30,8 @@ public class ImageServiceImpl implements ImageService {
 
     @Value("${custom.imgweb}")
     private String imgWeb = null;
+
+    private static final Logger LOGGER = LogManager.getLogger(ImageServiceImpl.class);
 
     @Autowired
     private StringRedisTemplate template = null;
@@ -81,5 +88,24 @@ public class ImageServiceImpl implements ImageService {
     public void delValistr(String token) {
         this.template.delete(token);
         this.template.delete(TimeUtils.cutTimestamp(token));
+    }
+
+    @Override
+    public Pair<String, byte[]> generateValistr(String token) {
+        Pair<String, byte[]> result = ValistrUtils.generateValistr();
+        String valistr = result.getLeft();
+        try {
+            this.template.opsForValue().set(token, valistr, 20, TimeUnit.MINUTES);
+            this.template.opsForList().leftPush(TimeUtils.cutTimestamp(token), token);
+            String oldKey = this.template.opsForList().index(TimeUtils.cutTimestamp(token), -1);
+            if (oldKey != null && !oldKey.equals(token)) {
+                this.template.delete(oldKey);
+                this.template.opsForList().rightPop(TimeUtils.cutTimestamp(token));
+            }
+        } catch (RedisConnectionFailureException e) {
+            // 如果redis连接失败，则不存入验证码
+            LOGGER.error(ExceptionUtils.getStackTrace(e));
+        }
+        return result;
     }
 }

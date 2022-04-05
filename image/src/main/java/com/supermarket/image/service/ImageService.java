@@ -1,5 +1,6 @@
 package com.supermarket.image.service;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
@@ -25,4 +26,11 @@ public interface ImageService {
      * @param token redis中的key
      */
     public void delValistr(String token);
+
+    /**
+     * 生成验证码
+     * @param token token
+     * @return 验证码, 字节数组
+     */
+    public Pair<String, byte[]> generateValistr(String token);
 }

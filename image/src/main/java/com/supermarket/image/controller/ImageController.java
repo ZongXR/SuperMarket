@@ -1,26 +1,33 @@
 package com.supermarket.image.controller;
 
+import com.supermarket.common.vo.CommonResult;
 import com.supermarket.common.vo.PicUploadResult;
 import com.supermarket.image.service.ImageService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.io.OutputStream;
 
 @Controller
-@Api(tags = "图片微服务")
-//@RequestMapping("/pic")
+@Api(tags = "图片上传相关的微服务")
+//@RequestMapping("/image")
 public class ImageController {
+
+    private static final Logger LOGGER = LogManager.getLogger(ImageController.class);
 
     @Autowired
     private ImageService imageService = null;
@@ -34,57 +41,25 @@ public class ImageController {
     @ApiImplicitParam(name = "pic", value = "图片文件")
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
-    public PicUploadResult imgUpload(
-            MultipartFile pic
+    public CommonResult<?> imgUpload(
+            @RequestParam(value = "pic", required = true) MultipartFile pic
     ){
-        PicUploadResult result = new PicUploadResult();
-        try{
-            String url = this.imageService.uploadImg(pic);
-            result.setUrl(url);
-            result.setError(0);
-            return result;
-        }catch (Exception e){
-            e.printStackTrace();
-            result.setError(1);
-            result.setUrl(e.getMessage());
-            return result;
-        }
+        String url = this.imageService.uploadImg(pic);
+        return CommonResult.success(null, url);
     }
 
     /**
-     * 生成验证码
-     * @param token token
-     * @param response 相应
+     * 统一的异常处理器
+     * @param e 异常
+     * @return 返回结果
      */
-    @ApiOperation("生成验证码")
-    @ApiImplicitParam(name = "token", value = "浏览器的token")
-    @RequestMapping("/valistr")
-    public void valiCode(
-            @RequestParam("token") String token,
-            HttpServletResponse response
+    @ExceptionHandler(Throwable.class)
+    @ResponseBody
+    public CommonResult<Object> handleException(
+            Exception e
     ){
-        try {
-            String valistr = this.imageService.generateValistr(token, response.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 删除验证码
-     * @param token token
-     */
-    @ApiOperation("删除验证码")
-    @ApiImplicitParam(name = "token", value = "浏览器的token")
-    @RequestMapping("/valistrdel")
-    public void delValistr(
-            @RequestParam("token") String token
-    ){
-        try{
-            this.imageService.delValistr(token);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        ImageController.LOGGER.error(ExceptionUtils.getStackTrace(e));
+        return CommonResult.failed(e.getMessage());
     }
 
 }

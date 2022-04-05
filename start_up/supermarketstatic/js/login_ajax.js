@@ -21,7 +21,7 @@ $(function(){
  */
 window.onunload = function(){
 	$.ajax({
-		url:"http://www.supermarket.com/valistrdel",
+		url:"http://www.supermarket.com/images/valistrdel",
 		type:"get",
 		data:{"token": "VALISTR_" + randomKey},
 		dataType:"json"
@@ -87,7 +87,7 @@ function login(){
  */
 function refreshValistr(element) {
 	window.randomKey = UUID + new Date().getTime();
-	$(element).attr("src", "/valistr?token=VALISTR_" + randomKey);
+	$(element).attr("src", "/images/valistr?token=VALISTR_" + randomKey);
 }
 
 /**
