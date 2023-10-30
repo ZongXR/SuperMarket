@@ -69,7 +69,7 @@
             <dependency>
                 <groupId>org.elasticsearch</groupId>
                 <artifactId>elasticsearch</artifactId>
-                <version>6.8.6</version>
+                <version>7.17.13</version>
             </dependency>
             <dependency>
                 <groupId>org.elasticsearch.client</groupId>
